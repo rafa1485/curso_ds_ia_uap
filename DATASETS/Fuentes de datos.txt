@@ -1,0 +1,35 @@
+
+
+Clasificación de Sonidos
+https://huggingface.co/datasets/DynamicSuperb/Vehicle_sounds_classification_dataset
+
+https://huggingface.co/datasets/UrbanSounds/urban_sounds_micro
+
+https://huggingface.co/datasets/UrbanSounds/UrbanSoundsNew
+
+https://huggingface.co/datasets/DynamicSuperb/EmergencyTrafficDetection_Large-Scale-Audio-dataset
+
+
+Clasificación de Instrumentos de Percusión
+
+https://huggingface.co/datasets/DynamicSuperb/HEARPercussionInstrumentsStrokeClassification_MridangamStroke-Fold1
+
+https://huggingface.co/datasets/DynamicSuperb/HEARPercussionInstrumentsStrokeClassification_MridangamStroke-Fold2
+
+https://huggingface.co/datasets/DynamicSuperb/HEARPercussionInstrumentsStrokeClassification_MridangamStroke-Fold3
+
+https://huggingface.co/datasets/DynamicSuperb/HEARPercussionInstrumentsStrokeClassification_MridangamStroke-Fold4
+
+https://huggingface.co/datasets/DynamicSuperb/HEARPercussionInstrumentsStrokeClassification_MridangamStroke-Fold5
+
+
+
+https://huggingface.co/datasets/DynamicSuperb/HEARPercussionInstrumentsTonicClassification_MridangamTonic-Fold1
+
+https://huggingface.co/datasets/DynamicSuperb/HEARPercussionInstrumentsTonicClassification_MridangamTonic-Fold2
+
+https://huggingface.co/datasets/DynamicSuperb/HEARPercussionInstrumentsTonicClassification_MridangamTonic-Fold3
+
+https://huggingface.co/datasets/DynamicSuperb/HEARPercussionInstrumentsTonicClassification_MridangamTonic-Fold4
+
+https://huggingface.co/datasets/DynamicSuperb/HEARPercussionInstrumentsTonicClassification_MridangamTonic-Fold5
