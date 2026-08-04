@@ -23,6 +23,7 @@ Libro de fundamentos, metodos y aplicaciones. El contenido teorico es independie
 - [Capitulo 16](Capitulo_16_Procesamiento_del_lenguaje_y_modelos_de_lenguaje.md)
 - [Laboratorios integradores](Laboratorios_integradores.md)
 - [Apendices](Apendices.md)
+- [Apéndice D: proyectos y datasets](Apendice_D_Proyectos_integradores.md)
 
 ## Material grafico
 

@@ -124,7 +124,7 @@ Elaborar una ficha de análisis para una aplicación real, incluyendo beneficios
 
 ### 2.1.5. Criterios de éxito y línea de base
 
-### 2.1.6. Ejemplo práctico guiado: formulación de un problema de calidad del agua
+### 2.1.6. Ejemplo práctico guiado: formulación de un problema de mantenimiento ferroviario
 
 Transformar una necesidad operativa en preguntas descriptivas, predictivas y prescriptivas medibles.
 
@@ -238,7 +238,7 @@ Construir un perfil de calidad que identifique tipos, rangos, faltantes, duplica
 
 ### 3.2.6. Detección y tratamiento de valores atípicos
 
-### 3.2.7. Ejemplo práctico guiado: limpieza de mediciones de presión y caudal
+### 3.2.7. Ejemplo práctico guiado: limpieza de mediciones de temperatura y vibración
 
 Diseñar y aplicar reglas que preserven eventos reales mientras se corrigen errores de medición o registro.
 
@@ -338,7 +338,7 @@ Comparar un procedimiento incorrecto con otro que ajuste todas las transformacio
 
 ### 4.1.7. Asimetría y curtosis
 
-### 4.1.8. Ejemplo práctico guiado: perfil estadístico del consumo de agua
+### 4.1.8. Ejemplo práctico guiado: perfil estadístico del consumo eléctrico
 
 Calcular e interpretar medidas descriptivas y reconocer distribuciones asimétricas y observaciones extremas.
 
@@ -498,9 +498,9 @@ Seleccionar distribuciones plausibles y contrastar sus propiedades con observaci
 
 ### 5.3.6. Inferencia mediante distribuciones conjuntas
 
-### 5.3.7. Ejemplo práctico guiado: diagnóstico probabilístico de una fuga
+### 5.3.7. Ejemplo práctico guiado: diagnóstico probabilístico de una transacción fraudulenta
 
-Actualizar la probabilidad de una fuga a partir de sucesivas evidencias de presión, caudal y reclamos.
+Actualizar la probabilidad de fraude a partir de sucesivas evidencias sobre importe, dispositivo y localización.
 
 ### Actividad EMO [AGUA-04]: estimar riesgo y priorizar una acción
 
@@ -590,7 +590,7 @@ Expresar probabilidades, incertidumbres y supuestos de manera comprensible para 
 
 ### 6.1.6. Agentes omniscientes frente a agentes racionales
 
-### 6.1.7. Ejemplo práctico guiado: definición de un agente para gestión de redes de agua
+### 6.1.7. Ejemplo práctico guiado: definición de un agente para supervisión de una cadena de frío
 
 Especificar las percepciones, acciones, objetivos, información disponible y criterios de desempeño.
 
@@ -764,9 +764,9 @@ Optimizar un recorrido sujeto a límites de tiempo, prioridades y disponibilidad
 
 ### 8.1.6. Valor de la información
 
-### 8.1.7. Ejemplo práctico guiado: decisión de inspección y reparación
+### 8.1.7. Ejemplo práctico guiado: decisión de inspección y reemplazo de un transformador
 
-Comparar alternativas según probabilidad de fuga, costos, beneficios y tolerancia al riesgo.
+Comparar alternativas según probabilidad de avería, costos, beneficios y tolerancia al riesgo.
 
 ## 8.2. Procesos de decisión de Markov
 
@@ -1953,5 +1953,4 @@ Los ejemplos prácticos guiados deberán:
 4. Cada estudiante debe presentar una evidencia individual y responder preguntas sobre el producto completo.
 5. El laboratorio no obliga a aplicar técnicas que no sean pertinentes al tipo de dato.
 6. Las extensiones avanzadas se consideran profundización y no sustituyen las capacidades mínimas.
-
 

@@ -1,0 +1,29 @@
+# Fuente de datos sobre Calidad del Agua y modo de acceso
+
+Para descargar datos de los estudios de calidad del agua se puede ingresar mediante un explorador web a la url:
+https://www.waterqualitydata.us/
+
+
+Seleccionar la modalidad basica (descarga manual) o avanzada (descarga programática).
+
+## BASICA
+
+Seleccionar los filtros para delimitar la consulta de datos mediante el formulario.
+
+Avanzar con NEXT hasta definir todos los filtros. Aparecerá una ventana para descargar los datos.
+
+
+## AVANZADA
+
+Seleccionar todos los filtros que se desean y desplazarse al final de la web para encontrar los comandos que se pueden incluir en el programa para realizar la descarga automáticamente.
+
+En el caso de usar CURL por ejemplo se tiene el comando:
+
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/zip' -d '{"statecode":["CA:10"],"startDateLo":"01-01-2020","providers":["NWIS","STORET"]}' 'https://www.waterqualitydata.us/data/Station/search?mimeType=xlsx&zip=yes'
+
+
+### Manejo de archivos de desde descarga en terminal
+
+Cuando se realiza la descarga desde el terminal con el comando anterior se recive un archivo ZIP, el cual debe ser guardado en disco. para ello se debe introducir el parámetro --output seguido del nombre del archivo ZIP. Por ejemplo se tiene:
+
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/zip' -d '{"statecode":["CA:10"],"startDateLo":"01-01-2020","providers":["NWIS","STORET"]}' --output NOMBRE_ARCHIVO.zip 'https://www.waterqualitydata.us/data/Station/search?mimeType=xlsx&zip=yes'

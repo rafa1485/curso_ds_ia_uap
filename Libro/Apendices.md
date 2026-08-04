@@ -14,4 +14,6 @@ Documentar poblacion objetivo, datos, etiquetas, cambios de distribucion, limita
 
 ## D. Proyectos integradores
 
-Para cada caso se deben registrar fuente, licencia, version, unidad de analisis, diccionario, actividades EMO, particiones, laboratorio, rubrica y defensa. La version del dataset forma parte del resultado.
+El desarrollo completo se encuentra en [Apéndice D. Proyectos integradores y contratos de datos](Apendice_D_Proyectos_integradores.md).
+
+El apéndice fija para movilidad, agua, reclamos y sanidad vegetal las fuentes oficiales, variables disponibles, derivados permitidos, particiones, actividades EMO, objetivos realizables, límites y rúbrica común. La versión del dataset forma parte del resultado.

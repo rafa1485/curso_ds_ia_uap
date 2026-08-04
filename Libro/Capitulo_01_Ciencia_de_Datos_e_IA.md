@@ -40,9 +40,11 @@ Estas categorías pueden combinarse, pero no deben confundirse. Describir que do
 
 Una especificación inicial de un problema puede expresarse como:
 
-`P = (U, O, X, Y, A, H, C)`
+$$
+P = (U, O, X, Y, A, H, C)
+$$
 
-donde `U` es la unidad de análisis, `O` el objetivo, `X` las variables disponibles, `Y` el resultado de interés, `A` el conjunto de acciones posibles, `H` el horizonte temporal y `C` las restricciones. Esta notación obliga a preguntar qué representa cada observación y en qué momento se conocerá cada dato.
+donde $U$ es la unidad de análisis, $O$ el objetivo, $X$ las variables disponibles, $Y$ el resultado de interés, $A$ el conjunto de acciones posibles, $H$ el horizonte temporal y $C$ las restricciones. Esta notación obliga a preguntar qué representa cada observación y en qué momento se conocerá cada dato.
 
 Por ejemplo, si una empresa desea reducir retrasos de transporte, una fila podría representar un viaje, una parada, una zona o un intervalo de quince minutos. Cada elección conduce a una pregunta diferente. Predecir el retraso de un viaje requiere variables disponibles antes de iniciarlo; analizar la congestión de una zona puede requerir agregar muchos viajes; asignar vehículos necesita además conocer recursos y restricciones operativas.
 
@@ -54,17 +56,21 @@ La Inteligencia Artificial estudia la construcción de sistemas capaces de reali
 
 Una forma clásica de describir un sistema inteligente es mediante el concepto de agente. Un agente recibe una secuencia de percepciones y selecciona acciones:
 
-`a_t = pi(h_t)`
+$$
+a_t = \pi(h_t)
+$$
 
-donde `h_t` es la historia de percepciones hasta el instante `t`, `a_t` es la acción y `pi` es la política o función de decisión. En un sistema sencillo, `pi` puede ser una tabla de reglas. En otro, puede ser un modelo aprendido a partir de datos. La complejidad de la implementación no determina por sí sola la inteligencia del comportamiento.
+donde $h_t$ es la historia de percepciones hasta el instante $t$, $a_t$ es la acción y $\pi$ es la política o función de decisión. En un sistema sencillo, $\pi$ puede ser una tabla de reglas. En otro, puede ser un modelo aprendido a partir de datos. La complejidad de la implementación no determina por sí sola la inteligencia del comportamiento.
 
-El agente actúa en un entorno. El entorno puede ser físico, como una red de agua o un vehículo, o informacional, como un sistema de reclamos. Las acciones producen consecuencias que pueden medirse mediante una función de desempeño `U`. Un agente racional intenta seleccionar acciones con buen desempeño esperado, dadas sus percepciones, su conocimiento y sus recursos.
+El agente actúa en un entorno. El entorno puede ser físico, como una red de agua o un vehículo, o informacional, como un sistema de reclamos. Las acciones producen consecuencias que pueden medirse mediante una función de desempeño $U$. Un agente racional intenta seleccionar acciones con buen desempeño esperado, dadas sus percepciones, su conocimiento y sus recursos.
 
 La formulación general de una decisión bajo incertidumbre es:
 
-`a* = argmax_a E[U(a, S) | evidencia disponible]`
+$$
+a^* = \operatorname*{arg\,max}_{a}\;\mathbb{E}\!\left[U(a,S)\mid\text{evidencia disponible}\right]
+$$
 
-El valor de la expresión depende de cómo se definan los estados posibles `S`, sus probabilidades, la utilidad y las restricciones. Esto es importante porque un sistema puede optimizar perfectamente una función mal elegida. Si se recompensa únicamente la rapidez de respuesta, un asistente puede producir respuestas rápidas pero incorrectas; si se penalizan demasiado los falsos negativos, un detector puede generar demasiadas alertas innecesarias.
+El valor de la expresión depende de cómo se definan los estados posibles $S$, sus probabilidades, la utilidad y las restricciones. Esto es importante porque un sistema puede optimizar perfectamente una función mal elegida. Si se recompensa únicamente la rapidez de respuesta, un asistente puede producir respuestas rápidas pero incorrectas; si se penalizan demasiado los falsos negativos, un detector puede generar demasiadas alertas innecesarias.
 
 La IA incluye enfoques basados en reglas, búsqueda, lógica, probabilidades, planificación, aprendizaje automático, visión artificial, procesamiento del lenguaje y agentes autónomos. El aprendizaje automático es una parte de la IA, no su totalidad. Un sistema experto construido con reglas puede ser IA aunque no aprenda automáticamente. Del mismo modo, una regresión usada para describir una relación puede pertenecer a Ciencia de Datos sin constituir un agente inteligente.
 
@@ -72,13 +78,18 @@ La distinción entre capacidad y autonomía también es fundamental. Un sistema 
 
 ### 1.1.3. Aprendizaje automático y aprendizaje profundo
 
-El aprendizaje automático construye una función a partir de ejemplos o experiencia. En el aprendizaje supervisado se dispone de observaciones `D = {(x_i, y_i)}_{i=1}^n`, donde `x_i` representa entradas y `y_i` el resultado asociado. El objetivo es estimar una función `f_theta` cuyos parámetros `theta` produzcan resultados útiles en observaciones nuevas.
+El aprendizaje automático construye una función a partir de ejemplos o experiencia. En el aprendizaje supervisado se dispone de observaciones $D=\{(x_i,y_i)\}_{i=1}^{n}$, donde $x_i$ representa entradas y $y_i$ el resultado asociado. El objetivo es estimar una función $f_\theta$ cuyos parámetros $\theta$ produzcan resultados útiles en observaciones nuevas.
 
 Una formulación frecuente es:
 
-`theta* = argmin_theta [ (1/n) sum_i L(y_i, f_theta(x_i)) + lambda Omega(theta) ]`
+$$
+\theta^* = \operatorname*{arg\,min}_{\theta}\left[
+\frac{1}{n}\sum_{i=1}^{n}L\!\left(y_i,f_\theta(x_i)\right)
++ \lambda\Omega(\theta)
+\right]
+$$
 
-La primera parte mide el error sobre los ejemplos disponibles. `L` puede ser una pérdida cuadrática para regresión, una pérdida logarítmica para clasificación u otra función apropiada. El término `Omega(theta)` penaliza complejidad; `lambda` controla la intensidad de la regularización. La optimización encuentra parámetros, pero no garantiza que la tarea esté bien formulada ni que el modelo generalice.
+La primera parte mide el error sobre los ejemplos disponibles. $L$ puede ser una pérdida cuadrática para regresión, una pérdida logarítmica para clasificación u otra función apropiada. El término $\Omega(\theta)$ penaliza complejidad; $\lambda$ controla la intensidad de la regularización. La optimización encuentra parámetros, pero no garantiza que la tarea esté bien formulada ni que el modelo generalice.
 
 La generalización es la capacidad de funcionar sobre datos que no se utilizaron para ajustar el modelo. Si un algoritmo memoriza peculiaridades del conjunto de entrenamiento, puede presentar bajo error interno y fallar en producción. Por eso se separan entrenamiento, validación y prueba, y se diseñan protocolos que respetan tiempo, grupos, duplicados y disponibilidad de información.
 
@@ -86,9 +97,11 @@ En el aprendizaje no supervisado no se dispone necesariamente de una variable ob
 
 El aprendizaje profundo utiliza redes neuronales con múltiples capas de transformaciones. Una capa puede calcular:
 
-`h^(l) = phi(W^(l) h^(l-1) + b^(l))`
+$$
+h^{(\ell)} = \phi\!\left(W^{(\ell)}h^{(\ell-1)}+b^{(\ell)}\right)
+$$
 
-donde `W` son pesos, `b` sesgos y `phi` una función no lineal. Al apilar capas, el sistema aprende representaciones intermedias: en una imagen pueden aparecer bordes, texturas y formas; en un texto, relaciones entre tokens y contexto. La profundidad aumenta la capacidad representacional, pero también la necesidad de datos, cómputo, regularización, diagnóstico y explicabilidad.
+donde $W$ son pesos, $b$ sesgos y $\phi$ una función no lineal. Al apilar capas, el sistema aprende representaciones intermedias: en una imagen pueden aparecer bordes, texturas y formas; en un texto, relaciones entre tokens y contexto. La profundidad aumenta la capacidad representacional, pero también la necesidad de datos, cómputo, regularización, diagnóstico y explicabilidad.
 
 “Aprender” no significa comprender en el sentido humano. Un modelo estadístico identifica regularidades útiles para su objetivo de entrenamiento. Puede explotar correlaciones espurias, señales de fondo o artefactos de captura. Por eso la inspección de ejemplos, la evaluación por subgrupos y el análisis fuera de distribución son tan importantes como la métrica global.
 
@@ -116,11 +129,13 @@ Un proyecto sólido necesita que estas perspectivas sean compatibles. Un modelo 
 
 Un modelo descriptivo resume observaciones. Puede calcular frecuencias, medias, cuantiles, distribuciones, asociaciones o segmentos. Su propósito es responder qué ocurrió o qué estructuras aparecen. Un modelo descriptivo no necesita predecir el futuro para ser valioso; por ejemplo, identificar horarios con mayor demanda puede orientar una investigación operativa.
 
-Un modelo predictivo estima un resultado desconocido. La predicción puede referirse al futuro, a una observación cuyo valor aún no se midió o a una etiqueta que requiere evaluación costosa. Formalmente, se busca estimar `P(Y|X)` o una cantidad condicional como `E[Y|X]`. La calidad se mide comparando predicciones con resultados observados mediante un protocolo que represente el uso real.
+Un modelo predictivo estima un resultado desconocido. La predicción puede referirse al futuro, a una observación cuyo valor aún no se midió o a una etiqueta que requiere evaluación costosa. Formalmente, se busca estimar $P(Y\mid X)$ o una cantidad condicional como $\mathbb{E}[Y\mid X]$. La calidad se mide comparando predicciones con resultados observados mediante un protocolo que represente el uso real.
 
-Un modelo prescriptivo compara acciones. Puede usar predicciones, pero agrega una función de utilidad, costos, restricciones y consecuencias. Si `p` es la probabilidad de una falla, `C_i` el costo de inspección y `C_f` el costo de no detectar la falla, una regla simple puede seleccionar inspección cuando:
+Un modelo prescriptivo compara acciones. Puede usar predicciones, pero agrega una función de utilidad, costos, restricciones y consecuencias. Si $p$ es la probabilidad de una falla, $C_i$ el costo de inspección y $C_f$ el costo de no detectar la falla, una regla simple puede seleccionar inspección cuando:
 
-`p * C_f > C_i`
+$$
+p\,C_f > C_i
+$$
 
 La desigualdad no es una ley universal. Es una consecuencia de un modelo de costos determinado. Si existen beneficios de inspeccionar, restricciones de capacidad o daños irreversibles, la regla debe ampliarse.
 
@@ -182,11 +197,11 @@ Este enfoque es útil cuando se diseñan interfaces, tutores o herramientas de a
 
 ### 1.2.3. Sistemas que piensan racionalmente
 
-Pensar racionalmente significa derivar conclusiones válidas a partir de premisas y reglas de inferencia. La lógica proposicional y la lógica de predicados ofrecen lenguajes formales para representar hechos y relaciones. Si se tiene `A -> B` y se observa `A`, el modus ponens permite inferir `B`.
+Pensar racionalmente significa derivar conclusiones válidas a partir de premisas y reglas de inferencia. La lógica proposicional y la lógica de predicados ofrecen lenguajes formales para representar hechos y relaciones. Si se tiene $A\to B$ y se observa $A$, el modus ponens permite inferir $B$.
 
 La ventaja de la lógica es la claridad: las premisas, reglas y conclusiones pueden inspeccionarse. Sus limitaciones aparecen cuando el conocimiento es incompleto, ambiguo o incierto. Un sistema médico raramente dispone de premisas absolutas; una observación puede ser ruidosa y una regla puede tener excepciones.
 
-La probabilidad amplía este enfoque al permitir grados de creencia. En lugar de afirmar únicamente que una hipótesis es verdadera o falsa, se puede calcular `P(H|E)`, la probabilidad de una hipótesis `H` dada la evidencia `E`. La lógica difusa, los modelos gráficos y otras formalizaciones representan incertidumbre o vaguedad de maneras diferentes.
+La probabilidad amplía este enfoque al permitir grados de creencia. En lugar de afirmar únicamente que una hipótesis es verdadera o falsa, se puede calcular $P(H\mid E)$, la probabilidad de una hipótesis $H$ dada la evidencia $E$. La lógica difusa, los modelos gráficos y otras formalizaciones representan incertidumbre o vaguedad de maneras diferentes.
 
 Pensar racionalmente tampoco garantiza actuar bien. Una inferencia puede ser válida y conducir a una acción perjudicial si las premisas son incorrectas o si no se consideraron costos y consecuencias.
 
@@ -194,9 +209,11 @@ Pensar racionalmente tampoco garantiza actuar bien. Una inferencia puede ser vá
 
 Un sistema actúa racionalmente cuando selecciona, entre las acciones disponibles, aquella que maximiza el desempeño esperado según sus objetivos, información y limitaciones. Este enfoque es central para los agentes inteligentes.
 
-Sea `S` el estado del entorno, `E` la evidencia, `A` una acción y `U` la utilidad. La elección ideal puede escribirse como:
+Sea $S$ el estado del entorno, $E$ la evidencia, $A$ una acción y $U$ la utilidad. La elección ideal puede escribirse como:
 
-`a* = argmax_a sum_s P(s | E) U(a,s)`
+$$
+a^* = \operatorname*{arg\,max}_{a}\sum_s P(s\mid E)\,U(a,s)
+$$
 
 El agente no necesita conocer el estado verdadero con certeza. Necesita representar creencias sobre estados posibles, evaluar consecuencias y reconocer el costo de obtener más información. La racionalidad es, por tanto, relativa a la información disponible. Un agente no es irracional por no elegir una acción que solo sería óptima con información que no podía observar.
 
@@ -291,7 +308,10 @@ El aprendizaje profundo se benefició de datasets extensos, GPU, arquitecturas d
 
 Los modelos fundacionales se preentrenan sobre grandes colecciones y luego se adaptan a tareas o dominios. La IA generativa produce nuevas instancias condicionadas por una entrada: texto, imágenes, audio, código u otros contenidos. En un modelo autoregresivo, una secuencia puede factorizarse como:
 
-`P(x_1,...,x_T) = product_t P(x_t | x_1,...,x_(t-1))`
+$$
+P(x_1,\ldots,x_T)
+=P(x_1)\prod_{t=2}^{T}P\!\left(x_t\mid x_1,\ldots,x_{t-1}\right)
+$$
 
 Esta formulación permite generar paso a paso, pero no garantiza que el contenido sea verdadero. La fluidez lingüística es una propiedad de generación, no una prueba de conocimiento. Por eso los modelos generativos deben combinarse con recuperación de fuentes, validación, límites de uso y supervisión.
 

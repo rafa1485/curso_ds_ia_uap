@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17324d">
+  <title>{{ current.title }} | Ciencia de Datos e IA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'arithmatex'
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script defer src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+  <header class="mobile-header">
+    <a class="mobile-brand" href="{{ url_for('home') }}">CD · IA</a>
+    <button class="menu-button" id="menu-button" type="button" aria-expanded="false" aria-controls="book-sidebar">
+      <span></span><span></span><span></span>
+      <span class="sr-only">Abrir índice del libro</span>
+    </button>
+  </header>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+  <aside class="book-sidebar" id="book-sidebar" aria-label="Capítulos del libro">
+    <div class="brand-block">
+      <a class="brand-mark" href="{{ url_for('home') }}" aria-label="Ir al índice">CD<span>+</span>IA</a>
+      <p class="eyebrow">Libro digital</p>
+      <p class="book-name">Ciencia de Datos e Inteligencia Artificial</p>
+    </div>
+
+    <nav class="chapter-nav">
+      <p class="nav-label">Contenido</p>
+      {% for document in documents %}
+        <a class="chapter-link {{ 'active' if document.slug == current.slug else '' }} {{ document.kind }}"
+           href="{{ url_for('show_document', slug=document.slug) }}"
+           {% if document.slug == current.slug %}aria-current="page"{% endif %}>
+          {% if document.kind == 'chapter' %}
+            <span class="chapter-number">{{ '%02d'|format(loop.index - 1) }}</span>
+          {% else %}
+            <span class="chapter-symbol">{{ '⌂' if document.kind == 'index' else '·' }}</span>
+          {% endif %}
+          <span>{{ document.nav_title }}</span>
+        </a>
+      {% endfor %}
+    </nav>
+  </aside>
+
+  <main class="page-shell">
+    <div class="chapter-meta">
+      <span>{{ 'Capítulo' if current.kind == 'chapter' else 'Material complementario' }}</span>
+      <span class="meta-rule"></span>
+      <span>Lectura digital</span>
+    </div>
+
+    <div class="content-grid">
+      <article class="book-content" id="book-content">
+        {{ content | safe }}
+
+        <nav class="page-navigation" aria-label="Navegación entre capítulos">
+          {% if previous %}
+            <a class="page-link previous" href="{{ url_for('show_document', slug=previous.slug) }}">
+              <span class="page-direction">← Anterior</span>
+              <strong>{{ previous.title }}</strong>
+            </a>
+          {% else %}<span></span>{% endif %}
+          {% if following %}
+            <a class="page-link next" href="{{ url_for('show_document', slug=following.slug) }}">
+              <span class="page-direction">Siguiente →</span>
+              <strong>{{ following.title }}</strong>
+            </a>
+          {% endif %}
+        </nav>
+      </article>
+
+      <aside class="section-sidebar" aria-label="Secciones de este capítulo">
+        <p class="nav-label">En esta página</p>
+        <div class="toc">{{ chapter_toc | safe }}</div>
+        <a class="back-to-top" href="#">Volver arriba ↑</a>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>
