@@ -1,0 +1,506 @@
+% Compilar desde este directorio con:
+% pdflatex Clase_01_Introduccion_a_la_Ciencia_de_Datos.tex
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{array}
+
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+
+\usetheme{Boadilla}
+\usecolortheme{default}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alerted text}{fg=UAPTeal}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.78\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}%
+      \color{UAPGray}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}%
+      \color{UAPGray}\hfill Semana 1 \enspace | \enspace \insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}%
+  }%
+}
+
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\newcommand{\pregunta}[1]{\begin{block}{Pregunta clave}#1\end{block}}
+\graphicspath{{../../../Libro/imagenes/}{Libro/imagenes/}}
+
+\title[Data Science · Clase 1]{Introducción a la Ciencia de Datos}
+\subtitle{Problema, datos y workflow}
+\author{Curso de Data Science}
+\institute{Semana 1 · Clase 1}
+\date{}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+    \vfill
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\Huge\inserttitle\par}
+    \vspace{0.5em}
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\Large\insertsubtitle\par}
+    \vspace{2em}
+    {\color{white}\large\insertauthor\par}
+    {\color{white}\insertinstitute\par}
+    \vfill
+  \end{beamercolorbox}
+\end{frame}
+
+\begin{frame}{Propósito de la clase}
+  Comprender la Ciencia de Datos como un proceso interdisciplinario que transforma observaciones en evidencia para apoyar decisiones.
+  \vspace{0.6em}
+  \begin{block}{Al finalizar, podremos}
+    \begin{itemize}
+      \item distinguir problema, dato, modelo, evidencia y decisión;
+      \item reconocer objetivos descriptivos, predictivos y prescriptivos;
+      \item explicar las etapas generales de un proyecto de datos;
+      \item caracterizar fuentes, tipos y limitaciones de los datos;
+      \item formular un problema inicial de movilidad urbana.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Pregunta de apertura}
+  \begin{block}{Situación}
+    Una empresa de movilidad quiere ``mejorar el servicio''.
+  \end{block}
+  \pregunta{¿Qué necesitamos precisar antes de abrir un dataset?}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{itemize}
+        \item ¿Quién utilizará el resultado?
+        \item ¿Qué decisión debe tomar?
+        \item ¿Qué representa una observación?
+      \end{itemize}
+    \column{0.48\textwidth}
+      \begin{itemize}
+        \item ¿Qué resultado se quiere modificar?
+        \item ¿Cómo sabremos si aporta valor?
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{¿Qué es la Ciencia de Datos?}
+  Campo interdisciplinario que desarrolla métodos para:
+  \begin{enumerate}
+    \item obtener conocimiento a partir de datos;
+    \item comunicar evidencia sobre un fenómeno;
+    \item apoyar decisiones bajo objetivos y restricciones.
+  \end{enumerate}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{block}{No se reduce a}
+        Programar, entrenar modelos, producir gráficos o acumular datos.
+      \end{block}
+    \column{0.48\textwidth}
+      \begin{block}{Idea central}
+        \alert{La pregunta y la decisión determinan el producto apropiado.}
+      \end{block}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Los datos representan, no reproducen}
+  Un dato es un registro producido por un proceso de observación.
+  \vspace{0.5em}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{0.20\textwidth} X X}
+    \toprule
+    Fenómeno & Registro posible & Lo que puede quedar fuera \\
+    \midrule
+    Demora de un viaje & Hora programada y hora real & Tráfico, incidentes, criterio de registro \\
+    Ubicación & Coordenadas GPS & Precisión, pérdida de señal, contexto vial \\
+    Experiencia & Reclamo o encuesta & Personas que no responden, lenguaje, expectativas \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \pregunta{¿Qué representa este campo, cómo se obtuvo y cuándo estuvo disponible?}
+\end{frame}
+
+\begin{frame}{De los datos a la decisión}
+  \centering
+  \includegraphics[width=0.95\textwidth]{ciclo_vida_datos.png}
+  \vspace{0.5em}
+
+  \texttt{problema $\rightarrow$ datos $\rightarrow$ representación $\rightarrow$ análisis $\rightarrow$ evidencia $\rightarrow$ decisión $\rightarrow$ evaluación}
+  \vfill
+  \begin{itemize}
+    \item El ciclo es \concepto{iterativo}, no una línea rígida.
+    \item Un hallazgo puede obligar a revisar la pregunta inicial.
+    \item Un modelo estima; una decisión incorpora objetivos, costos y responsabilidades.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Preguntas que puede responder un proyecto}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{0.17\textwidth} X X}
+    \toprule
+    Objetivo & Pregunta típica & Ejemplo de movilidad \\
+    \midrule
+    Describir & ¿Qué ocurrió? & ¿Dónde se concentran las demoras? \\
+    Diagnosticar & ¿Qué factores se asocian? & ¿Qué acompaña demoras mayores? \\
+    Predecir & ¿Qué valor no conocemos? & ¿Cuánto demorará el próximo viaje? \\
+    Prescribir & ¿Qué acción conviene? & ¿A qué zona reasignar un vehículo? \\
+    Monitorear & ¿Qué está cambiando? & ¿Se degradó la puntualidad? \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \centering\alert{Estas preguntas pueden conectarse, pero no son equivalentes.}
+\end{frame}
+
+\begin{frame}{Describir no es predecir}
+  \begin{columns}[T]
+    \column{0.47\textwidth}
+      \begin{block}{Descripción}
+        Resume observaciones mediante frecuencias, medias, cuantiles, distribuciones o segmentos.
+      \end{block}
+    \column{0.47\textwidth}
+      \begin{block}{Predicción}
+        Estima un resultado desconocido o futuro y se evalúa sobre casos no utilizados para ajustar el modelo.
+      \end{block}
+  \end{columns}
+  \vfill
+  \pregunta{Saber dónde ocurrieron demoras, ¿permite anticipar la demora del próximo viaje?}
+\end{frame}
+
+\begin{frame}{Predecir no es decidir}
+  \begin{columns}[T]
+    \column{0.42\textwidth}
+      \begin{block}{Predicción}
+        \centering\large Demora esperada: 18 minutos
+      \end{block}
+    \column{0.54\textwidth}
+      \begin{block}{Decisión}
+        Reasignar vehículo, mantener distribución o solicitar apoyo.
+      \end{block}
+  \end{columns}
+  \vspace{0.5em}
+  Para decidir también necesitamos:
+  \begin{itemize}
+    \item costos, beneficios, capacidad y restricciones;
+    \item horizonte temporal y consecuencias de los errores;
+    \item responsables de ejecutar y revisar.
+  \end{itemize}
+  \centering\alert{Una predicción precisa puede ser inútil si no modifica ninguna acción.}
+\end{frame}
+
+\begin{frame}{Una disciplina interdisciplinaria}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{0.27\textwidth} X}
+    \toprule
+    Perspectiva & Contribución \\
+    \midrule
+    Estadística & Variabilidad, inferencia, incertidumbre y evaluación \\
+    Matemática y optimización & Relaciones, objetivos, restricciones y selección \\
+    Computación & Representación, algoritmos y eficiencia \\
+    Ingeniería de software & Reproducibilidad, pruebas, operación y monitoreo \\
+    Conocimiento del dominio & Significado, plausibilidad y restricciones reales \\
+    Comunicación & Evidencia comprensible para usuarios y responsables \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+\begin{frame}{Formular antes de modelar}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{itemize}
+        \item \concepto{Unidad}: ¿qué representa una fila?
+        \item \concepto{Usuario}: ¿quién usará el resultado?
+        \item \concepto{Objetivo}: ¿qué se quiere mejorar?
+        \item \concepto{Acción}: ¿qué puede hacerse?
+      \end{itemize}
+    \column{0.48\textwidth}
+      \begin{itemize}
+        \item \concepto{Horizonte}: ¿para cuándo se necesita?
+        \item \concepto{Datos}: ¿qué estará disponible?
+        \item \concepto{Restricciones}: ¿qué límites existen?
+        \item \concepto{Valor}: ¿cómo se evaluará la utilidad?
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{La unidad cambia la pregunta}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{0.28\textwidth} X}
+    \toprule
+    Unidad de análisis & Pregunta resultante \\
+    \midrule
+    Viaje & ¿Este viaje llegará con demora? \\
+    Vehículo & ¿Qué vehículos acumulan más retrasos? \\
+    Zona y franja horaria & ¿Dónde y cuándo aumenta la demanda? \\
+    Día & ¿Cómo cambia la puntualidad a lo largo del tiempo? \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{block}{Conclusión}
+    No existe una fila ``natural'': la unidad se elige según el problema y la decisión.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Workflow de un proyecto de datos}
+  \small
+  \begin{enumerate}
+    \item Comprender la necesidad y la decisión.
+    \item Establecer baseline y criterios de éxito.
+    \item Recolectar, comprender y auditar datos.
+    \item Preparar una representación analítica.
+    \item Analizar o modelar sin fuga de información.
+    \item Evaluar desempeño, utilidad y riesgos.
+    \item Comunicar o desplegar con monitoreo.
+    \item Iterar con nueva evidencia.
+  \end{enumerate}
+  \centering\alert{Es un proceso de decisión con evidencia, no una sucesión de algoritmos.}
+\end{frame}
+
+\begin{frame}{KDD y CRISP-DM}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{block}{KDD}
+        \centering\small Selección $\rightarrow$ limpieza $\rightarrow$ transformación $\rightarrow$ minería $\rightarrow$ interpretación
+        \vspace{0.6em}
+
+        Enfatiza el descubrimiento de conocimiento desde los datos.
+      \end{block}
+    \column{0.48\textwidth}
+      \begin{block}{CRISP-DM}
+        \centering\small Negocio $\rightarrow$ datos $\rightarrow$ preparación $\rightarrow$ modelado $\rightarrow$ evaluación $\rightarrow$ despliegue
+        \vspace{0.6em}
+
+        Conecta necesidad, trabajo analítico y uso.
+      \end{block}
+  \end{columns}
+  \vfill
+  \centering\alert{Ambas metodologías se aplican como ciclos con retroalimentación.}
+\end{frame}
+
+\begin{frame}{Tipos de datos según su estructura}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{0.22\textwidth} X X}
+    \toprule
+    Tipo & Característica & Ejemplo \\
+    \midrule
+    Estructurados & Esquema tabular definido & Viajes en Parquet o base SQL \\
+    Semiestructurados & Claves y estructura flexible & Respuesta JSON de una API \\
+    No estructurados & Requieren representación adicional & Texto, audio o imágenes \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  La estructura condiciona almacenamiento, controles de calidad, métodos de análisis y costo de integración.
+\end{frame}
+
+\begin{frame}{Fuentes y procedencia}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{itemize}
+        \item \concepto{Observacionales}: registran procesos sin intervención controlada.
+        \item \concepto{Experimentales}: provienen de intervenciones diseñadas.
+        \item \concepto{Simulados}: son generados por un modelo.
+      \end{itemize}
+    \column{0.48\textwidth}
+      \begin{itemize}
+        \item \concepto{Primarios}: se recolectan para el proyecto.
+        \item \concepto{Secundarios}: fueron creados con otro propósito.
+      \end{itemize}
+  \end{columns}
+  \vfill
+  \begin{block}{Documentar cada fuente}
+    Origen · licencia · cobertura · frecuencia · formato · calidad · sesgos · responsable
+  \end{block}
+\end{frame}
+
+\begin{frame}{Big Data: más que tamaño}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{0.19\textwidth} X}
+    \toprule
+    Dimensión & Pregunta de diagnóstico \\
+    \midrule
+    Volumen & ¿Cuánto se almacena y procesa? \\
+    Velocidad & ¿Con qué rapidez llega y pierde vigencia? \\
+    Variedad & ¿Cuántos formatos y significados se integran? \\
+    Veracidad & ¿Qué tan confiable es la medición? \\
+    Valor & ¿La información mejora una decisión? \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \centering\alert{Un dataset pequeño y preciso puede valer más que uno masivo pero irrelevante.}
+\end{frame}
+
+\begin{frame}{Herramientas: medios, no método}
+  \begin{columns}[T]
+    \column{0.47\textwidth}
+      \begin{block}{Python}
+        pandas · NumPy · Matplotlib · scikit-learn
+      \end{block}
+    \column{0.47\textwidth}
+      \begin{block}{R}
+        tidyverse · ggplot2 · tidymodels
+      \end{block}
+  \end{columns}
+  \vspace{0.6em}
+  Un proyecto reproducible registra:
+  \begin{itemize}
+    \item versiones, dependencias, parámetros y semillas;
+    \item datos, particiones y transformaciones;
+    \item métricas, resultados y decisiones.
+  \end{itemize}
+  \centering\alert{La elección depende del equipo, el ecosistema y la tarea.}
+\end{frame}
+
+\begin{frame}{Caso transversal: movilidad urbana}
+  \begin{block}{Necesidad inicial}
+    Una empresa que administra una flota quiere reducir demoras.
+  \end{block}
+  \small
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+      \begin{itemize}
+        \item \concepto{Unidad}: viaje.
+        \item \concepto{Usuario}: responsable de operaciones.
+        \item \concepto{Horizonte}: próxima franja horaria.
+        \item \concepto{Resultado}: demora por zona.
+      \end{itemize}
+    \column{0.48\textwidth}
+      \begin{itemize}
+        \item \concepto{Acción}: reasignar vehículos.
+        \item \concepto{Restricciones}: capacidad y distancia.
+        \item \concepto{Valor}: reducir demoras sin aumentar cancelaciones.
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Del caso amplio a tareas concretas}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{0.17\textwidth} X X}
+    \toprule
+    Etapa & Tarea & Producto \\
+    \midrule
+    Describir & Resumir viajes y demoras por zona y hora & Tabla o visualización \\
+    Predecir & Estimar demora del siguiente intervalo & Predicción y evaluación \\
+    Prescribir & Comparar reasignaciones factibles & Recomendación operativa \\
+    Monitorear & Detectar degradación del servicio & Indicadores y alertas \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{0.5em}
+  \begin{block}{Campos posibles}
+    \texttt{id\_viaje · origen · destino · hora\_programada · hora\_real · zona · vehículo}
+  \end{block}
+  \centering\alert{Cuidado: \texttt{hora\_real} no está disponible antes de terminar el viaje.}
+\end{frame}
+
+\begin{frame}{Actividad guiada: ficha del problema}
+  \small
+  En equipos, completar para el caso de movilidad:
+  \begin{enumerate}
+    \item problema observable y beneficio esperado;
+    \item usuario del resultado y personas afectadas;
+    \item unidad de análisis y periodo;
+    \item decisión y acciones posibles;
+    \item datos disponibles antes de decidir;
+    \item resultado de interés;
+    \item restricciones y supuestos;
+    \item baseline y métrica de valor.
+  \end{enumerate}
+  \begin{block}{Tiempo sugerido}
+    25 minutos de trabajo + 10 minutos de contraste.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Criterios de revisión de la ficha}
+  La evidencia es adecuada si:
+  \begin{itemize}
+    \item la unidad corresponde con la pregunta;
+    \item el usuario puede ejecutar la acción declarada;
+    \item las entradas existen antes de la decisión;
+    \item la métrica representa valor y no solo desempeño técnico;
+    \item el baseline permite comparar la propuesta;
+    \item los supuestos y límites son observables;
+    \item se reconocen personas o procesos afectados.
+  \end{itemize}
+  \begin{block}{Entregable de semana 1}
+    Ficha de una página, versión inicial.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Puesta en común}
+  Cada equipo presenta en un minuto:
+  \begin{enumerate}
+    \item su decisión principal;
+    \item la unidad de análisis elegida;
+    \item la métrica de valor;
+    \item el supuesto más riesgoso.
+  \end{enumerate}
+  \vspace{0.5em}
+  \begin{block}{Preguntas para contrastar}
+    \begin{itemize}
+      \item ¿Hay datos suficientes para representar el fenómeno?
+      \item ¿Se requiere descripción, predicción o prescripción?
+      \item ¿Qué cambia si la unidad es zona en vez de viaje?
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Síntesis}
+  \begin{itemize}
+    \item La Ciencia de Datos produce evidencia a partir de observaciones.
+    \item Los datos son representaciones parciales y situadas.
+    \item Describir, predecir y prescribir responden preguntas diferentes.
+    \item Un modelo no es una decisión.
+    \item El workflow conecta necesidad, datos, análisis, uso y evaluación.
+    \item Formular unidad, usuario, acción y valor precede a elegir herramientas.
+  \end{itemize}
+  \vfill
+  \begin{block}{Idea de cierre}
+    Primero se diseña la pregunta; después se decide qué datos y métodos necesita.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Autoevaluación}
+  \small
+  \begin{enumerate}
+    \item ¿Por qué los datos no equivalen al fenómeno observado?
+    \item ¿Qué diferencia existe entre una predicción y una decisión?
+    \item ¿Cómo cambia el problema al cambiar la unidad de análisis?
+    \item ¿Por qué CRISP-DM debe entenderse como un ciclo?
+    \item ¿Qué dimensión de Big Data se relaciona con la confiabilidad?
+    \item ¿Qué información produciría fuga al anticipar una demora?
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Lecturas y recursos}
+  \begin{block}{Lectura principal}
+    \begin{itemize}
+      \item \textbf{Capítulo 1}: secciones 1.1.1, 1.1.4, 1.1.5 y 1.1.6.
+      \item \textbf{Capítulo 2}: secciones 2.1 a 2.4.
+    \end{itemize}
+  \end{block}
+  \begin{block}{Para continuar}
+    \begin{itemize}
+      \item Revisar el glosario y la autoevaluación del capítulo 1.
+      \item Completar y entregar la ficha inicial del problema de movilidad.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\end{document}
