@@ -1,6 +1,6 @@
 ---
 title: "Introducción a la Ciencia de Datos"
-subtitle: "Problema, datos y workflow"
+subtitle: "De una necesidad a evidencia útil para decidir"
 course: "Data Science"
 week: 1
 class: 1
@@ -9,27 +9,25 @@ language: es
 
 # Introducción a la Ciencia de Datos
 
-## Problema, datos y workflow
+## De una necesidad a evidencia útil para decidir
 
 **Semana 1 · Clase 1**
 
-<!-- Notas docentes:
-Presentar el curso desde una pregunta central: ¿cómo se transforma una necesidad real en evidencia útil para decidir? Aclarar que la clase no comienza por algoritmos ni herramientas.
--->
+<!-- Notas docentes: La clase comienza por decisiones, representaciones y evidencia, no por algoritmos o herramientas. -->
 
 ---
 
 # Propósito de la clase
 
-Comprender la Ciencia de Datos como un proceso interdisciplinario que transforma observaciones en evidencia para apoyar decisiones.
+Comprender la Ciencia de Datos como un proceso interdisciplinario que transforma observaciones en evidencia para apoyar decisiones responsables.
 
 Al finalizar, podremos:
 
-- distinguir problema, dato, modelo, evidencia y decisión;
-- reconocer objetivos descriptivos, predictivos y prescriptivos;
-- explicar las etapas generales de un proyecto de datos;
-- caracterizar fuentes, tipos y limitaciones de los datos;
-- formular un problema inicial de movilidad urbana.
+- distinguir dato, representación, modelo, evidencia y decisión;
+- diferenciar descripción, predicción y prescripción;
+- formular unidad, población, alcance y horizonte antes de modelar;
+- explicar workflow, KDD, CRISP-DM, procedencia y reproducibilidad;
+- especificar un problema de movilidad con unidad **zona-franja**.
 
 ---
 
@@ -37,17 +35,14 @@ Al finalizar, podremos:
 
 > Una empresa de movilidad quiere “mejorar el servicio”.
 
-¿Qué necesitaríamos precisar antes de abrir un dataset?
+¿Qué debemos precisar antes de abrir un dataset?
 
+- ¿Qué situación se desea modificar?
 - ¿Quién utilizará el resultado?
-- ¿Qué decisión debe tomar?
-- ¿Qué representa una observación?
-- ¿Qué resultado se quiere modificar?
-- ¿Cómo sabremos si la solución aporta valor?
-
-<!-- Notas docentes:
-Recoger respuestas sin corregirlas todavía. Conservar en la pizarra las expresiones asociadas con problema, usuario, datos, acción y evaluación para retomarlas al final.
--->
+- ¿Sobre qué unidad se decidirá?
+- ¿Qué acción está disponible?
+- ¿Qué datos existirán a tiempo?
+- ¿Cómo se medirá el valor?
 
 ---
 
@@ -59,12 +54,7 @@ Campo interdisciplinario que desarrolla métodos para:
 2. comunicar evidencia sobre un fenómeno;
 3. apoyar decisiones bajo objetivos y restricciones.
 
-No se reduce a:
-
-- programar;
-- entrenar modelos predictivos;
-- producir gráficos;
-- acumular grandes volúmenes de datos.
+No se reduce a programar, graficar, entrenar modelos o acumular datos. Su producto puede ser un inventario, auditoría, análisis, estimación, visualización o recomendación.
 
 **La pregunta y la decisión determinan el producto apropiado.**
 
@@ -72,297 +62,460 @@ No se reduce a:
 
 # Los datos representan, no reproducen
 
-Un dato es un registro producido por un proceso de observación.
+Un dato es un registro producido por un proceso de observación situado.
 
-| Fenómeno | Registro posible | Lo que puede quedar fuera |
-|---|---|---|
-| Demora de un viaje | Hora programada y hora real | Tráfico, incidentes, criterio de registro |
-| Ubicación de un vehículo | Coordenadas GPS | Precisión, pérdida de señal, contexto vial |
-| Experiencia del pasajero | Reclamo o encuesta | Personas que no responden, lenguaje, expectativas |
+**Diagrama:** `fenómeno → proceso de observación → registro`, con una salida lateral que muestra lo que puede quedar fuera: contexto, silencios, error y selección.
 
-Antes de analizar debemos preguntar:
+Ejemplo:
 
-> ¿Qué representa este campo, cómo se obtuvo y cuándo estuvo disponible?
+`demoras en la ciudad → sensor / regla / canal → hora / GPS / reclamo`
 
----
+Preguntas mínimas:
 
-# De los datos a la decisión
-
-![Ciclo de vida de un proyecto de datos](../../../Libro/imagenes/ciclo_vida_datos.png)
-
-`problema → datos → representación → análisis → evidencia → decisión → evaluación`
-
-- El ciclo es **iterativo**, no una línea de producción rígida.
-- Un hallazgo puede obligar a revisar la pregunta inicial.
-- Un modelo representa o estima; una decisión incorpora objetivos, costos y responsabilidades.
-
-<!-- Notas docentes:
-Destacar la retroalimentación del gráfico. Reformular no significa fracasar: puede ser el principal aprendizaje del análisis.
--->
+- ¿Qué representa?
+- ¿Cómo se obtuvo?
+- ¿Qué no observa?
+- ¿Cuándo estuvo disponible?
 
 ---
 
-# Preguntas que puede responder un proyecto
+# De datos a conocimiento
 
-| Objetivo | Pregunta típica | Ejemplo de movilidad |
+**Diagrama:** `datos → información → conocimiento → decisión`.
+
+| Nivel | Significado | Operación principal |
 |---|---|---|
-| Describir | ¿Qué ocurrió? | ¿Dónde se concentran las demoras? |
-| Diagnosticar | ¿Qué factores se asocian? | ¿Qué variables acompañan demoras mayores? |
-| Predecir | ¿Qué valor aún no conocemos? | ¿Cuánto demorará el próximo viaje? |
-| Prescribir | ¿Qué acción conviene? | ¿A qué zona reasignar un vehículo? |
-| Monitorear | ¿Qué está cambiando? | ¿Se degradó la puntualidad esta semana? |
+| Datos | Observaciones codificadas | Registrar |
+| Información | Datos organizados en contexto | Organizar |
+| Conocimiento | Patrones y reglas de uso | Interpretar |
+| Decisión | Selección de una acción | Deliberar |
 
-Estas preguntas pueden conectarse, pero **no son equivalentes**.
+Cada transición agrega contexto, pero también supuestos, pérdidas y posibles sesgos. La **trazabilidad** permite reconstruirla.
+
+---
+
+# De la necesidad a la decisión
+
+**Diagrama:** `necesidad → pregunta → datos → análisis → evidencia → decisión humana → impacto`.
+
+## Correspondencia hacia adelante
+
+La tarea debe producir evidencia utilizable por una acción real.
+
+## Correspondencia hacia atrás
+
+La decisión define unidad, oportunidad, evaluación y datos necesarios.
+
+**Un modelo es un componente de la cadena, no la decisión.**
+
+---
+
+# El ciclo aprende y vuelve atrás
+
+**Diagrama circular:** `formular → obtener y representar → analizar y evaluar → revisar y decidir → observar impacto → formular`, con retornos desde evaluación hacia formulación y datos.
+
+- Explorar puede revelar que la pregunta no es medible.
+- Evaluar puede mostrar que no se supera el baseline.
+- Usar puede cambiar el proceso que genera datos.
+
+> La organización define quién aprueba, ejecuta, revisa y puede detener el sistema.
+
+---
+
+# Taxonomía de preguntas analíticas
+
+| Objetivo | Pregunta | Ejemplo en movilidad |
+|---|---|---|
+| Describir | ¿Qué ocurrió? | ¿Dónde y cuándo hubo demoras? |
+| Diagnosticar | ¿Qué se asocia? | ¿Qué acompaña demoras mayores? |
+| Predecir | ¿Qué valor no conocemos? | ¿Qué demanda tendrá cada zona-franja? |
+| Prescribir | ¿Qué acción conviene? | ¿Cómo reasignar vehículos factibles? |
+| Monitorear | ¿Qué está cambiando? | ¿Se degradó la cobertura o el modelo? |
+
+Pueden conectarse, pero requieren evidencia y evaluación diferentes.
+
+---
+
+# Describir: resumir lo observado
+
+Una descripción estima propiedades de observaciones y grupos:
+
+$$
+\bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i
+\qquad
+\widehat{p}=\frac{1}{n}\sum_{i=1}^{n}\mathbb{1}(y_i=1)
+$$
+
+- **Productos:** frecuencias, medias, cuantiles, distribuciones, segmentos y visualizaciones.
+- **Movilidad:** viajes, demora mediana y espera extrema por zona y franja observada.
+
+**Una asociación descriptiva no demuestra causa ni anticipa por sí sola.**
+
+---
+
+# Predecir: estimar lo no observado
+
+Una predicción estima un resultado desconocido, futuro o costoso de medir:
+
+$$
+\widehat{P}(Y\mid X)
+\qquad\text{o}\qquad
+\widehat{\mathbb{E}}[Y\mid X]
+$$
+
+- Las entradas deben existir en el momento real de uso.
+- La evaluación utiliza casos no usados para ajustar.
+- La partición debe respetar tiempo, grupos y duplicados.
+- El desempeño se compara con un baseline pertinente.
+
+> ¿Qué demanda tendrá cada zona durante la próxima franja?
 
 ---
 
 # Describir no es predecir
 
-## Descripción
+**Diagrama comparativo:** una tarjeta de descripción, que resume casos observados, conduce solo como hipótesis a una tarjeta de predicción, que estima casos no observados.
 
-Resume observaciones mediante frecuencias, medias, cuantiles, distribuciones o segmentos.
+| Descripción | Predicción |
+|---|---|
+| Resume casos observados | Estima casos no observados |
+| Media, cuantiles, distribución | Probabilidad condicional, error futuro |
+| ¿Dónde ocurrieron demoras? | ¿Qué zona-franja tendrá demanda alta? |
 
-## Predicción
-
-Estima un resultado desconocido o futuro y debe evaluarse sobre casos no utilizados para ajustar el modelo.
-
-> Saber dónde ocurrieron demoras no implica poder anticipar la demora del próximo viaje.
+Una buena explicación del pasado no implica bajo error sobre periodos posteriores.
 
 ---
 
 # Predecir no es decidir
 
-Una predicción estima un resultado:
+**Diagrama:** `predicción e incertidumbre → comparación de acciones, costos y restricciones → responsable humano`.
 
-`demora esperada = 18 minutos`
+$$
+a^*=\arg\max_{a\in\mathcal A}\mathbb E[U(a,S)\mid X]
+$$
 
-Una decisión compara acciones posibles:
+- El modelo informa.
+- La política compara.
+- La persona autorizada aprueba, modifica o rechaza.
 
-`reasignar vehículo / mantener distribución / solicitar apoyo`
-
-Para decidir también necesitamos:
-
-- costos y beneficios;
-- capacidad y restricciones;
-- horizonte temporal;
-- consecuencias de los errores;
-- responsables de ejecutar y revisar.
-
-**Una predicción precisa puede ser inútil si no modifica ninguna acción.**
+> La autoridad humana efectiva requiere tiempo, información y poder real para contradecir o detener la recomendación.
 
 ---
 
 # Una disciplina interdisciplinaria
 
+**Diagrama radial:** estadística, matemática, computación, ingeniería, conocimiento del dominio y comunicación convergen en evidencia útil y confiable.
+
 | Perspectiva | Contribución |
 |---|---|
-| Estadística | Variabilidad, inferencia, incertidumbre y evaluación |
-| Matemática y optimización | Relaciones, objetivos, restricciones y selección |
-| Computación | Representación, algoritmos y eficiencia |
-| Ingeniería de software | Reproducibilidad, pruebas, operación y monitoreo |
-| Conocimiento del dominio | Significado, plausibilidad y restricciones reales |
-| Comunicación | Evidencia comprensible para usuarios y responsables |
+| Estadística | Variabilidad e inferencia |
+| Matemática | Objetivos y restricciones |
+| Computación | Representación y escala |
+| Ingeniería | Pruebas y operación |
+| Dominio | Significado y plausibilidad |
+| Comunicación | Comprensión y uso |
 
-Un resultado sólido exige que estas perspectivas sean compatibles.
+Una perspectiva aislada puede optimizar la parte equivocada.
 
 ---
 
 # Formular antes de modelar
 
-Una especificación inicial debe declarar:
+**Diagrama:** `necesidad real → pregunta analítica → tarea computacional`, con una flecha de retorno: “¿sirve para decidir?”.
 
-- **unidad de análisis:** ¿qué representa una fila?;
-- **usuario:** ¿quién utilizará el resultado?;
-- **objetivo:** ¿qué se quiere conocer o mejorar?;
-- **acción:** ¿qué puede hacerse con la evidencia?;
-- **horizonte:** ¿para qué momento se necesita?;
-- **datos:** ¿qué estará disponible antes de decidir?;
-- **restricciones:** ¿qué límites no pueden ignorarse?;
-- **criterio de valor:** ¿cómo se evaluará la utilidad?
+Ejemplo:
+
+`reducir esperas → demanda por zona-franja → agregar o predecir`
+
+> Si no podemos explicar quién decide, sobre qué unidad, con qué información, para cuándo y con qué propósito, la formulación aún no está completa.
 
 ---
 
-# La unidad cambia la pregunta
+# Especificación compacta del problema
 
-“Analizar demoras” puede significar estudiar:
+$$
+\mathcal P=(U,\mathcal R,O,X,Y,A,H,C)
+$$
 
-| Unidad de análisis | Pregunta resultante |
-|---|---|
-| Viaje | ¿Este viaje llegará con demora? |
-| Vehículo | ¿Qué vehículos acumulan más retrasos? |
-| Zona y franja horaria | ¿Dónde y cuándo aumenta la demanda? |
-| Día | ¿Cómo cambia la puntualidad a lo largo del tiempo? |
+- $U$: unidad de análisis.
+- $\mathcal R$: población objetivo.
+- $O$: objetivo del proyecto.
+- $X$: entradas disponibles.
+- $Y$: resultado de interés.
+- $A$: acciones posibles.
+- $H$: horizonte temporal.
+- $C$: restricciones.
+- Usuario, valor y responsables completan la ficha.
 
-No existe una fila “natural”: la unidad se elige según el problema y la decisión.
+Cuatro pruebas: **observabilidad, accionabilidad, disponibilidad temporal y contrafactual**: “¿qué haríamos si la respuesta fuera distinta?”.
+
+---
+
+# Unidad, población y alcance
+
+- **Unidad $U$:** entidad elemental descrita, predicha o decidida; define el significado de una fila.
+- **Población $\mathcal R$:** unidades sobre las que se desea generalizar o actuar; no equivale a la muestra observada.
+- **Alcance:** periodos, lugares, casos, usuarios, acciones y exclusiones autorizadas.
+
+Si la acción reasigna recursos entre zonas por franja, la evidencia final debe conservar la unidad **zona-franja**. Las predicciones por viaje requieren una agregación explícita.
+
+`población objetivo ≠ muestra disponible ≠ población futura de uso`
+
+---
+
+# Horizonte y disponibilidad: reconstruir el reloj
+
+**Diagrama temporal:** histórico y entradas conocidas conducen al corte $t_0$; allí ocurre la decisión. La franja objetivo y el resultado se encuentran después del corte y no pueden usarse como entradas.
+
+`histórico → corte t₀ → franja objetivo → resultado`
+
+- $X$: conocido y recibido antes de $t_0$.
+- Decisión: tomada en $t_0$.
+- $Y$: observado después de $t_0$.
+
+Evaluar con la información disponible retrospectivamente puede sobrestimar lo que el sistema sabía al decidir.
 
 ---
 
 # Workflow de un proyecto de datos
 
-1. Comprender la necesidad y la decisión.
-2. Establecer baseline y criterios de éxito.
-3. Recolectar, comprender y auditar datos.
-4. Preparar una representación analítica.
-5. Analizar o modelar sin fuga de información.
-6. Evaluar desempeño, utilidad y riesgos.
-7. Comunicar o desplegar con monitoreo.
-8. Iterar con nueva evidencia.
+**Diagrama iterativo:**
 
-> Un proyecto de datos es un proceso de decisión con evidencia, no una sucesión de algoritmos.
+1. Formular decisión y éxito.
+2. Obtener e inventariar.
+3. Preparar la representación.
+4. Analizar o modelar.
+5. Evaluar y contrastar.
+6. Comunicar o integrar con autoridad y monitoreo.
+7. Volver a formular con la evidencia de uso.
 
----
-
-# KDD y CRISP-DM
-
-## KDD
-
-`selección → limpieza → transformación → minería → interpretación`
-
-Enfatiza el proceso de descubrimiento de conocimiento desde los datos.
-
-## CRISP-DM
-
-`negocio → datos → preparación → modelado → evaluación → despliegue`
-
-Enfatiza la conexión entre necesidad, trabajo analítico y uso.
-
-**Ambas metodologías se aplican como ciclos con retroalimentación.**
+Baseline, criterios de éxito y protocolo de evaluación se fijan antes de comparar resultados finales.
 
 ---
 
-# Tipos de datos según su estructura
+# Puertas y artefactos: aprender antes de escalar
 
-| Tipo | Característica | Ejemplo |
+| Puerta | Evidencia mínima | Artefacto vivo |
 |---|---|---|
-| Estructurados | Esquema tabular definido | Viajes en Parquet o base SQL |
-| Semiestructurados | Claves y estructura flexible | Respuesta JSON de una API |
-| No estructurados | Requieren representación adicional | Texto de reclamos, audio o imágenes |
+| Formular → datos | Unidad, alcance, autoridad y valor acordados | Ficha del problema |
+| Datos → análisis | Cobertura, licencia, calidad y tiempo conocidos | Inventario + diccionario |
+| Análisis → uso | Baseline superado y riesgos aceptables | Registro de experimento |
+| Uso → escala | Utilidad, carga y fallos observados | Plan de monitoreo y retirada |
 
-La estructura condiciona:
+Un **producto mínimo evaluable** es el artefacto más pequeño que permite probar la incertidumbre capaz de invalidar el proyecto.
 
-- almacenamiento y procesamiento;
-- controles de calidad;
-- métodos de análisis;
-- costo de integración.
+**Continuar, modificar, escalar o detener son resultados legítimos.**
 
 ---
 
-# Fuentes y procedencia
+# KDD: del dato al conocimiento validado
 
-Los datos pueden ser:
+**Diagrama iterativo:** `selección → preprocesamiento → transformación → minería de datos → interpretación y evaluación`, con retorno hacia preprocesamiento.
 
-- **observacionales:** registran procesos sin intervención controlada;
-- **experimentales:** provienen de intervenciones diseñadas;
-- **simulados:** son generados por un modelo del fenómeno;
-- **primarios:** se recolectan para el proyecto;
-- **secundarios:** fueron creados con otro propósito.
+- La minería es una etapa dentro de KDD, no un sinónimo del proceso completo.
+- El preprocesamiento estudia calidad, faltantes, errores, duplicados y consistencia.
+- La transformación cambia la representación con supuestos explícitos.
+- La interpretación determina validez, novedad, comprensión y utilidad.
 
-Para cada fuente documentamos:
-
-`origen · licencia · cobertura · frecuencia · formato · calidad · sesgos · responsable`
+Evitar el salto: `resultado → patrón → hallazgo validado → regla aprobada`.
 
 ---
 
-# Big Data: más que tamaño
+# CRISP-DM: organizar el proyecto completo
+
+**Diagrama circular:** `comprensión del problema → comprensión de datos → preparación → modelado → evaluación → despliegue o entrega → comprensión del problema`.
+
+- Comienza por el problema, no por el modelo.
+- Evalúa desempeño técnico y correspondencia con el objetivo.
+- Despliegue puede ser informe, tablero, API o regla operativa.
+- Operación, monitoreo, incidentes y retirada retroalimentan el ciclo.
+
+**CRISP-DM no termina al publicar un modelo.**
+
+---
+
+# Estructura de los datos
+
+| Tipo | Organización | Ejemplo y decisión de representación |
+|---|---|---|
+| Estructurados | Esquema explícito, filas, columnas y claves | Viajes SQL; validar unidad, tipos y cardinalidad |
+| Semiestructurados | Claves o marcas con esquema flexible | Eventos JSON; distinguir ausente, nulo y lista vacía |
+| No estructurados | Sin variables tabulares inmediatas | Texto, audio o imagen; construir una representación |
+
+Un esquema válido no garantiza significado correcto; y “no estructurado” no significa carente de estructura interna.
+
+---
+
+# De fuentes heterogéneas a una tabla analítica
+
+**Diagrama:** viajes con unidad viaje, clima con unidad estación-hora y zonas con unidad polígono-versión pasan por reglas explícitas de agregación, unión, filtrado y corte para producir una tabla analítica cuya fila es zona-franja.
+
+`fuentes → reglas explícitas → tabla analítica zona-franja`
+
+- La tabla analítica deriva de fuentes: no las reemplaza.
+- Cada unión declara claves, cardinalidad, cobertura y fecha de corte.
+- Cambiar la cantidad de filas puede cambiar la población o la unidad.
+- La tabla conserva claves y procedencia.
+
+---
+
+# Fuentes: inventariar antes de integrar
+
+| Fuente | Unidad original | Acceso | Riesgo principal |
+|---|---|---|---|
+| Viajes | viaje | base o archivo | operadores no cubiertos |
+| GPS | dispositivo-evento | flujo o API | latencia, deriva y pérdida |
+| Clima | estación-hora | API | desfase horario y distancia |
+| Zonas | polígono-versión | archivo geográfico | límites modificados |
+| Calendario | día | archivo o tabla | definición local |
+
+Ficha mínima:
+
+`propietario · propósito original · unidad · cobertura · captura · formato · frecuencia · licencia · sensibilidad · calidad · cambios`
+
+---
+
+# Procedencia: ejes distintos, preguntas distintas
+
+**Diagrama de cuatro ejes independientes:**
+
+1. **Mecanismo de generación:** observacional / experimental / simulado.
+2. **Propósito de recolección:** primario para el proyecto / secundario, creado con otro propósito.
+3. **Acceso y gobernanza:** abierto / privado / restringido.
+4. **Linaje:** origen → extracción → transformación → producto.
+
+No son categorías excluyentes entre ejes. Un dato puede ser **observacional, secundario y privado** a la vez. Cada eje implica límites de inferencia, uso y auditoría diferentes.
+
+---
+
+# Big Data: seis V, seis diagnósticos
+
+**Diagrama radial:** seis dimensiones convergen en el desafío de datos.
 
 | Dimensión | Pregunta de diagnóstico |
 |---|---|
 | Volumen | ¿Cuánto se almacena y procesa? |
-| Velocidad | ¿Con qué rapidez llega y pierde vigencia? |
-| Variedad | ¿Cuántos formatos y significados deben integrarse? |
-| Veracidad | ¿Qué tan confiable es la medición? |
-| Valor | ¿La información mejora una decisión? |
+| Velocidad | ¿Con qué ritmo y latencia llega? |
+| Variedad | ¿Qué formatos, fuentes y estructuras se integran? |
+| Veracidad | ¿Qué confiabilidad e incertidumbre posee? |
+| Valor | ¿Mejora una decisión? |
+| Variabilidad | ¿Cómo cambian significado y distribución? |
 
-Un dataset pequeño y preciso puede tener más valor que uno masivo pero irrelevante.
-
----
-
-# Herramientas: medios, no método
-
-## Python
-
-`pandas · NumPy · Matplotlib · scikit-learn`
-
-## R
-
-`tidyverse · ggplot2 · tidymodels`
-
-La elección depende del equipo, el ecosistema, la integración y la tarea.
-
-Un proyecto reproducible registra:
-
-- versiones y dependencias;
-- datos y transformaciones;
-- parámetros y semillas;
-- métricas, resultados y decisiones.
+**Escala no corrige semántica: más datos del concepto equivocado siguen siendo equivocados.**
 
 ---
 
-# Caso transversal: movilidad urbana
+# Herramientas y reproducibilidad
 
-## Necesidad inicial
+| Entornos | Artefactos | Controles |
+|---|---|---|
+| Python, R, SQL, Jupyter, Quarto | Código, datos, configuración, resultados, documentación | Versiones, checksums, pruebas, semillas, decisiones |
 
-Una empresa que administra una flota quiere reducir demoras.
+Cadena reproducible:
 
-## Primera formulación
+`fuente identificada → transformación versionada → experimento registrado → resultado reconstruible`
 
-- **Unidad:** viaje.
-- **Usuario:** responsable de operaciones.
-- **Horizonte:** próxima franja horaria.
-- **Resultado:** demora esperada por zona.
-- **Acción:** reasignar vehículos entre zonas.
-- **Restricciones:** capacidad, distancia, prioridad y disponibilidad.
-- **Valor:** reducción de demoras sin aumentar viajes cancelados.
+- Una semilla ayuda, pero no sustituye datos, entorno y partición versionados.
+- Un notebook debe ejecutarse de principio a fin en un entorno limpio.
+- La herramienta se elige por el ciclo de vida y el equipo, no por preferencia personal.
+
+---
+
+# Caso movilidad: formulación coherente
+
+## Decisión operativa
+
+Antes de cada franja, el responsable decide si reasigna vehículos entre zonas.
+
+- **Unidad:** zona-franja.
+- **Población:** zonas operadas en condiciones normales.
+- **Horizonte:** próxima franja de 30 minutos.
+- **Resultado:** demanda y espera por zona-franja.
+- **Acciones:** mantener o proponer traslados factibles.
+- **Restricciones:** capacidad, distancia, seguridad y cobertura.
+- **Valor:** reducir espera extrema sin aumentar cancelaciones.
+- **Autoridad:** responsable de operaciones.
+
+**La unidad coincide con el nivel de predicción y de reasignación.**
+
+---
+
+# Movilidad: evidencia, recomendación y autoridad
+
+**Diagrama:** `viajes, GPS, clima y zonas → construir zona-franja → demanda esperada e incertidumbre → opciones factibles y consecuencias → responsable decide → acción en la flota o mantener estado`. El impacto observado retroalimenta la construcción y evaluación.
+
+## Límite de automatización
+
+El sistema:
+
+- recomienda opciones;
+- comunica incertidumbre;
+- puede abstenerse ante datos insuficientes o riesgo alto;
+- no ejecuta traslados;
+- no reemplaza protocolos de seguridad.
+
+La autoridad final permanece en el responsable de operaciones.
 
 ---
 
 # Del caso amplio a tareas concretas
 
-| Etapa | Tarea | Producto |
+| Objetivo | Tarea sobre zona-franja | Producto y evaluación |
 |---|---|---|
-| Describir | Resumir viajes y demoras por zona y hora | Tabla o visualización |
-| Predecir | Estimar demora del siguiente intervalo | Predicción y evaluación |
-| Prescribir | Comparar reasignaciones factibles | Recomendación operativa |
-| Monitorear | Detectar degradación del servicio | Indicadores y alertas |
+| Describir | Agregar viajes, espera y oferta observada | Perfil por zona-franja |
+| Predecir | Estimar demanda o espera de la próxima franja | Pronóstico vs. baseline temporal |
+| Prescribir | Comparar reasignaciones factibles | Opciones, utilidad y restricciones |
+| Monitorear | Detectar cambio en datos, error e impacto | Alertas, revisión o retirada |
 
-Posibles campos:
+Los eventos de viaje se agregan a zona-franja; el resultado no se presenta como una decisión por viaje individual.
 
-`id_viaje · origen · destino · hora_programada · hora_real · zona · vehículo`
+---
 
-**Cuidado:** `hora_real` no está disponible antes de que termine el viaje.
+# Fuga temporal: saber hoy lo que mañana ocurrió
+
+**Diagrama temporal:** para decidir a las 09:00 sobre la franja 09:00–09:30, son válidos el GPS recibido hasta las 08:55, calendario y flota disponible. Son fuga los viajes completados a las 09:20 y la demanda total de la franja.
+
+| Disponible al decidir | Conocido después: fuga |
+|---|---|
+| GPS recibido hasta 08:55 | Viajes completados a las 09:20 |
+| Calendario | Demanda total 09:00–09:30 |
+| Flota disponible | Espera final de la franja |
+
+Reconstruir qué eventos habían sido **recibidos**, no solo cuáles ocurrieron antes. Tiempo de evento, recepción y decisión son relojes distintos.
 
 ---
 
 # Actividad guiada: ficha del problema
 
-En equipos, completar para el caso de movilidad:
+En equipos, completar para movilidad:
 
-1. problema observable y beneficio esperado;
-2. usuario del resultado y personas afectadas;
-3. unidad de análisis y periodo;
-4. decisión y acciones posibles;
-5. datos disponibles antes de decidir;
-6. resultado de interés;
-7. restricciones y supuestos;
-8. baseline y métrica de valor.
+1. necesidad, usuario, responsable y personas afectadas;
+2. unidad zona-franja, población, alcance y exclusiones;
+3. decisión, acciones permitidas y autoridad final;
+4. fecha de corte, horizonte, entradas disponibles y resultado;
+5. pregunta descriptiva, predictiva y prescriptiva;
+6. fuentes, procedencia y regla de integración;
+7. baseline, valor, restricciones y condición de detención;
+8. un riesgo de fuga temporal y su control.
 
-**Tiempo sugerido:** 25 minutos de trabajo + 10 minutos de contraste.
+**Tiempo sugerido:** 30 minutos de trabajo + 10 minutos de contraste.
 
 ---
 
-# Criterios de revisión de la ficha
+# Criterios de revisión
 
-La evidencia es adecuada si:
+La ficha es adecuada si:
 
-- la unidad corresponde con la pregunta;
-- el usuario puede ejecutar la acción declarada;
-- las entradas existen antes de la decisión;
-- la métrica representa valor y no solo desempeño técnico;
-- el baseline permite comparar la propuesta;
-- los supuestos y límites son observables;
-- se reconocen personas o procesos afectados.
+- la unidad **zona-franja** coincide con pregunta, tabla y acción;
+- población, alcance, horizonte y exclusiones son verificables;
+- cada entrada existe y puede recibirse antes de decidir;
+- descripción, predicción y prescripción no se confunden;
+- las fuentes conservan procedencia y reglas de integración;
+- el baseline representa una alternativa realista;
+- valor, riesgos y criterios de detención están explícitos;
+- una persona con autoridad aprueba, modifica o rechaza la acción.
 
-**Entregable de semana 1:** ficha de una página, versión inicial.
+**Entregable:** ficha de una página + diagrama `necesidad → evidencia → decisión → impacto`.
 
 ---
 
@@ -370,40 +523,46 @@ La evidencia es adecuada si:
 
 Cada equipo presenta en un minuto:
 
-1. su decisión principal;
-2. la unidad de análisis elegida;
-3. la métrica de valor;
-4. el supuesto más riesgoso.
+1. la decisión y quién conserva autoridad;
+2. la unidad, el corte temporal y el horizonte;
+3. el baseline y la métrica de valor;
+4. el supuesto que podría invalidar el proyecto.
 
 Preguntas para contrastar:
 
-- ¿Hay datos suficientes para representar el fenómeno?
-- ¿La solución requiere descripción, predicción o prescripción?
-- ¿Qué cambiaría si la unidad fuera zona en vez de viaje?
+- ¿La evidencia llega antes y a la misma granularidad que la decisión?
+- ¿Qué representa la muestra y qué zonas quedan fuera?
+- ¿Qué resultado justificaría modificar o detener el proyecto?
 
 ---
 
-# Síntesis
+# Síntesis: siete ideas para conservar
 
-- La Ciencia de Datos produce evidencia a partir de observaciones.
-- Los datos son representaciones parciales y situadas.
-- Describir, predecir y prescribir responden preguntas diferentes.
-- Un modelo no es una decisión.
-- El workflow conecta necesidad, datos, análisis, uso y evaluación.
-- Formular unidad, usuario, acción y valor precede a elegir herramientas.
+1. Los datos son representaciones parciales producidas por procesos.
+2. La Ciencia de Datos construye evidencia, no solo modelos.
+3. Describir, predecir y decidir son problemas distintos.
+4. Unidad, población, alcance y horizonte preceden al algoritmo.
+5. Workflow, KDD y CRISP-DM son iterativos y trazables.
+6. Procedencia y reproducibilidad sostienen lo que podemos afirmar.
+7. La autoridad y responsabilidad pertenecen a personas y organizaciones.
 
-> Primero se diseña la pregunta; después se decide qué datos y métodos necesita.
+> Primero se diseña la decisión y la evidencia necesaria; después se eligen datos, métodos y herramientas.
 
 ---
 
-# Autoevaluación
+# Síntesis visual: la cadena completa
 
-1. ¿Por qué los datos no equivalen al fenómeno observado?
-2. ¿Qué diferencia existe entre una predicción y una decisión?
-3. ¿Cómo cambia el problema al cambiar la unidad de análisis?
-4. ¿Por qué CRISP-DM debe entenderse como un ciclo?
-5. ¿Qué dimensión de Big Data se relaciona con la confiabilidad?
-6. ¿Qué información de movilidad produciría fuga si se usa para anticipar una demora?
+**Diagrama:**
+
+`necesidad y alcance → unidad, población y horizonte → fuentes y procedencia → representación analítica → evidencia evaluada → decisión autorizada`
+
+La decisión conduce a `impacto → monitoreo → aprendizaje`, que vuelve a la necesidad. Tres controles acompañan la cadena:
+
+- pregunta y valor;
+- calidad y licencia;
+- baseline y riesgos.
+
+**Cada flecha es una decisión documentable; cada retorno es una oportunidad de aprender.**
 
 ---
 
@@ -412,9 +571,10 @@ Preguntas para contrastar:
 ## Lectura principal
 
 - [Capítulo 1. Ciencia de Datos e Inteligencia Artificial](../../../Libro/Capitulo_01_Ciencia_de_Datos_e_IA.md): secciones 1.1.1, 1.1.4, 1.1.5 y 1.1.6.
-- [Capítulo 2. Ciclo de vida de un proyecto basado en datos](../../../Libro/Capitulo_02_Ciclo_de_vida_de_un_proyecto_de_datos.md): secciones 2.1 a 2.4.
+- [Capítulo 2. Ciclo de vida de un proyecto basado en datos](../../../Libro/Capitulo_02_Ciclo_de_vida_de_un_proyecto_de_datos.md): secciones 2.1 a 2.4, con énfasis en 2.1.3, 2.2.1, 2.2.2, 2.3 y 2.4.
 
 ## Para continuar
 
-- Revisar el glosario esencial y las preguntas de autoevaluación del capítulo 1.
-- Completar y entregar la ficha inicial del problema de movilidad.
+- Revisar los glosarios de ambos capítulos.
+- Completar la ficha inicial del caso de movilidad.
+- Dibujar el linaje de una fuente hasta la unidad zona-franja.
