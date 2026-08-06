@@ -21,9 +21,11 @@ strong { color: #17324d; }
 
 **Semana y clase:** semana 1, clase 1
 
-**Presentación asociada:** *Fundamentos de IA: agentes y racionalidad* (38 diapositivas)
+**Presentación asociada:** *Fundamentos de Inteligencia Artificial: agentes y racionalidad* (38 diapositivas)
 
 **Fuentes:** capítulos 1 y 6 del libro *Ciencia de Datos e Inteligencia Artificial*
+
+**Inteligencia Artificial (IA).** Es la disciplina que estudia y construye sistemas capaces de percibir, representar información, razonar, aprender, planificar, comunicarse o seleccionar acciones orientadas a objetivos. La sigla designa el campo y no implica por sí misma conciencia, comprensión humana general ni autonomía completa.
 
 ## Propósito y forma de uso
 
@@ -32,6 +34,8 @@ Esta guía desarrolla el contenido del libro que sostiene cada parte de la prese
 La presentación utiliza un caso transversal: un **asistente integrado de movilidad** que observa demanda, tráfico y estado de la flota; recomienda rutas o reasignaciones; comunica incertidumbre; puede abstenerse; y entrega la recomendación a una persona responsable de operaciones, quien conserva la autoridad de ejecución. Esta frontera se mantendrá en toda la exposición. Cuando el libro presenta por separado reasignación de flota y recomendación de rutas, la guía indicará que la clase realiza una adaptación integrada.
 
 Las diapositivas 20 a 33 están organizadas en parejas. La primera desarrolla el concepto mediante texto y la segunda lo representa con un diagrama. En esos casos la guía distingue qué explicar antes de mostrar el gráfico y cómo recorrer visualmente sus elementos.
+
+**PEAS (por *Performance measure, Environment, Actuators, Sensors*).** Es un marco para especificar la tarea de un agente mediante cuatro componentes: medida de desempeño, entorno, actuadores y sensores. Comienza por las consecuencias que deben evaluarse y luego delimita dónde opera el agente, qué acciones puede producir y qué información puede percibir.
 
 ### Recorrido de la clase
 
@@ -242,6 +246,8 @@ La ingeniería de software convierte un método en sistema operable mediante pru
 
 La diapositiva 15 separa percepción, representación, memoria, inferencia o aprendizaje, evaluación de acciones y ejecución con retroalimentación. Esta separación sirve para diagnosticar fallos. Una recomendación incorrecta puede originarse en un sensor, un estado interno incompleto, una predicción, una función de desempeño o un actuador.
 
+**Sistema de Posicionamiento Global (GPS).** Es un sistema de navegación por satélite que proporciona estimaciones de posición, velocidad y tiempo. Como sensor, está sujeto a error, pérdida de señal, latencia y cobertura, por lo que cada lectura debe acompañarse de marca temporal y calidad.
+
 Conviene recorrer un fallo de extremo a extremo: un GPS desactualizado produce una percepción incorrecta; el estado ubica mal al vehículo; el plan propone una reasignación inviable; el responsable la rechaza. Atribuir todo el error al “modelo de IA” ocultaría el mecanismo real.
 
 ## Diapositivas 16-18. Evolución histórica
@@ -273,6 +279,8 @@ El resurgimiento estadístico se apoyó en datasets extensos, sensores, almacena
 **Correspondencia con el libro:** capítulo 1, §§1.1.3 y 1.3.5.
 
 ### Contenido que debe exponerse
+
+**Unidad de procesamiento gráfico (GPU, por *Graphics Processing Unit*).** Es un procesador especializado en ejecutar muchas operaciones numéricas en paralelo. Aunque surgió para procesamiento gráfico, su arquitectura permite acelerar el entrenamiento y la ejecución de modelos de aprendizaje profundo basados en grandes cantidades de operaciones matriciales.
 
 El aprendizaje profundo utiliza capas de transformaciones para aprender representaciones intermedias. En imágenes pueden emerger bordes, texturas y formas; en texto, relaciones entre unidades y contexto. Su expansión estuvo vinculada con datos, GPU, arquitecturas diferenciables y técnicas de entrenamiento más estables.
 
@@ -494,6 +502,8 @@ Cada equipo elaborará una ficha inicial del asistente integrado. Debe incluir:
 8. tres escenarios de prueba.
 
 ### Ejemplo mínimo
+
+**Percentil 90 (P90).** Es el valor que no supera el 90 % de las observaciones y deja por encima el 10 % más alto. En movilidad permite vigilar esperas extremas que una media puede ocultar, por lo que complementa las medidas de tendencia central.
 
 **Situación:** aumenta la demanda en zona B y hay tres vehículos libres. **Percepciones:** ubicación, ocupación, solicitudes y tráfico con marcas temporales. **Acciones:** mantener distribución, proponer mover uno o dos vehículos, pedir confirmación o abstenerse. **Restricción:** no reducir cobertura de zona A por debajo del mínimo. **Desempeño:** espera media y P90, distancia vacía y cobertura. **Falla segura:** si dos posiciones están desactualizadas, no asumir disponibilidad y escalar al responsable.
 

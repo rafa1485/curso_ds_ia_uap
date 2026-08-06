@@ -25,831 +25,901 @@ strong { color: #17324d; }
 
 **Fuentes principales:** capítulos 1 y 2 del libro *Ciencia de Datos e Inteligencia Artificial*
 
-## Propósito y forma de uso
+### Propósito y forma de uso
 
-Esta guía desarrolla relaciones conceptuales, fórmulas, recorridos visuales, comprobaciones y transiciones. La clase no comienza con software, sino con una necesidad, la evidencia posible y la decisión que apoyaría.
+Esta guía sincroniza cada marco con qué mostrar, distinguir y comprobar. La clase comienza con una necesidad, la evidencia posible y la decisión que apoyaría, no con software.
 
-El caso transversal es una empresa de **movilidad urbana** que desea reducir demoras. El producto puede describir, predecir o recomendar, pero operaciones conserva autoridad para aprobar y ejecutar. Se mantendrán cuatro niveles:
-
-1. **Modelo:** representación o función que resume o estima.
-2. **Evidencia:** resultado interpretado y validado dentro de un alcance.
-3. **Decisión:** selección de una acción con objetivos, costos y restricciones.
-4. **Autoridad humana:** persona o instancia institucional que aprueba, ejecuta, revisa y responde por la acción.
-
-La secuencia amplía la presentación actual. El aprendizaje se comprueba mediante preguntas, actividad, revisión y defensa.
+El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad **zona-franja**, horizonte de **treinta minutos** y decisión humana de operaciones. Un **modelo** representa o estima; la **evidencia** es un resultado evaluado; la **decisión** selecciona bajo restricciones; la **autoridad humana** aprueba, modifica, rechaza, ejecuta y responde.
 
 ### Recorrido de la clase
 
 | Bloque | Diapositivas | Resultado esperado |
 |---|---:|---|
 | Apertura y concepto | 1-6 | Delimitar Ciencia de Datos y entender los datos como representaciones |
-| Proceso y propósitos | 7-14 | Explicar el ciclo, clasificar preguntas y separar predicción de decisión |
-| Formulación | 15-18 | Especificar problema, unidad, población, horizonte y alcance |
-| Organización del trabajo | 19-28 | Comparar workflow, metodologías, estructuras, fuentes y reproducibilidad |
+| Proceso y propósitos | 7-14 | Explicar el ciclo, clasificar preguntas y separar descripción, predicción y decisión |
+| Formulación | 15-18 | Especificar problema, unidad, población, alcance, corte y horizonte |
+| Organización del trabajo | 19-28 | Comparar metodologías, estructuras, fuentes y reproducibilidad |
 | Caso aplicado | 29-32 | Formular movilidad, distinguir tareas y detectar fuga temporal |
-| Producción y defensa | 33-35 | Elaborar, revisar y defender una ficha de problema |
-| Cierre | 36-38 | Sintetizar el marco y orientar lecturas verificadas |
+| Producción y defensa | 33-35 | Elaborar, revisar y defender una ficha del problema |
+| Cierre | 36-38 | Recuperar siete ideas, leer la síntesis visual y orientar la continuidad |
 
 > **Tesis de la clase:** un proyecto de datos es un sistema de producción de evidencia para una decisión. Un modelo puede formar parte de ese sistema, pero no reemplaza la formulación, la validación, la responsabilidad ni la autoridad de uso.
 
-## Diapositivas 1-3. Apertura: título, propósito y pregunta inicial
+## Diapositiva 1. Introducción a la Ciencia de Datos
 
-**Correspondencia con el libro:** capítulo 1, propósito y §1.1.1; capítulo 2, propósito y objetivos de aprendizaje, introducción de §2.1 y §2.1.1.
+**Correspondencia con el libro.** Capítulo 1, propósito y §1.1.1; capítulo 2, propósito.
 
-### Qué exponer
+**Propósito.** Instalar la pregunta rectora: datos o modelo no equivalen a saber qué hacer.
 
-La diapositiva 1 pregunta: **¿cómo se transforma una necesidad real en evidencia útil para decidir?** Útil no significa solo exacta: debe llegar a tiempo, representar la unidad de acción y encajar en la capacidad del decisor.
+**Guion sugerido.** Decir: “Hoy no empezaremos preguntando qué algoritmo usar, sino qué situación modificar, qué observar y quién podría actuar”. La evidencia es un resultado evaluado dentro de límites; el conocimiento agrega interpretación y reglas de uso; la decisión elige una acción; la autoridad reside en personas y organizaciones. Anticipar el caso estable de movilidad.
 
-La diapositiva 2 plantea desempeños: distinguir problema, observación, modelo, evidencia y decisión; clasificar preguntas; reconocer iteración; caracterizar datos; y formular movilidad. No se entrena un modelo.
+**Conceptos y términos.** *Necesidad*: situación que se busca comprender o modificar. *Evidencia*: información evaluada dentro de condiciones. *Conocimiento*: patrones interpretados con experiencia y reglas. *Decisión*: selección de una acción. “Útil” exige pertinencia, oportunidad y uso posible.
 
-En la diapositiva 3, presentar “mejorar el servicio” y registrar fenómeno, usuario, unidad, acción y evaluación. Abrir un dataset antes de precisarlos puede llevar a responder rigurosamente la pregunta equivocada.
+**Ejemplo de movilidad.** Reducir espera sin más cancelaciones mediante evidencia zona-franja; operaciones decide para los próximos treinta minutos.
 
-### Fórmulas e interpretación
+**Error frecuente o límite.** Equiparar Ciencia de Datos y aprendizaje automático, o prometer impacto desde un pronóstico.
 
-No se introduce aún una fórmula de modelado. Se presenta la cadena conceptual del capítulo 2:
+**Comprobación.** “¿Quién ejecuta legítimamente un traslado?”. El responsable autorizado; dato, predicción y recomendación son insumos.
+
+**Conclusión que debe quedar.** La clase estudiará la cadena completa entre una necesidad y una decisión, no una colección de técnicas aisladas.
+
+**Transición sugerida.** “Para saber qué exigiremos al final, hagamos explícito el propósito de la clase”.
+
+## Diapositiva 2. Propósito de la clase
+
+**Correspondencia con el libro.** Capítulo 1, §§1.1.1, 1.1.4-1.1.6; capítulo 2, objetivos de aprendizaje y §§2.1-2.4.
+
+**Propósito.** Convertir los cinco resultados en un contrato de formulación y argumentación, no de entrenamiento.
+
+**Guion sugerido.** Leer los resultados como capacidades conectadas: distinguir objetos; separar descripción, predicción y prescripción; fijar unidad, población, alcance y horizonte; organizar el trabajo mediante *workflow*, **Descubrimiento de Conocimiento en Bases de Datos (KDD, por *Knowledge Discovery in Databases*)** y **Proceso Estándar Intersectorial para Minería de Datos (CRISP-DM, por *Cross-Industry Standard Process for Data Mining*)**; aplicar todo a zona-franja. Las siglas se definen aquí por ser su primera aparición.
+
+**Conceptos y términos.** *Workflow*: actividades, entradas, salidas, controles y retornos. KDD incluye minería dentro del descubrimiento; CRISP-DM organiza el proyecto completo. *Procedencia* registra origen y transformaciones; *reproducibilidad* permite reconstruir resultados.
+
+**Ejemplo de movilidad.** Explicar fila zona-franja, población, datos al corte y autoridad sobre traslados.
+
+**Error frecuente o límite.** Memorizar definiciones sin detectar incoherencias ni aplicar conceptos.
+
+**Comprobación.** “¿Por qué el horizonte distingue entrada y fuga?”. Por momento de decisión y disponibilidad.
+
+**Conclusión que debe quedar.** La coherencia entre pregunta, unidad, tiempo, método y decisión es el criterio transversal de la sesión.
+
+**Transición sugerida.** “Probemos ese criterio con una frase deliberadamente amplia: mejorar el servicio”.
+
+## Diapositiva 3. Pregunta de apertura
+
+**Correspondencia con el libro.** Capítulo 2, §§2.1 y 2.1.1; capítulo 1, §1.1.6.
+
+**Propósito.** Separar intención y problema verificable.
+
+**Guion sugerido.** Presentar “mejorar el servicio” sin corregirla. Organizar respuestas según las columnas y conectar sus preguntas: la unidad coincide con la acción, los datos llegan antes y el valor observa consecuencias. Aplicar la prueba contrafactual: si el pronóstico cambiara, ¿cambiaría una acción disponible?
+
+**Conceptos y términos.** *Usuario*: quien emplea el producto, no necesariamente quien resulta afectado. *Acción disponible*: intervención autorizada y factible. *Valor*: mejora bajo costos y riesgos. *Éxito*: condición verificable fijada de antemano.
+
+**Ejemplo de movilidad.** Reducir espera alta sin más cancelaciones; decidir a las 09:00 para 09:00-09:30 sobre zona-franja.
+
+**Composición visual relevante.** Arriba están situación y pregunta; abajo, comprensión y uso en dos columnas. Alternarlas evita relegar la operación.
+
+**Error frecuente o límite.** Dejar que columnas disponibles definan el problema o usar objetivos no observables.
+
+**Comprobación.** Si la distribución no cambia con la salida, no hay decisión asociada; puede quedar valor descriptivo.
+
+**Conclusión que debe quedar.** Antes de abrir datos se necesita una hipótesis explícita sobre usuario, unidad, acción, tiempo y valor.
+
+**Transición sugerida.** “Ahora podemos definir la disciplina por el tipo de trabajo que hace, no por una herramienta”.
+
+## Diapositiva 4. ¿Qué es la Ciencia de Datos?
+
+**Correspondencia con el libro.** Capítulo 1, §1.1.1 y síntesis; capítulo 2, propósito.
+
+**Propósito.** Definir Ciencia de Datos y sus productos legítimos.
+
+**Guion sugerido.** Recorrer tres verbos: obtener exige interpretar representaciones; comunicar hace comprensibles incertidumbre y límites; apoyar preserva la autoridad humana. Programar, graficar o entrenar son actividades, no la disciplina completa. Si la incertidumbre crítica es cobertura u oportunidad, el producto correcto puede ser un inventario o auditoría.
+
+**Conceptos y términos.** *Interdisciplinario* reúne preguntas no sustituibles. *Modelo*: representación o función. *Auditoría*: examen contra criterios. *Estimación*: cuantificación con incertidumbre. *Recomendación*: comparación sin autoridad propia.
+
+**Ejemplo de movilidad.** Un inventario de posicionamiento satelital, una auditoría de latencia o un perfil zona-franja pueden preceder al pronóstico.
+
+**Composición visual relevante.** Leer definición, contraste “no se reduce a/producto apropiado” y alerta final; no hay progresión obligatoria.
+
+**Error frecuente o límite.** Definir la disciplina por Python, volumen o predicción.
+
+**Comprobación.** Pedir un producto no predictivo útil para el caso. Son válidos un diccionario, un análisis de cobertura, una visualización de cuantiles o una prueba de integración.
+
+**Conclusión que debe quedar.** Ciencia de Datos diseña evidencia para una pregunta y uso; el modelo es una pieza posible.
+
+**Transición sugerida.** “Esa evidencia parte de datos; por eso debemos abandonar la idea de que el registro es la realidad misma”.
+
+## Diapositiva 5. Los datos representan, no reproducen
+
+**Correspondencia con el libro.** Capítulo 1, §1.1.1; capítulo 2, introducción de §2.3 y §§2.3.4-2.3.6.
+
+**Propósito.** Mostrar que todo dato es producido por un mecanismo situado y que error, sesgo, cobertura y selección no son detalles posteriores.
+
+**Guion sugerido.** Partir del fenómeno y preguntar si cabe completo en una fila. Sensor, regla y canal determinan registros de hora, ubicación o reclamo. *Error* es discrepancia; *sesgo*, desviación sistemática; *cobertura*, qué puede observarse; *selección*, qué casos entran. No reclamar no demuestra ausencia de demora.
+
+**Conceptos y términos.** El **Sistema de Posicionamiento Global (GPS)** estima posición, velocidad y tiempo; depende de dispositivo, recepción, entorno y latencia. Como ampliación didáctica, no fórmula literal del libro, $x_{obs}=g(z,instrumento,contexto)+\varepsilon$: $z$ es el fenómeno, $g$ el mecanismo o función de observación y $\varepsilon$ el error; no supone que toda pérdida sea ruido recuperable.
+
+**Descripción detallada del diagrama.** El diagrama representa la producción de un registro, no un flujo operativo. La caja azul superior “Fenómeno: demoras en la ciudad” es el referente amplio. La caja verde central “Proceso de observación” codifica transformación y enumera sensor, regla y canal. La caja amarilla inferior “Registro” codifica el dato materializado: hora, GPS o reclamo. Las flechas azules continuas indican dependencia: el fenómeno se observa mediante un proceso y ese proceso produce registros; no significan copia exacta ni causalidad exhaustiva. A la derecha, una caja clara “Queda fuera” enumera contexto, silencios, error y selección. La flecha verde discontinua que sale del proceso hacia esa caja marca pérdidas y exclusiones, no una fase deseable ni retroalimentación temporal. Orden de lectura: fenómeno, proceso, registro y desvío hacia lo que queda fuera; cerrar con las cuatro preguntas mínimas de la columna derecha. Interpretación válida: el significado y los límites del dato dependen de cómo se obtuvo. Inferencia incorrecta: que todo lo omitido pueda medirse o corregirse después, o que un sensor elimine selección. Ejemplo oral: un GPS puede registrar un vehículo detenido, pero no distinguir por sí solo congestión, espera deliberada o pérdida de señal. Pregunta visual: “¿En qué caja se origina que solo ciertos pasajeros reclamen?”. En proceso de observación y selección, no en el fenómeno exclusivamente. Conclusión visual: entre mundo y registro siempre hay una transformación auditable.
+
+**Ejemplo de movilidad.** GPS, reclamos y `hora_real` observan partes distintas, con coberturas y relojes diferentes.
+
+**Error frecuente o límite.** Llamar objetivo al sensor, igualar ausencia y cero, o creer que volumen elimina sesgo.
+
+**Comprobación.** Ante `GPS=(0,0)`, distinguir ubicación, error y ausencia mediante contrato y procedencia.
+
+**Conclusión que debe quedar.** Un dato es una representación parcial producida, con observaciones y ausencias que deben explicarse.
+
+**Transición sugerida.** “Si el registro no es todavía conocimiento, veamos qué trabajo agrega cada transición”.
+
+## Diapositiva 6. De datos a conocimiento
+
+**Correspondencia con el libro.** Capítulo 1, §1.1.1, distinción entre datos, información, conocimiento y decisión; capítulo 2, síntesis.
+
+**Propósito.** Diferenciar niveles epistemológicos y mostrar por qué la trazabilidad debe cubrir interpretaciones, no solo archivos.
+
+**Guion sugerido.** Los datos codifican; la información organiza con unidad, periodo y fuente; el conocimiento interpreta patrones con experiencia y reglas; la decisión delibera y actúa. La evidencia respalda una afirmación evaluada. Cada transición agrega contexto y supuestos: excluir cancelados, interpretar causalmente o deliberar con objetivos incompletos puede sesgarla.
+
+**Conceptos y términos.** *Trazabilidad* reconstruye entradas, transformaciones, interpretaciones y decisiones. *Información* tiene contexto; *conocimiento* no equivale a patrón novedoso; *deliberación* compara consecuencias bajo autoridad.
+
+**Descripción detallada del diagrama.** Cuatro cajas horizontales forman una cadena. La amarilla “Datos” codifica observaciones registradas. Dos cajas verdes, “Información” y “Conocimiento”, representan trabajo de organización e interpretación. La caja dorada “Decisión” destaca intervención humana. Las flechas azules continuas están rotuladas “organizar”, “interpretar” y “deliberar”; los rótulos son operaciones que deben documentarse, no conversiones automáticas. Leer de izquierda a derecha y luego regresar de derecha a izquierda: desde la decisión preguntar qué conocimiento la justifica, qué información lo sostiene y qué datos la originan. La interpretación válida es que cada nivel depende del anterior y agrega contexto. No afirma que toda organización produzca información correcta, que un patrón sea conocimiento verdadero ni que una decisión sea inevitable. Ejemplo oral: eventos GPS se organizan por zona-franja, se interpreta un patrón de demanda, y operaciones considera ese patrón junto con seguridad. Pregunta: “¿Dónde entra el objetivo de no aumentar cancelaciones?”. En conocimiento contextual y deliberación, no en el dato bruto. Conclusión visual: el tránsito es humano, técnico y auditable.
+
+**Ejemplo de movilidad.** GPS es dato; conteos contextualizados, información; patrón interpretado, conocimiento; traslado, decisión.
+
+**Error frecuente o límite.** Presentar una escalera automática o afirmar que “los datos hablan”.
+
+**Comprobación.** “Una tabla de conteos sin definición de zona ni periodo, ¿es ya información utilizable?”. No de forma suficiente: falta contexto para interpretar.
+
+**Conclusión que debe quedar.** La evidencia y el conocimiento se construyen mediante transiciones justificables; la decisión agrega deliberación y autoridad.
+
+**Transición sugerida.** “Ubicaremos ahora esos niveles dentro de la cadena completa que comienza en una necesidad”.
+
+## Diapositiva 7. De la necesidad a la decisión
+
+**Correspondencia con el libro.** Capítulo 2, §2.1.1 y teoría de cambio de §2.1.2; capítulo 1, ciclo general de §1.1.1.
+
+**Propósito.** Establecer correspondencia hacia adelante y hacia atrás entre cada eslabón, y separar evidencia, decisión e impacto.
+
+**Guion sugerido.** Hacia adelante: necesidad, pregunta, datos, análisis, evidencia evaluada, decisión e impacto. Hacia atrás: el impacto define valor; la acción, unidad y oportunidad; la evidencia, evaluación; esta, datos y análisis. La doble lectura evita una salida correcta sin uso.
+
+**Conceptos y términos.** *Correspondencia*: compatibilidad entre eslabones. *Impacto*: consecuencia, no métrica interna. *Teoría de cambio*: conexión argumentada entre salida, interpretación, acción y consecuencia.
+
+**Descripción detallada del diagrama.** Siete nodos horizontales se leen de izquierda a derecha: “Necesidad” y “Impacto” son cajas azul claro que delimitan el dominio; “Pregunta” y “Análisis” son verdes y representan trabajo analítico; “Datos” y “Evidencia” son amarillas y distinguen insumo de resultado validado; “Decisión humana” es dorada y marca autoridad. Seis flechas azules continuas conectan nodos adyacentes. No indican inevitabilidad ni que no haya retornos; solo hacen visible la dependencia principal. Debajo, dos bloques explican lecturas complementarias: hacia adelante, producir evidencia utilizable; hacia atrás, dejar que la decisión determine unidad, oportunidad, evaluación y datos. Orden exacto: nombrar los siete nodos, detenerse entre análisis y evidencia, detenerse entre evidencia y decisión, leer ambos bloques y cerrar con la alerta. Interpretación válida: el modelo, si existe, ocupa parte de “Análisis”. Inferencias incorrectas: que evidencia cause por sí sola impacto, que una decisión humana garantice corrección o que toda necesidad exija modelado. Ejemplo oral: un pronóstico oportuno puede apoyar una reasignación, pero el impacto depende de ejecución y entorno. Pregunta: “¿Qué flecha falla si el resultado llega a las 09:05?”. Evidencia-decisión para el corte de 09:00. Conclusión visual: cada frontera necesita una justificación.
+
+**Ejemplo de movilidad.** Reducir espera; pronosticar zona-franja al corte; evaluar; decidir; observar espera, cancelaciones y cobertura.
+
+**Error frecuente o límite.** Llamar impacto a precisión o atribuir mejora al modelo sin observar acción.
+
+**Comprobación.** Pedir identificar qué eslabón contiene el baseline. Principalmente evaluación de la evidencia, aunque debe definirse desde formulación.
+
+**Conclusión que debe quedar.** Una salida analítica solo adquiere sentido por su correspondencia con una acción y una evaluación reales.
+
+**Transición sugerida.** “La cadena aclara dependencias, pero el trabajo real no avanza una sola vez de izquierda a derecha”.
+
+## Diapositiva 8. El ciclo aprende y vuelve atrás
+
+**Correspondencia con el libro.** Capítulo 1, §1.1.1; capítulo 2, propósito, §§2.2.3-2.2.5 y síntesis.
+
+**Propósito.** Normalizar la iteración como aprendizaje controlado y ubicar autoridad, monitoreo y detención dentro del ciclo.
+
+**Guion sugerido.** Volver no es improvisar: cada retorno registra evidencia. Explorar puede revelar falta de observabilidad; evaluar, no superar el *baseline* o referencia real; usar, cambios en los datos. La autoridad aprueba, ejecuta, revisa y detiene según condiciones previas como cobertura, riesgo o valor.
+
+**Conceptos y términos.** *Iteración*: hipótesis, artefacto, evidencia y decisión. *Monitoreo*: datos, error, uso e impacto. *Detención*: regla para suspender o reformular. *Autoridad efectiva*: tiempo, información y poder.
+
+**Descripción detallada del diagrama.** Cinco cajas forman un anillo. Arriba, “Formular”; a la derecha, “Obtener y representar”; abajo a la derecha, “Analizar y evaluar”; abajo a la izquierda, “Revisar y decidir”; a la izquierda, “Observar impacto”. Las flechas azules continuas recorren el ciclo en sentido horario y regresan desde impacto a formulación. Dos flechas verdes discontinuas acortan el retorno: de análisis a formulación y de revisión a obtención. El trazo discontinuo codifica retroalimentación correctiva, no menor importancia. Leer primero el perímetro completo; después los dos atajos; finalmente la columna de ejemplos y la caja de autoridad. Interpretación válida: hay retornos específicos según el tipo de evidencia. No afirma que todas las etapas deban repetirse siempre ni autoriza cambiar la prueba después de ver resultados. Ejemplo oral: al descubrir que cancelados fueron eliminados, se vuelve a representación; si aun corregido no hay acción útil, se vuelve a formulación. Pregunta: “¿A dónde volvemos si GPS llega tarde?”. A obtención/representación y posiblemente formulación temporal. Conclusión visual: aprender significa revisar decisiones documentadas.
+
+**Ejemplo de movilidad.** Reasignar cambia GPS y demanda futuros; monitoreo separa entorno y política.
+
+**Error frecuente o límite.** Cambiar métricas retrospectivamente o iterar sin retroalimentación semántica.
+
+**Comprobación.** “Si el pronóstico no supera usar la demanda de la franja anterior, ¿qué resultado legítimo tiene la iteración?”. No avanzar, reformular o detener; haber aprendido que la complejidad no aporta bajo ese protocolo.
+
+**Conclusión que debe quedar.** Un ciclo confiable aprende con retornos trazables y permite detenerse.
+
+**Transición sugerida.** “Dentro de este ciclo, el tipo de pregunta determina qué resultado y qué evaluación son pertinentes”.
+
+## Diapositiva 9. Taxonomía de preguntas analíticas
+
+**Correspondencia con el libro.** Capítulo 1, §1.1.1; capítulo 2, §2.1.1.
+
+**Propósito.** Distinguir cinco objetivos que pueden conectarse, pero que no comparten automáticamente evidencia ni criterios de éxito.
+
+**Guion sugerido.** Leer cada fila como pregunta y producto: describir resume; diagnosticar estudia asociaciones, no prueba causas; predecir estima; prescribir compara acciones; monitorear detecta cambios. Pueden conectarse, pero no forman una madurez obligatoria.
+
+**Conceptos y términos.** *Descripción*: observaciones; *diagnóstico*: asociaciones; *predicción*: valor desconocido; *prescripción*: acciones bajo utilidad y restricciones; *monitoreo*: cambio respecto de referencias.
+
+**Lectura detallada de la tabla.** La primera columna nombra objetivo; la segunda, pregunta; la tercera, ejemplo de movilidad. Leer cada fila completa desde describir hasta monitorear; luego la tercera columna verticalmente para mostrar productos distintos. Las filas pueden encadenarse, no equivalen: asociación no garantiza predicción; predicción no contiene costos; monitoreo revisa datos, modelo e impacto. La alerta exige evaluación diferente.
+
+**Ejemplo de movilidad.** Perfiles, lluvia asociada, demanda futura, traslados factibles y monitoreo GPS son objetivos distintos.
+
+**Error frecuente o límite.** Confundir predicción con explicación, diagnóstico con causa o prescripción con ranking.
+
+**Comprobación.** Clasificar cobertura GPS, demanda futura y traslado: monitoreo, predicción y prescripción.
+
+**Conclusión que debe quedar.** El verbo de la pregunta fija qué afirmación puede sostenerse y cómo debe evaluarse.
+
+**Transición sugerida.** “Comencemos por la operación menos exigente en supuestos: resumir lo observado”.
+
+## Diapositiva 10. Describir: resumir lo observado
+
+**Correspondencia con el libro.** Capítulo 1, §§1.1.5 y 1.1.6; capítulo 2, preguntas descriptivas en §2.1.1. Esta diapositiva trata descripción, medias, proporciones y cuantiles, no predicción.
+
+**Propósito.** Enseñar qué resumen responde cada estadístico y qué no puede concluirse de una descripción.
+
+**Guion sugerido.** Una distribución reparte valores y frecuencias. La media resume balance; la proporción, una fracción; los cuantiles, posiciones ordenadas. El **percentil 90 (P90)** deja aproximadamente 90 % de observaciones por debajo o igual y 10 % por encima; muestra una cola que la media puede ocultar. Todo resumen depende de población, periodo, unidad y faltantes.
+
+**Lectura de la fórmula.** En $\bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i$, $x_i$ es el valor de la observación $i$, $n$ la cantidad incluida, $\sum$ suma todos los valores, $1/n$ divide por el conteo y $\bar{x}$ es la media muestral. Supone valores comparables y una regla clara de inclusión; no exige normalidad para calcularse, pero puede ser sensible a extremos. En $\widehat p=\frac{1}{n}\sum_{i=1}^{n}\mathbb{1}(y_i=1)$, la función indicadora vale 1 si se cumple la condición y 0 si no; la suma cuenta casos y la división produce proporción. El sombrero indica estimación desde la muestra. Ninguna fórmula prueba causa, representa casos ausentes ni anticipa automáticamente otra franja. Un cuantil $q_{0.90}$, ampliación didáctica, satisface aproximadamente $P(X\le q_{0.90})=0.90$; con muestras y empates existen convenciones de cálculo, por lo que debe documentarse el método.
+
+**Conceptos y términos.** *Distribución*: valores y frecuencias; *media*: promedio aritmético; *proporción*: parte del total; *cuantil*: posición acumulada; *segmento*: subconjunto definido.
+
+**Composición visual relevante.** Las fórmulas ocupan el centro conceptual. Debajo, la caja izquierda enumera productos y la derecha aterriza movilidad; leer fórmula, producto general y aplicación concreta. La alerta final impide el salto de asociación a causa o de pasado a futuro.
+
+**Ejemplo de movilidad.** Para cada zona-franja se informa cantidad de viajes, mediana y P90 de espera, proporción de cancelaciones y cobertura GPS. P90 de 18 minutos significa que aproximadamente 90 % de esperas observadas no superó 18 y 10 % sí; no significa que cada usuario espere 18 ni que el próximo P90 será igual.
+
+**Error frecuente o límite.** Promediar zonas con distinta cantidad de viajes sin explicar ponderación; excluir cancelados porque no tienen `hora_real`; interpretar P90 como “90 % de probabilidad para el próximo caso”.
+
+**Comprobación.** “Dos zonas tienen media de diez minutos, pero P90 de doce y veinticinco. ¿Son equivalentes?”. No: la segunda tiene una cola alta mucho más severa.
+
+**Conclusión que debe quedar.** Describir exige elegir resúmenes que conserven el aspecto relevante de la distribución y declarar su alcance.
+
+**Transición sugerida.** “Resumir observaciones conocidas no responde cuánto valdrá una franja todavía no observada”.
+
+## Diapositiva 11. Predecir: estimar lo no observado
+
+**Correspondencia con el libro.** Capítulo 1, §§1.1.3, 1.1.5 y 1.1.6; capítulo 2, §§2.1.1 y 2.1.5. El foco es predicción y evaluación fuera del ajuste.
+
+**Propósito.** Definir predicción mediante cantidades condicionales y explicar por qué generalización, partición y baseline son parte de la tarea.
+
+**Guion sugerido.** Una predicción estima un futuro, etiqueta no medida o resultado costoso. La **distribución condicional** $P(Y\mid X)$ conserva resultados posibles e incertidumbre; la **esperanza condicional** $\mathbb E[Y\mid X]$ resume su promedio. La barra se lee “dado”, no “causado por”. Evaluar fuera del ajuste exige casos no usados para estimar ni elegir, respetando tiempo, grupos y duplicados.
+
+**Lectura de la fórmula.** En $\widehat P(Y\mid X)$, $Y$ es el resultado desconocido, $X$ el conjunto de entradas disponibles, $P$ una distribución condicional y el sombrero indica que se estima desde datos. Puede devolver probabilidades de demanda baja, media o alta. En $\widehat{\mathbb E}[Y\mid X]$, $\mathbb E$ es una media teórica condicionada y el sombrero vuelve a indicar estimación. Si la pérdida es cuadrática, la esperanza condicional suele ser el objetivo puntual natural, pero eso no la convierte en valor seguro. Las expresiones suponen que $X$ existirá con semántica y oportunidad comparables y que la evaluación representa el uso. No permiten concluir causalidad, baja incertidumbre individual, utilidad operativa ni estabilidad ante cambio de población.
+
+**Conceptos y términos.** *Ajuste*: estimar parámetros; *generalización*: funcionar en casos nuevos; *partición temporal*: reservar periodos posteriores; *baseline*: alternativa pertinente, como último valor o patrón estacional.
+
+**Ejemplo de movilidad.** A las 09:00 se estima demanda de cada zona durante 09:00-09:30 con solicitudes recibidas, disponibilidad de flota, calendario y señales oportunas. El modelo se compara en semanas posteriores con un baseline estacional.
+
+**Error frecuente o límite.** Reportar error de entrenamiento, elegir el candidato usando repetidamente la prueba o mezclar filas dependientes de una misma zona y momento en ambos lados. Un error bajo tampoco demuestra que la acción derivada mejore espera.
+
+**Comprobación.** “¿Por qué no basta ocultar al azar 20 % de filas?”. Porque el uso es futuro y existen dependencias temporales, zonales y duplicados que una división aleatoria puede compartir.
+
+**Conclusión que debe quedar.** Predecir exige entradas disponibles al uso y una evaluación independiente que reproduzca la generalización pretendida.
+
+**Transición sugerida.** “Pongamos lado a lado la pregunta retrospectiva y la prospectiva para no confundir sus productos”.
+
+## Diapositiva 12. Describir no es predecir
+
+**Correspondencia con el libro.** Capítulo 1, §1.1.5; capítulo 2, §2.1.1. Esta lámina contrasta describir frente a predecir.
+
+**Propósito.** Mostrar que una descripción puede inspirar una hipótesis predictiva, pero no garantiza error bajo en casos futuros.
+
+**Guion sugerido.** Contrastar las preguntas inferiores: demoras observadas frente a demanda no observada. Luego comparar productos: media, cuantiles y distribución frente a probabilidad condicional y error futuro. Usar una regularidad histórica para pronosticar agrega un supuesto de estabilidad: es hipótesis, no garantía.
+
+**Conceptos y términos.** *Error futuro*: discrepancia en casos de uso; *estabilidad*: relaciones transferibles; *hipótesis predictiva*: información que anticipa sin afirmar causa.
+
+**Descripción detallada del diagrama.** Dos tarjetas claras grandes se alinean horizontalmente. La izquierda, “Descripción”, contiene “resume casos observados” y símbolos de media, cuantiles y distribución. La derecha, “Predicción”, contiene “estima casos no observados”, probabilidad condicional y error futuro. Una flecha azul de izquierda a derecha está rotulada “hipótesis, no garantía”: indica que patrones descriptivos pueden motivar predicción, no que la descripción se transforme automáticamente ni que la relación sea unidireccional obligatoria. Debajo de cada tarjeta hay una caja amarilla con su pregunta de movilidad. Orden exacto: preguntas inferiores, tarjetas superiores, flecha, bloque de prueba decisiva. Interpretación válida: ambos análisis pueden usar las mismas fuentes, pero cambian población de evaluación y afirmación. No afirma que predecir sea superior, que toda descripción preceda cronológicamente a todo modelo o que una explicación histórica carezca de valor. Ejemplo oral: la zona A tuvo alta demanda los lunes; solo una evaluación en lunes posteriores dirá si el patrón pronostica. Pregunta: “¿Qué elemento visual introduce la necesidad de evaluación futura?”. La tarjeta derecha y su “error futuro”. Conclusión visual: describir caracteriza lo visto; predecir debe responder por lo no visto.
+
+**Ejemplo de movilidad.** Un mapa de P90 de espera del mes pasado identifica concentración observada. Un pronóstico para la próxima franja necesita un corte, entradas oportunas y comparación en fechas no ajustadas.
+
+**Error frecuente o límite.** Presentar una curva histórica bien ajustada como validación prospectiva o afirmar que el grupo con mayor media seguirá siendo el de mayor demanda.
+
+**Comprobación.** Pedir una evidencia adicional para pasar de descripción a predicción. Respuesta: desempeño contra baseline en periodos posteriores, con partición y disponibilidad realistas.
+
+**Conclusión que debe quedar.** Explicar bien el pasado no implica anticipar bien el futuro.
+
+**Transición sugerida.** “Incluso un buen pronóstico deja abierta otra pregunta: qué acción conviene”.
+
+## Diapositiva 13. Predecir no es decidir
+
+**Correspondencia con el libro.** Capítulo 1, §§1.1.2, 1.1.5 y 1.2.4; capítulo 2, §§2.1.1, 2.1.4 y 2.1.5. Esta lámina contrasta predecir frente a decidir.
+
+**Propósito.** Separar estimación, comparación de acciones y autoridad, incorporando incertidumbre, utilidad y factibilidad.
+
+**Guion sugerido.** La predicción presenta demanda e incertidumbre; la política compara costos, restricciones y consecuencias; el responsable aprueba, modifica o rechaza. Una acción factible satisface restricciones duras. La utilidad representa consecuencias valoradas, no una verdad natural. Autoridad efectiva exige tiempo, información y poder para detener.
+
+**Lectura de la fórmula.** En $a^*=\arg\max_{a\in\mathcal A}\mathbb E[U(a,S)\mid X]$, $\mathcal A$ es el conjunto de acciones factibles, $a$ una candidata, $S$ un estado incierto del entorno, $U(a,S)$ la utilidad o valoración de las consecuencias de ejecutar $a$ si ocurre $S$, y $X$ la evidencia disponible. $\mathbb E$ pondera la utilidad sobre estados posibles; $\arg\max$ devuelve la acción que alcanza el mayor valor esperado, no el valor numérico. $a^*$ es una recomendación bajo ese modelo. Supone estados, probabilidades, utilidad y restricciones suficientemente especificados. No demuestra que la utilidad sea justa, que se hayan incluido todas las consecuencias, que la acción sea legal ni que la persona deba obedecer.
+
+**Descripción detallada del diagrama.** Tres cajas horizontales se conectan por flechas azules. La amarilla “Predicción: demanda + incertidumbre” es evidencia cuantitativa. La verde “Comparar acciones: costos, restricciones, consecuencias” representa la política de decisión. La dorada “Responsable: aprueba, modifica o rechaza” marca autoridad. A la derecha, la fórmula formaliza únicamente la comparación, y tres viñetas repiten fronteras: modelo informa, política compara, persona decide. Leer predicción, comparación, fórmula, responsable y alerta inferior. Los colores distinguen dato, proceso y humano; no representan niveles de calidad. Interpretación válida: una predicción puede alimentar varias decisiones según restricciones. No afirma que siempre haya una función de utilidad completa, que la persona sea infalible o que “humano en el circuito” baste sin autoridad. Ejemplo oral: demanda alta en B puede no justificar traslado si deja A bajo cobertura mínima. Pregunta: “¿Dónde se excluye mover un vehículo no disponible?”. En $\mathcal A$ y en la caja de restricciones. Conclusión visual: entre pronóstico y acción hay una política explícita y una autoridad.
+
+**Ejemplo de movilidad.** El sistema estima demanda alta con intervalo amplio. Compara mantener, mover uno o mover dos vehículos. Mover dos viola cobertura mínima; mover uno es reversible. Operaciones incorpora un cierre vial no capturado y rechaza, registrando motivo.
+
+**Error frecuente o límite.** Convertir probabilidad alta en orden, esconder restricciones duras como costos negociables o llamar supervisión a una aprobación rutinaria sin información.
+
+**Comprobación.** “¿Puede rechazarse una predicción muy precisa?”. Sí: puede llegar tarde, no cambiar acciones, implicar riesgo o no superar una alternativa operativa.
+
+**Conclusión que debe quedar.** Una predicción estima; una política compara; una persona u órgano autorizado decide.
+
+**Transición sugerida.** “Sostener estas fronteras requiere perspectivas diferentes coordinadas alrededor de la evidencia”.
+
+## Diapositiva 14. Una disciplina interdisciplinaria
+
+**Correspondencia con el libro.** Capítulo 1, §§1.1.1 y 1.1.4; capítulo 2, §2.2.5.
+
+**Propósito.** Mostrar qué pregunta aporta cada disciplina y por qué ninguna perspectiva aislada garantiza evidencia útil y confiable.
+
+**Guion sugerido.** No presentar áreas como departamentos. Estadística aborda variabilidad e inferencia; matemática, objetivos y restricciones; computación, representación y escala; ingeniería, pruebas y operación; dominio, significado; comunicación, comprensión y uso. Gobernanza y autoridad atraviesan todas. Una persona puede cubrir roles, no omitir preguntas.
+
+**Conceptos y términos.** *Inferencia* relaciona muestra y población. *Observabilidad operativa* revela estado y fallos mediante registros; difiere de observabilidad conceptual. *Plausibilidad* no es prueba. Comunicar incluye incertidumbre y límites.
+
+**Descripción detallada del diagrama.** Un círculo verde central dice “Evidencia útil y confiable”. Seis tarjetas claras lo rodean: estadística arriba a la izquierda, matemática arriba, computación arriba a la derecha, ingeniería abajo a la derecha, dominio abajo y comunicación abajo a la izquierda. Cada tarjeta tiene una flecha azul hacia el centro; la convergencia indica contribución conjunta. No hay flechas entre disciplinas ni una jerarquía. Leer en sentido horario desde estadística y, para cada nodo, formular su pregunta; después señalar el centro y la alerta. La interpretación válida es complementariedad. No afirma que todas las tareas requieran igual dedicación, que el consenso elimine conflicto o que evidencia confiable resulte automáticamente de reunir perfiles. Ejemplo oral: estadística evalúa error, ingeniería asegura llegada antes de las 09:00, dominio valida cancelaciones y comunicación presenta abstención. Pregunta: “¿Qué nodo detectaría que una zona cambió de límites?”. Dominio e ingeniería/computación conjuntamente. Conclusión visual: optimizar una sola contribución puede optimizar la parte equivocada.
+
+**Ejemplo de movilidad.** Operaciones define acciones; ingeniería conserva tiempos de evento y recepción; estadística diseña evaluación; cartografía valida zonas; legal y gobernanza revisan ubicación; comunicación diseña evidencia que pueda cuestionarse.
+
+**Error frecuente o límite.** Consultar dominio solo al final, tratar comunicación como decoración o creer que revisión humana compensa un sistema opaco y tardío.
+
+**Comprobación.** Asignar preguntas: “¿qué significa cancelado?”, dominio; “¿se generaliza el error?”, estadística; “¿llega a tiempo?”, ingeniería; “¿quién autoriza?”, gobernanza operativa.
+
+**Conclusión que debe quedar.** La confiabilidad es una propiedad de coordinación entre preguntas disciplinares y responsabilidades.
+
+**Transición sugerida.** “El primer objeto compartido por esas perspectivas es una formulación que pueda explicarse sin algoritmos”.
+
+## Diapositiva 15. Formular antes de modelar
+
+**Correspondencia con el libro.** Capítulo 2, §2.1.1; capítulo 1, §§1.1.1 y 1.1.6.
+
+**Propósito.** Diferenciar necesidad real, pregunta analítica y tarea computacional, y exigir correspondencia con el uso.
+
+**Guion sugerido.** “Reducir esperas” es necesidad; “¿qué demanda tendrá cada zona-franja?”, pregunta analítica; “agregar o predecir”, tarea computacional. La necesidad también podría exigir descripción o auditoría. Justificar la tarea con “¿sirve para decidir?” y explicar sin algoritmos.
+
+**Conceptos y términos.** *Tarea computacional*: operación formal; *pregunta analítica*: propiedad observable delimitada; *correspondencia hacia atrás*: tarea, datos y unidad responden a la acción.
+
+**Descripción detallada del diagrama.** Tres cajas horizontales: azul “Necesidad real: reducir esperas”, verde “Pregunta analítica: demanda por zona-franja” y amarilla “Tarea computacional: agregar o predecir”. Flechas azules avanzan entre ellas. Desde la tarea sale una flecha verde discontinua hacia abajo y regresa a la necesidad, rotulada “¿sirve para decidir?”. Ese retorno es una prueba de utilidad, no una optimización automática. Orden: necesidad, pregunta, tarea, flecha de retorno y bloque “prueba sin algoritmos”. Interpretación válida: cada traducción restringe el significado y puede revisarse. No afirma que la cadena sea única, que toda pregunta requiera predicción o que una tarea útil garantice impacto. Ejemplo oral: reducir espera podría requerir primero agregar cancelaciones, no entrenar. Pregunta: “¿Qué cambiaría si la acción fuera informar pasajeros y no reasignar flota?”. Cambiarían unidad, horizonte, producto y posiblemente tarea. Conclusión visual: modelar antes de formular congela supuestos no examinados.
+
+**Ejemplo de movilidad.** Necesidad: reducir P90 de espera. Pregunta: demanda por zona durante los siguientes treinta minutos. Tarea: construir zona-franja y pronosticar contra baseline; luego comparar traslados factibles.
+
+**Error frecuente o límite.** Traducir una necesidad directamente a “usar redes neuronales” o elegir como objetivo una columna conveniente que no representa espera.
+
+**Comprobación.** Pedir completar: quién decide, sobre qué unidad, con qué información, para cuándo y con qué propósito. Si falta una respuesta, la formulación sigue incompleta.
+
+**Conclusión que debe quedar.** Una técnica solo es pertinente después de justificar la pregunta y su conexión con una decisión.
+
+**Transición sugerida.** “Hagamos esa formulación compacta para poder revisar sus componentes uno por uno”.
+
+## Diapositiva 16. Especificación compacta del problema
+
+**Correspondencia con el libro.** Capítulo 1, §1.1.1; capítulo 2, §§2.1.1-2.1.4. La notación combina las formulaciones de ambos capítulos y agrega población y objetivo de manera explícita.
+
+**Propósito.** Proporcionar una ficha mínima y cuatro pruebas que revelen formulaciones sin observación, acción o temporalidad.
+
+**Guion sugerido.** Leer la tupla como preguntas. Empezar por objetivo y acción; fijar unidad y población; luego resultado, entradas, horizonte y restricciones. Completar usuario, valor, afectados y responsables. Cuatro pruebas: **observabilidad**, medición defendible; **accionabilidad**, elección real; **disponibilidad temporal**, entrada previa; **contrafactual de uso**, qué acción cambiaría. La última no estima causalidad.
+
+**Lectura de la fórmula.** $\mathcal P=(U,\mathcal R,O,X,Y,A,H,C)$ define un objeto de especificación. $U$ es unidad de análisis; $\mathcal R$, población objetivo; $O$, objetivo; $X$, entradas disponibles; $Y$, resultado de interés; $A$, acciones posibles; $H$, horizonte; $C$, restricciones. Paréntesis y comas agrupan componentes; no indican suma, probabilidad ni orden causal. El caligráfico distingue la especificación del uso informal de $P$ como probabilidad. Supone que los componentes pueden declararse y revisarse, pero no que sean correctos ni completos. No permite concluir factibilidad de datos, generalización o valor sin evidencia.
+
+**Conceptos y términos.** *Observable* admite operacionalización con error; *accionable* aún requiere capacidad y autoridad; *contrafactual* aquí prueba cambio de acción, no estima efecto causal.
+
+**Ejemplo de movilidad.** $U$: zona-franja; $\mathcal R$: zonas operadas en condiciones normales; $O$: reducir espera extrema sin elevar cancelaciones; $X$: información recibida al corte; $Y$: demanda y espera en la franja siguiente; $A$: mantener o proponer traslados; $H$: treinta minutos; $C$: capacidad, distancia, seguridad y cobertura.
+
+**Error frecuente o límite.** Confundir objetivo con métrica, población con archivo, acción con salida del modelo o incluir en $X$ una etiqueta posterior.
+
+**Comprobación.** Cambiar $U$ a viaje y preguntar qué se rompe. La acción sigue siendo zonal, por lo que se necesitaría agregación explícita y revisar población, dependencias, evaluación y producto.
+
+**Conclusión que debe quedar.** Una formulación defendible hace explícitos entidad, población, propósito, información, resultado, acción, tiempo y límites.
+
+**Transición sugerida.** “Tres de esos componentes determinan sobre qué puede hablar legítimamente una fila: unidad, población y alcance”.
+
+## Diapositiva 17. Unidad, población y alcance
+
+**Correspondencia con el libro.** Capítulo 2, §2.1.3; capítulo 1, §§1.1.4 y 1.1.6.
+
+**Propósito.** Diferenciar entidad elemental, conjunto de generalización, muestra observada y fronteras autorizadas de uso.
+
+**Guion sugerido.** La **unidad** define una observación y nivel de acción; la **población objetivo**, dónde generalizar; la **muestra**, qué se observó bajo cobertura y selección; el **alcance**, periodos, lugares, usos y exclusiones. La **granularidad** es detalle temporal, espacial y de entidad: zona-franja difiere de viaje o GPS.
+
+**Conceptos y términos.** *Clave* identifica unidad o relación. *Dependencia*: filas comparten entidad o tiempo. *Generalización* declara dónde, cuándo, bajo qué condiciones y qué no se evaluó.
+
+**Composición visual relevante.** Tres columnas paralelas dan igual peso a unidad, población y alcance. Leerlas de izquierda a derecha y luego la alerta de granularidad. La línea final presenta tres conjuntos no equivalentes: población objetivo, muestra disponible y población futura. El símbolo $\neq$ significa que no deben asumirse idénticos, aunque puedan solaparse.
+
+**Ejemplo de movilidad.** Una fila zona-franja agrega viajes y señales recibidas para una zona durante treinta minutos. La población incluye zonas de operadores participantes en operación ordinaria. La muestra puede sobrerrepresentar centro y excluir eventos sin registro. Emergencias y zonas no operadas quedan fuera hasta nueva evaluación.
+
+**Error frecuente o límite.** Llamar censo de la ciudad a todos los viajes de una plataforma, tratar filas repetidas de una zona como independientes o ampliar uso porque la interfaz permite seleccionar otra ciudad.
+
+**Comprobación.** “Si el sistema se usará en fechas futuras de las mismas zonas, ¿cómo separar?”. Temporalmente. “Si se usará en zonas nuevas?”. Reservando grupos zonales pertinentes, además de considerar tiempo.
+
+**Conclusión que debe quedar.** Población objetivo, muestra y uso futuro son objetos distintos; la unidad debe coincidir con la acción.
+
+**Transición sugerida.** “Además de saber para quién vale una fila, necesitamos reconstruir exactamente qué podía saberse al decidir”.
+
+## Diapositiva 18. Horizonte y disponibilidad: reconstruir el reloj
+
+**Correspondencia con el libro.** Capítulo 2, §§2.1.4 y 2.3.6; capítulo 1, §1.1.6. El contenido es horizonte, corte y disponibilidad temporal.
+
+**Propósito.** Separar histórico, corte de decisión, franja objetivo y observación posterior del resultado.
+
+**Guion sugerido.** **Horizonte** es distancia del corte al objetivo; **corte** $t_0$, el instante que congela información; **disponibilidad**, recepción y procesamiento, no solo ocurrencia. Para decidir 09:00 sobre 09:00-09:30, lo recibido después no es entrada. $Y$ posterior sirve para evaluar.
+
+**Descripción detallada del diagrama.** Una línea horizontal azul con flecha a la derecha representa tiempo. Cuatro marcas ordenadas son “histórico”, “corte $t_0$”, “franja objetivo” y “resultado”. Sobre el tramo previo hay una caja amarilla “Entradas $X$ conocidas antes de $t_0$”. Bajo el corte hay una caja dorada “Decisión en $t_0$”. A la derecha y arriba, una caja azul “Objetivo $Y$ se observa después”. Una flecha azul lleva entradas a decisión. Una flecha verde discontinua parte de $Y$ hacia la zona del corte y dice “prohibido como entrada”; se dibuja como retorno para advertir fuga, no como flujo permitido. Orden exacto: eje y marcas de izquierda a derecha; caja $X$; decisión; caja $Y$; flecha prohibida; regla inferior. Interpretación válida: las características deben reconstruirse según disponibilidad al corte. No afirma que todo evento anterior sea válido, que $Y$ nunca pueda usarse en futuros reentrenamientos o que el horizonte sea el tiempo de cómputo. Ejemplo oral: el GPS de 08:58 recibido 09:04 no estaba disponible a las 09:00. Pregunta: “¿Dónde ubicar una corrección administrativa de las 10:00?”. Después del corte; puede corregir histórico, no la entrada en línea. Conclusión visual: evaluar justamente exige reproducir el reloj de decisión.
+
+**Ejemplo de movilidad.** Histórico hasta 09:00, decisión a las 09:00, objetivo 09:00-09:30 y demanda total conocida después de cerrar la franja. Deben conservarse tiempo de evento, recepción, disponibilidad y decisión.
+
+**Error frecuente o límite.** Filtrar solo por `hora_evento < t_0`, usar una tabla actualizada retrospectivamente o confundir horizonte de treinta minutos con una ventana histórica de treinta minutos.
+
+**Comprobación.** “Evento 08:58, recepción 09:04, decisión 09:00: ¿entrada válida?”. No para esa decisión, aunque ocurriera antes.
+
+**Conclusión que debe quedar.** El reloj relevante es qué información estaba disponible al corte, no qué sabemos al reconstruir meses después.
+
+**Transición sugerida.** “Con problema, población y reloj definidos, podemos organizar el trabajo completo y sus retornos”.
+
+## Diapositiva 19. Workflow de un proyecto de datos
+
+**Correspondencia con el libro.** Capítulo 2, propósito, §§2.1.5 y 2.2.3-2.2.4; capítulo 1, ciclo de §1.1.1.
+
+**Propósito.** Presentar un flujo de seis actividades con baseline y criterios fijados antes de comparar resultados finales.
+
+**Guion sugerido.** El *workflow* explicita: formular decisión y éxito; obtener con inventario y permiso; preparar con procedencia; analizar; evaluar contra baseline, incertidumbre y riesgo; comunicar o integrar con autoridad y monitoreo. Es iterativo. Baseline y protocolo preceden a la prueba final.
+
+**Conceptos y términos.** *Protocolo*: población, partición, métricas y tolerancias. *Artefacto*: objeto verificable. *Integrar* no equivale a automatizar.
+
+**Descripción detallada del diagrama.** Cinco cajas numeradas forman una fila: 1 formular, 2 obtener, 3 preparar, 4 analizar/modelar y 5 evaluar/contrastar. Los colores distinguen decisión, dato y proceso para recordar la naturaleza dominante, no equipos propietarios. Flechas azules conectan la fila. Debajo, una caja dorada más ancha contiene la fase 6, “Comunicar o integrar con autoridad y monitoreo”. Desde evaluación una flecha baja a fase 6; una flecha verde discontinua regresa desde fase 6 a formulación. Orden: recorrer 1 a 5, bajar a 6, seguir el retorno, leer el principio. Interpretación válida: el uso produce evidencia para reformular. No afirma cascada rígida, que evaluación ocurra una sola vez ni que todo producto se despliegue. Ejemplo oral: una auditoría de GPS puede pasar por todas las fases sin modelo. Pregunta: “¿Dónde se fija el baseline?”. En formulación/evaluación planificada, antes de comparación final. Conclusión visual: el flujo conecta aprendizaje técnico y operativo.
+
+**Ejemplo de movilidad.** Ficha zona-franja; inventario de viajes, GPS, clima y zonas; tabla con corte; baseline estacional y candidato; evaluación temporal; tablero asistido con abstención y monitoreo.
+
+**Error frecuente o límite.** Usar la prueba para elegir modelos, considerar “mejor de los probados” equivalente a aceptable o dejar monitoreo para después de publicar.
+
+**Comprobación.** Preguntar qué fase revisa una salida precisa que operaciones no comprende. Comunicación/integración, con posible retorno a formulación y representación.
+
+**Conclusión que debe quedar.** El workflow organiza evidencia y decisiones de avance, no solo procesamiento de datos.
+
+**Transición sugerida.** “Para impedir que avanzar sea automático, cada transición necesita una puerta y un artefacto revisable”.
+
+## Diapositiva 20. Puertas y artefactos: aprender antes de escalar
+
+**Correspondencia con el libro.** Capítulo 2, §§2.2.2-2.2.3 y §2.1.5.
+
+**Propósito.** Convertir fases en decisiones verificables y priorizar la incertidumbre que podría invalidar el proyecto.
+
+**Guion sugerido.** Una **puerta** decide avanzar, modificar, escalar o detener con evidencia mínima. Un **artefacto vivo** es versionado y evoluciona. Un **producto mínimo evaluable** es la menor implementación que prueba el supuesto crítico: si se desconoce GPS, primero perfil de cobertura y latencia. “Mínimo” reduce inversión, no rigor.
+
+**Lectura detallada de la tabla.** La primera columna nombra cuatro transiciones. La segunda responde qué evidencia mínima autoriza cruzarlas. La tercera identifica el artefacto vivo que conserva esa evidencia. Leer por filas: de formular a datos se necesitan unidad, alcance, autoridad y valor, registrados en ficha; de datos a análisis, cobertura, licencia, calidad y tiempo, registrados en inventario y diccionario; de análisis a uso, superar baseline y aceptar riesgos, en registro de experimento; de uso a escala, observar utilidad, carga y fallos, en plan de monitoreo y retirada. Después leer verticalmente la tercera columna para mostrar acumulación documental. Las flechas escritas en la primera columna son transiciones, no garantías de avance.
+
+**Conceptos y términos.** *Aceptación* decide suficiencia; *selección* elige candidato; *retirada* vuelve a una alternativa segura. Un artefacto vivo conserva versión, responsable y motivo.
+
+**Ejemplo de movilidad.** Antes de analizar se exige conocer qué porcentaje de eventos GPS llega antes del corte. Antes de uso se exige mejorar el baseline temporal sin degradar cancelaciones. Antes de escala se observa carga del operador y rechazos.
+
+**Error frecuente o límite.** Convertir puertas en burocracia documental, exigir certeza total o cruzarlas porque “ya se invirtió mucho”. Tampoco se compensan restricciones críticas con una puntuación global.
+
+**Comprobación.** “No sabemos si clima llega antes de las 09:00. ¿Cuál es el producto mínimo evaluable?”. Una medición versionada de latencia y cobertura por periodo, no un modelo con clima.
+
+**Conclusión que debe quedar.** Escalar es una decisión basada en evidencia acumulada; detener también es un resultado legítimo.
+
+**Transición sugerida.** “Dos metodologías conocidas ayudan a nombrar estas actividades; primero veremos la que sitúa minería dentro del descubrimiento”.
+
+## Diapositiva 21. KDD: del dato al conocimiento validado
+
+**Correspondencia con el libro.** Capítulo 2, §2.2.1.
+
+**Propósito.** Explicar KDD como proceso amplio y evitar el salto de salida computacional a conocimiento o regla operativa.
+
+**Guion sugerido.** En KDD, selección justifica fuentes y unidades; preprocesamiento estudia faltantes, errores y duplicados; transformación representa; minería encuentra patrones; interpretación/evaluación comprueba validez y utilidad. Distinguir resultado, patrón, hipótesis, hallazgo validado y regla aprobada: cada salto requiere control.
+
+**Conceptos y términos.** *Minería*: búsqueda de patrones; *hallazgo validado*: resultado que resiste controles; *regla operativa*: uso aprobado. Novedad depende del contexto.
+
+**Descripción detallada del diagrama.** Cinco cajas horizontales: selección amarilla; preprocesamiento y transformación verdes; minería verde; interpretación/evaluación azul. Flechas continuas avanzan entre etapas. Desde la última sale una flecha verde discontinua que baja y regresa a preprocesamiento, rotulada “iterar”. Leer de selección a interpretación, luego seguir el retorno y finalmente las dos cajas inferiores: minería no es KDD completo y deben evitarse saltos entre estados. Los colores distinguen insumo, proceso y juicio evaluativo; no señalan que selección ocurra una sola vez. Interpretación válida: un patrón inesperado puede exigir revisar codificación. No afirma que siempre se vuelva solo a preprocesamiento, que interpretación sea subjetiva sin criterios ni que KDD termine automáticamente en decisión. Ejemplo oral: una regla “alta demanda a las 08:00” puede ser correcta pero no accionable. Pregunta: “¿Dónde se descubre que el patrón proviene de duplicados?”. En interpretación/evaluación y se retorna a preprocesamiento. Conclusión visual: conocimiento requiere validar e interpretar el resultado en contexto.
+
+**Ejemplo de movilidad.** Se seleccionan viajes y franjas; se corrigen duplicados; se agregan eventos a zona-franja; se encuentra un patrón de demanda; se verifica en periodos separados y se consulta a operaciones antes de considerarlo evidencia.
+
+**Error frecuente o límite.** Llamar descubrimiento a cualquier correlación novedosa para el analista o limpiar hasta producir el patrón esperado.
+
+**Comprobación.** “Un cluster está muy separado pero no cambia ninguna acción ni tiene significado de dominio. ¿Es conocimiento operativo?”. No; es un resultado que requiere interpretación y quizá no avance.
+
+**Conclusión que debe quedar.** La minería produce patrones; KDD organiza el trabajo necesario para convertir algunos en conocimiento validado.
+
+**Transición sugerida.** “KDD enfoca el descubrimiento; CRISP-DM amplía la mirada a la organización completa del proyecto”.
+
+## Diapositiva 22. CRISP-DM: organizar el proyecto completo
+
+**Correspondencia con el libro.** Capítulo 2, §2.2.2.
+
+**Propósito.** Presentar seis fases cíclicas, sus entregables y el sentido amplio de despliegue.
+
+**Guion sugerido.** CRISP-DM comienza con la comprensión del negocio, rotulada “comprensión del problema” en la diapositiva; después comprende datos, prepara, modela, evalúa y despliega. Sus productos incluyen ficha, inventario, tabla versionada, baseline, evaluación técnica-operativa y entrega. Despliegue puede ser informe, tablero, servicio o regla; no implica autonomía. Monitoreo y retirada continúan.
+
+**Conceptos y términos.** *Despliegue*: integración real. Una **Interfaz de Programación de Aplicaciones (API, por *Application Programming Interface*)** expone datos u operaciones mediante contrato; una respuesta exitosa no garantiza cobertura. *Retirada*: suspensión con alternativa segura.
+
+**Descripción detallada del diagrama.** Seis cajas forman un ciclo aproximadamente hexagonal. Arriba está comprensión del problema; luego, en sentido horario, comprensión de datos, preparación, modelado, evaluación y despliegue/entrega. Flechas azules recorren el ciclo y vuelven de despliegue al problema. Una flecha verde discontinua conecta evaluación con comprensión de datos y hace visible un retorno específico. La columna derecha resume tres ideas y una alerta sobre continuidad operativa. Orden: nombrar las fases en sentido horario, explicar el retorno evaluación-datos, leer que comienza por el problema y terminar en “no termina al publicar”. Interpretación válida: las fases son vocabulario y puntos de control. No afirma que sean departamentos, que se ejecuten una vez ni que CRISP-DM prescriba herramientas concretas. Ejemplo oral: evaluación revela cobertura desigual y obliga a revisar inventario. Pregunta: “¿Puede un informe semanal ser despliegue?”. Sí, si integra evidencia en el proceso de uso. Conclusión visual: el proyecto completo es cíclico y operacional.
+
+**Ejemplo de movilidad.** La primera entrega puede ser un tablero asistido que muestra pronóstico, incertidumbre y procedencia; operaciones decide y registra motivos. Si cambia cobertura, se vuelve a comprensión de datos.
+
+**Error frecuente o límite.** Tratar fases como casillas administrativas o suponer que “negocio” excluye objetivos públicos y sociales.
+
+**Comprobación.** Preguntar dónde se revisa un modelo preciso que no reduce espera bajo simulación. En evaluación respecto del problema, con retorno a comprensión del problema o modelado.
+
+**Conclusión que debe quedar.** CRISP-DM organiza desde propósito hasta uso y mantiene retornos después de la entrega.
+
+**Transición sugerida.** “Para comprender los datos debemos distinguir su forma de almacenamiento de su significado”.
+
+## Diapositiva 23. Estructura de los datos
+
+**Correspondencia con el libro.** Capítulo 2, §§2.3.1-2.3.3.
+
+**Propósito.** Comparar datos estructurados, semiestructurados y no estructurados, y mostrar las decisiones de representación propias de cada forma.
+
+**Guion sugerido.** Estructurados: esquema, filas, columnas y claves. El **Lenguaje de Consulta Estructurada (SQL, por *Structured Query Language*)** consulta y transforma datos relacionales, sin garantizar semántica. Semiestructurados: claves flexibles; la **Notación de Objetos de JavaScript (JSON, por *JavaScript Object Notation*)** representa objetos y arreglos, distinguiendo ausente, nulo y vacío. Texto, audio e imagen carecen de variables tabulares inmediatas, no de estructura interna.
+
+**Conceptos y términos.** *Esquema*: nombres, tipos y restricciones. *Clave primaria*: identidad; *foránea*: relación. *Cardinalidad*: uno a uno, uno a muchos o muchos a muchos. *Representación*: variables derivadas con significado.
+
+**Lectura detallada de la tabla.** La primera columna clasifica el tipo; la segunda describe su organización; la tercera une ejemplo y decisión. Leer cada fila completa. Estructurados: viajes SQL; revisar unidad, tipos y cardinalidad. Semiestructurados: eventos JSON; distinguir ausente, nulo y lista vacía. No estructurados: texto, audio o imagen; construir una representación, por ejemplo tokens, espectrograma o características visuales. Después leer verticalmente la tercera columna para mostrar que todos exigen decisiones, aunque cambie el procedimiento. La tabla clasifica organización, no calidad, procedencia ni mecanismo generador.
+
+**Ejemplo de movilidad.** Tabla SQL de viajes, eventos JSON de telemetría y texto de reclamos pueden contribuir a zona-franja. Expandir una lista de incidentes puede multiplicar filas; agregar texto puede perder matices; ambas transformaciones deben declararse.
+
+**Error frecuente o límite.** Creer que esquema válido asegura significado, que JSON es libre de contrato o que “no estructurado” significa caótico. Una unión muchos-a-muchos puede inflar conteos sin producir error técnico.
+
+**Comprobación.** “Cada viaje tiene tres etiquetas y se expande a tres filas antes de contar. ¿Qué ocurre?”. Se triplica el conteo salvo que se preserve la unidad mediante otra tabla o agregación.
+
+**Conclusión que debe quedar.** La forma determina controles de representación; el significado exige esquema, diccionario, claves y cardinalidades.
+
+**Transición sugerida.** “Ahora veremos cómo fuentes con unidades distintas se convierten, mediante reglas explícitas, en una tabla zona-franja”.
+
+## Diapositiva 24. De fuentes heterogéneas a una tabla analítica
+
+**Correspondencia con el libro.** Capítulo 2, §2.3.1, especialmente normalización, tablas analíticas y estado al corte; §2.3.8. Esta lámina trata construcción de tabla analítica.
+
+**Propósito.** Explicar cómo agregar, unir, filtrar y cortar fuentes sin cambiar silenciosamente la unidad ni perder procedencia.
+
+**Guion sugerido.** Una **tabla analítica** deriva de fuentes para una pregunta y corte. Una fila es zona durante treinta minutos: viajes se agregan; clima se asigna temporal y espacialmente; zonas aportan geometría versionada. Cada unión declara claves, cardinalidad, cobertura y corte. Cambiar filas puede cambiar población o unidad.
+
+**Conceptos y términos.** *Agregar*: resumir unidades; *unir*: relacionar por claves; *filtrar*: incluir/excluir; *cortar*: reconstruir estado; *linaje*: retroceder hasta fuente y transformación.
+
+**Descripción detallada del diagrama.** A la izquierda hay tres cajas amarillas apiladas: viajes con unidad viaje, clima con estación-hora y zonas con polígono-versión. Las tres flechas azules convergen en una caja verde central “Reglas explícitas: agregar, unir, filtrar, cortar”. Desde ella una flecha llega a una caja azul “Tabla analítica: una fila = zona-franja; claves + procedencia”. La convergencia significa integración controlada, no que se concatenen tablas sin transformación. Orden exacto: leer unidad de cada fuente de arriba abajo; seguir cada flecha hacia reglas; explicar los cuatro verbos; llegar a la unidad final; leer las tres viñetas inferiores. Interpretación válida: una tabla puede reconciliar granularidades con reglas. No afirma que las tres fuentes sean obligatorias, que toda unión tenga una clave simple ni que la tabla resultante sea verdadera por ser rectangular. Ejemplo oral: viajes 08:30-09:00 se cuentan por zona, clima de estación se asigna por proximidad y el polígono vigente determina pertenencia. Pregunta: “¿Dónde se evita que dos versiones de zona dupliquen una franja?”. En regla de vigencia, claves y cardinalidad. Conclusión visual: la unidad final es construida, no heredada automáticamente.
+
+**Ejemplo de movilidad.** Clave analítica `(zona_id, inicio_franja)`. Se conserva versión de polígonos, corte de extracción, conteo antes y después de cada unión y cobertura de fuentes.
+
+**Error frecuente o límite.** Usar límites actuales para historia sin declarar, unir clima solo por hora ignorando zona o aceptar una multiplicación de filas porque la consulta ejecutó.
+
+**Comprobación.** “La unión aumenta de 100 a 140 zonas-franja. ¿Qué se revisa?”. Cardinalidad, duplicados de clave, vigencias y relación muchos-a-muchos antes de interpretar.
+
+**Conclusión que debe quedar.** Construir una tabla analítica es una decisión semántica y temporal documentada.
+
+**Transición sugerida.** “Antes de integrar masivamente, el equipo necesita inventariar qué es y cómo falla cada fuente”.
+
+## Diapositiva 25. Fuentes: inventariar antes de integrar
+
+**Correspondencia con el libro.** Capítulo 2, introducción de §2.3, §§2.3.5-2.3.6 y §2.3.8. Esta lámina es el inventario de fuentes.
+
+**Propósito.** Leer cada fuente por unidad, acceso y riesgo, y presentar el inventario como especificación de integración y gobernanza.
+
+**Guion sugerido.** Inventariar antes de descargar revela fuentes no integrables, autorizadas o tardías. Registrar propietario, propósito, unidad, cobertura, captura, formato, frecuencia, licencia, sensibilidad, calidad y cambios. Gobernanza asigna acceso, uso, retención y responsabilidad. API, archivo y flujo tienen fallos distintos.
+
+**Lectura detallada de la tabla.** Las columnas son fuente, unidad original, acceso y riesgo principal. Leer por filas. Viajes: viaje, base o archivo, cobertura incompleta de operadores. GPS: dispositivo-evento, flujo o API, latencia, deriva y pérdida. Clima: estación-hora, API, desfase horario y distancia espacial. Zonas: polígono-versión, archivo geográfico, límites modificados. Calendario: día, archivo o tabla, definiciones locales. Luego leer verticalmente “unidad original” para mostrar incompatibilidad de granularidades y “riesgo” para asociar un control específico. La tabla no clasifica calidad total ni prioridad; un riesgo principal no excluye otros.
+
+**Conceptos y términos.** *Deriva*: cambio gradual de medición; *cobertura*: operadores, dispositivos, territorio y tiempo; *licencia*: usos permitidos; *sensibilidad*: daño o privacidad potencial.
+
+**Ejemplo de movilidad.** Viajes y zonas son obligatorios para construir unidad; calendario puede ser opcional; clima entra solo si su asignación y latencia cumplen umbral; GPS puede degradarse a indicador de cobertura en vez de característica si llega tarde.
+
+**Error frecuente o límite.** Confundir “descargable” con permitido, una respuesta exitosa mediante el **Protocolo de Transferencia de Hipertexto (HTTP, por *Hypertext Transfer Protocol*)** con una extracción completa o un archivo llamado “final” con una versión inmutable.
+
+**Comprobación.** Antes de unir clima: exigir zona horaria, instante de actualización, estación, regla espacial, cobertura, faltantes, frecuencia y disponibilidad al corte.
+
+**Conclusión que debe quedar.** Un inventario es una decisión argumentada sobre pertinencia, integración, legitimidad y continuidad de cada fuente.
+
+**Transición sugerida.** “Además de acceso y formato, necesitamos saber qué mecanismo produjo los datos y qué recorrido siguieron”.
+
+## Diapositiva 26. Procedencia: ejes distintos, preguntas distintas
+
+**Correspondencia con el libro.** Capítulo 2, introducción de §2.3 y §§2.3.4-2.3.7. La clasificación primario/secundario es una ampliación didáctica.
+
+**Propósito.** Separar mecanismo de generación, propósito de recolección, acceso/gobernanza y linaje.
+
+**Guion sugerido.** **Procedencia** documenta origen, contexto y transformación. El mecanismo es observacional, con confusión posible; experimental, con condiciones asignadas; o simulado, dependiente del simulador. El propósito es primario o secundario; el acceso, abierto, privado o restringido. **Linaje** conecta origen y producto. Son ejes independientes.
+
+**Conceptos y términos.** *Gobernanza*: permisos, usos y responsables. *Linaje*: artefactos y transformaciones. *Secundario* significa otro propósito, no menor calidad. *Observacional* no significa neutral.
+
+**Descripción detallada del diagrama.** Cuatro tarjetas horizontales iguales están apiladas. La primera contiene el eje “Mecanismo de generación” con observacional, experimental y simulado. La segunda, “Propósito de recolección” con primario y secundario. La tercera, “Acceso y gobernanza” con abierto, privado y restringido. La cuarta dibuja el linaje como origen, extracción, transformación y producto unidos por flechas. La igualdad visual muestra ejes independientes; las barras verticales dentro de cada tarjeta separan alternativas de ese eje, no etapas. Leer de arriba abajo y luego construir una combinación cruzada. Interpretación válida: un dato puede ocupar una categoría en cada eje simultáneamente. No afirma que abierto sea experimental, que privado sea confiable, que simulado sea falso ni que el linaje por sí solo otorgue legitimidad. Ejemplo oral: GPS de una plataforma es observacional, secundario para este análisis y privado, con linaje de evento a tabla zona-franja. Pregunta: “¿Qué eje limita inferencia causal?”. Principalmente mecanismo generador; los demás afectan uso y auditoría. Conclusión visual: preguntas distintas requieren metadatos distintos.
+
+**Ejemplo de movilidad.** El pronóstico puede usar viajes observacionales privados recolectados para facturación, clima abierto secundario y escenarios simulados de reasignación. Deben mantenerse distinguibles.
+
+**Error frecuente o límite.** Presentar una simulación como observación, inferir causalidad de asociación o creer que licencia abierta elimina privacidad y sesgo.
+
+**Comprobación.** Clasificar viajes operativos: observacionales, probablemente secundarios respecto del proyecto, privados o restringidos; su linaje debe documentarse.
+
+**Conclusión que debe quedar.** Saber de dónde viene un dato implica describir generación, propósito, gobernanza y transformaciones, no solo citar un archivo.
+
+**Transición sugerida.** “Cuando cantidad, ritmo y diversidad crecen, estas mismas preguntas se organizan mediante seis diagnósticos”.
+
+## Diapositiva 27. Big Data: seis V, seis diagnósticos
+
+**Correspondencia con el libro.** Capítulo 2, §2.3.7; capítulo 1, §1.3.5 como antecedente de cinco V. El capítulo 2 incorpora variabilidad.
+
+**Propósito.** Usar las seis V como dimensiones diagnósticas, no como etiqueta de prestigio ni métrica única.
+
+**Guion sugerido.** **Volumen**: cuánto; **velocidad**: ritmo y latencia; **variedad**: formatos y fuentes; **veracidad**: confiabilidad; **valor**: mejora de decisión; **variabilidad**: cambios de distribución o significado. Asociar medidas concretas; más infraestructura no corrige semántica.
+
+**Conceptos y términos.** Las **seis V de Big Data** diagnostican, no clasifican binariamente. *Latencia* es demora entre relojes; *variabilidad* incluye definición, estacionalidad y deriva.
+
+**Descripción detallada del diagrama.** Un círculo verde central dice “Desafío de datos”. Seis tarjetas lo rodean: volumen arriba izquierda, velocidad arriba, variedad arriba derecha, veracidad abajo derecha, valor abajo y variabilidad abajo izquierda. Cada tarjeta formula una pregunta y envía una flecha azul al centro. La convergencia indica que el desafío combina dimensiones. Orden exacto: volumen, velocidad, variedad, veracidad, valor y variabilidad; para cada una asociar un control; terminar en el centro y la alerta. Aunque valor está abajo, no es menos importante ni el centro geométrico. Interpretación válida: distintas combinaciones requieren soluciones distintas. No afirma que todas deban ser altas, que seis V definan una escala universal ni que distribuir mejore calidad. Ejemplo oral: muchos GPS tardíos tienen volumen y velocidad, pero poco valor al corte. Pregunta: “¿Qué V captura un cambio de límites zonales?”. Variabilidad, con consecuencias también para veracidad. Conclusión visual: Big Data es un conjunto de tensiones técnicas y semánticas orientadas al uso.
+
+**Ejemplo de movilidad.** GPS genera volumen y velocidad; viajes, clima y zonas añaden variedad; pérdidas afectan veracidad; cambios estacionales, variabilidad; valor existe solo si la evidencia llega antes y cambia una acción segura.
+
+**Error frecuente o límite.** Adoptar computación distribuida sin medir memoria o tiempo, o estimar con gran precisión el concepto equivocado.
+
+**Comprobación.** “Un archivo pequeño de cierres críticos puede tener alto valor?”. Sí. “Una zona cuyo significado cambia?”. Variabilidad.
+
+**Conclusión que debe quedar.** Escala se diagnostica por dimensiones medibles; ninguna sustituye validez semántica ni conexión con la decisión.
+
+**Transición sugerida.** “Sea pequeño o grande, un resultado confiable debe poder reconstruirse y auditarse”.
+
+## Diapositiva 28. Herramientas y reproducibilidad
+
+**Correspondencia con el libro.** Capítulo 1, §1.1.4; capítulo 2, §§2.4, 2.4.1-2.4.2 y 2.4.5-2.4.7.
+
+**Propósito.** Relacionar entornos, artefactos y controles en una cadena reproducible, diferenciando reproducibilidad y trazabilidad.
+
+**Guion sugerido.** **Reproducibilidad** reconstruye resultados; **trazabilidad** sigue decisiones y transformaciones. Python, R y SQL son medios. **Jupyter** combina narrativa, código y resultados y debe ejecutarse desde cero. **Quarto** genera documentos reproducibles. Una **semilla** repite secuencias bajo condiciones compatibles, no controla todo no determinismo. Un **checksum** identifica contenido exacto, no significado.
+
+**Conceptos y términos.** *Versión*: estado; *configuración*: parámetros; *prueba*: contrato verificado; *registro*: razón de una decisión, no solo métricas.
+
+**Composición visual relevante.** Tres columnas superiores agrupan entornos, artefactos y controles. Deben leerse horizontalmente como combinación: un entorno ejecuta código y datos bajo configuración; los controles vinculan versiones, checksums, pruebas y semillas. La caja central dibuja fuente identificada, transformación versionada, experimento registrado y resultado reconstruible. Las flechas indican dependencia documental, no que baste con conservar el último artefacto. Las viñetas inferiores corrigen tres reduccionismos: semilla, notebook y preferencia personal.
+
+**Ejemplo de movilidad.** Un gráfico de P90 por zona registra corte, operadores, versión de polígonos, zona horaria, consulta, código, entorno y regla para cancelados. Otra persona puede regenerarlo sin buscar `final_v2.csv`.
+
+**Error frecuente o límite.** “Corre en mi equipo”, guardar solo el modelo, pegar tablas manualmente o creer que checksum prueba calidad. Reproducibilidad tampoco justifica retener datos sensibles indefinidamente.
+
+**Comprobación.** “Tenemos código y semilla, pero la API devuelve datos actuales. ¿Qué falta?”. Instantánea, versión o consulta con corte verificable.
+
+**Conclusión que debe quedar.** Reconstruir evidencia exige identificar datos, código, entorno, configuración, partición, variación y decisiones.
+
+**Transición sugerida.** “Apliquemos ahora toda la formulación a un caso único y coherente de movilidad”.
+
+## Diapositiva 29. Caso movilidad: formulación coherente
+
+**Correspondencia con el libro.** Capítulo 1, §1.1.6; capítulo 2, §§2.1.3-2.1.5 y §2.3.8.
+
+**Propósito.** Consolidar una ficha donde unidad, horizonte, resultado, acciones, restricciones, valor y autoridad sean compatibles.
+
+**Guion sugerido.** Partir de la decisión antes de cada franja y verificar la ficha. Zona-franja coincide con predicción y traslado; población son zonas operadas en condiciones declaradas; horizonte, treinta minutos; resultado, demanda y espera; acciones, mantener o trasladar; valor, espera extrema sin más cancelaciones; autoridad, operaciones.
+
+**Conceptos y términos.** *Restricción dura*: excluye; *blanda*: penaliza. *Autoridad*: aprobar y responder. *Valor*: consecuencia operativa.
+
+**Composición visual relevante.** La caja superior fija la decisión; dos columnas inferiores distribuyen cuatro componentes cada una. Leer en pares: unidad-acciones, población-restricciones, horizonte-valor, resultado-autoridad. La alerta final resume coherencia de granularidad. No leer las columnas como dos fichas independientes.
+
+**Ejemplo de movilidad.** A las 09:00 se estima 09:00-09:30. Se ofrecen mantener o mover un vehículo si distancia y cobertura lo permiten. Operaciones puede rechazar por un cierre no registrado. La acción efectiva y el motivo quedan documentados.
+
+**Error frecuente o límite.** Mezclar zona-franja con resultado por viaje, omitir “mantener” del conjunto de acciones o medir éxito solo por demanda predicha.
+
+**Comprobación.** Pedir encontrar una contradicción si el resultado fuera demora de cada viaje y la acción mover flota entre zonas. Falta regla explícita de agregación y evaluación zonal.
+
+**Conclusión que debe quedar.** La formulación es coherente cuando evidencia, decisión y evaluación comparten unidad, población y reloj.
+
+**Transición sugerida.** “La ficha se convierte ahora en una cadena operativa que preserva la frontera entre recomendación y autoridad”.
+
+## Diapositiva 30. Movilidad: evidencia, recomendación y autoridad
+
+**Correspondencia con el libro.** Capítulo 1, §§1.1.5-1.1.6 y §1.4.4; capítulo 2, §§2.1.2, 2.1.4 y 2.2.5.
+
+**Propósito.** Recorrer el caso desde fuentes hasta acción, incorporando incertidumbre, opciones factibles, abstención y retroalimentación.
+
+**Guion sugerido.** Las fuentes se transforman en zona-franja; la evidencia combina demanda, incertidumbre y evaluación; las opciones incluyen consecuencias y factibilidad; el responsable aprueba, modifica, rechaza o mantiene. La **abstención** es salida explícita ante información o riesgo insuficiente. La acción genera observaciones y puede cambiar datos futuros.
+
+**Conceptos y términos.** *Incertidumbre*: variabilidad o desconocimiento; *abstención*: derivar o mantener alternativa segura; *autoridad humana*: contradecir y detener.
+
+**Descripción detallada del diagrama.** Cinco cajas forman la fila principal: fuentes amarillas; proceso verde de construir zona-franja; evidencia amarilla de demanda esperada e incertidumbre; proceso verde de opciones factibles y consecuencias; responsable dorado. Flechas continuas avanzan. Debajo de opciones hay una caja azul “Acción en la flota o mantener estado”; una flecha desde responsable llega a ella, mostrando que la acción ocurre después de la decisión humana. Una flecha verde discontinua vuelve desde acción a construcción de unidad y se rotula “impacto observado”. Orden: fuentes, construcción, evidencia, opciones, responsable, acción, retorno y alerta de automatización. Interpretación válida: el uso genera nuevos datos y aprendizaje. No afirma que el impacto pueda atribuirse causalmente sin diseño, que toda consecuencia sea observada ni que el responsable deba aceptar. Ejemplo oral: baja cobertura activa abstención y se mantiene regla vigente. Pregunta: “¿Dónde puede detenerse la cadena sin fallo?”. En evidencia u opciones mediante abstención, y en responsable mediante rechazo. Conclusión visual: recomendación y ejecución están separadas por autoridad.
+
+**Ejemplo de movilidad.** El sistema presenta mover uno, mantener y abstenerse, con efecto esperado en P90, cancelaciones y cobertura. Operaciones elige mantener por incidente vial nuevo.
+
+**Error frecuente o límite.** Escribir “el algoritmo reasigna”, ocultar incertidumbre o tratar rechazo humano como etiqueta de error sin investigar contexto.
+
+**Comprobación.** Preguntar qué registrar ante un rechazo: corte, entradas, versión, predicción, incertidumbre, opciones, motivo, decisión, acción efectiva y resultado.
+
+**Conclusión que debe quedar.** El producto es evidencia y opciones; la autoridad decide y el monitoreo aprende de la acción real.
+
+**Transición sugerida.** “Una misma cadena contiene tareas distintas; la tabla siguiente vuelve a separarlas por producto y evaluación”.
+
+## Diapositiva 31. Del caso amplio a tareas concretas
+
+**Correspondencia con el libro.** Capítulo 1, §§1.1.5-1.1.6; capítulo 2, §§2.1.1, 2.1.5 y 2.2.4.
+
+**Propósito.** Traducir un caso amplio en cuatro tareas sobre la misma unidad, cada una con producto y evaluación propios.
+
+**Guion sugerido.** Mantener zona-franja y cambiar el verbo. Describir agrega y controla cobertura; predecir estima y compara con baseline temporal; prescribir evalúa reasignaciones, utilidad y restricciones; monitorear detecta cambios y activa revisión o retirada. Un ranking sin acciones ni consecuencias no prescribe.
+
+**Conceptos y términos.** *Perfil*: resumen; *pronóstico*: resultado futuro; *opción factible*: satisface restricciones; *alerta*: condición, responsable y respuesta; *retirada*: alternativa segura.
+
+**Lectura detallada de la tabla.** La primera columna fija cuatro objetivos; la segunda formula la tarea manteniendo “sobre zona-franja”; la tercera une producto y forma de evaluación. Leer por filas: describir produce perfil; predecir, pronóstico comparado con baseline; prescribir, opciones con utilidad y restricciones; monitorear, alertas y decisiones de revisión. Luego leer verticalmente la segunda columna para comprobar que la unidad no cambia. Las relaciones son encadenables: un perfil puede informar baseline, un pronóstico alimentar opciones y monitoreo revisar todos; no son equivalentes ni una escala de sofisticación. El bloque inferior recuerda que eventos de viaje deben agregarse y no deben presentarse como decisiones individuales.
+
+**Ejemplo de movilidad.** Para 09:00-09:30: el perfil resume semanas previas; el pronóstico estima demanda; la prescripción compara mover uno o mantener; monitoreo comprueba latencia GPS, error, tasa de abstención y P90 observado.
+
+**Error frecuente o límite.** Evaluar prescripción solo por error predictivo, presentar cada viaje como decisión o monitorear únicamente disponibilidad del servicio sin impacto.
+
+**Comprobación.** “Un modelo mejora error, pero las opciones resultantes dejan una zona sin cobertura. ¿Qué tarea falla?”. Prescripción/factibilidad, aunque predicción pudiera mejorar.
+
+**Conclusión que debe quedar.** Compartir unidad y fuentes no elimina las diferencias entre describir, predecir, prescribir y monitorear.
+
+**Transición sugerida.** “Antes de confiar en el pronóstico, auditaremos el fallo que más fácilmente produce resultados extraordinarios e irreales: usar futuro”.
+
+## Diapositiva 32. Fuga temporal: saber hoy lo que mañana ocurrió
+
+**Correspondencia con el libro.** Capítulo 1, §§1.1.3, 1.1.6 y §1.4.5; capítulo 2, §§2.1.3-2.1.5 y tiempos de evento, recepción y decisión en §2.3.6.
+
+**Propósito.** Definir fuga temporal con precisión, reconocer sus mecanismos, explicar por qué vuelve optimista la evaluación y establecer controles de detección y prevención.
+
+**Guion sugerido.** **Fuga de información** ocurre cuando entrenamiento, características, selección o evaluación acceden a información ausente en uso real, o la comparten de modo que la prueba deja de representar casos nuevos. La **fuga temporal** viola el reloj de decisión. Importan ocurrencia, recepción, procesamiento y disponibilidad.
+
+Separar cuatro relojes: **evento**, cuando ocurre; **recepción**, cuando llega; **disponibilidad**, cuando puede consultarse tras procesar; y **decisión**, cuando se congela evidencia. Para cada característica:
 
 $$
-\text{necesidad}\rightarrow\text{pregunta analítica}\rightarrow
-\text{tarea computacional}\rightarrow\text{evidencia}\rightarrow\text{decisión}.
+t_{disponibilidad}\le t_{decisión}.
 $$
 
-Cada flecha exige justificación: una tarea produce una salida, no evidencia automática, y la evidencia no posee autoridad de ejecución.
+La disponibilidad debe ser anterior o igual a decisión; no equivale a `hora_evento`. La igualdad admite el corte si el contrato lo permite. Es necesaria, no suficiente: aún puede haber derivación de etiqueta, uso ilegítimo o contaminación global.
 
-### Ejemplo de movilidad
-
-“Mejorar” puede significar reducir demora, cancelaciones o desigualdad territorial. Una predicción por viaje no resuelve directamente una reasignación por zona.
-
-### Error frecuente o advertencia
-
-El error inicial es traducir “queremos mejorar” como “necesitamos aprendizaje automático”. La técnica no define el problema. También debe evitarse prometer impacto operativo sin identificar quién puede modificar una acción a partir del resultado.
-
-### Comprobación
-
-Preguntar: “Si la empresa usará exactamente la misma distribución de vehículos cualquiera sea el análisis, ¿existe una decisión asociada?”. Respuesta esperada: no; puede existir valor descriptivo, pero no debe afirmarse que el pronóstico reducirá demoras por sí mismo.
-
-**Transición sugerida:** “Para diseñar esa cadena necesitamos aclarar qué hace la Ciencia de Datos y qué tipo de objeto es un dato”.
-
-## Diapositivas 4-6. Definición y datos como representaciones
-
-**Correspondencia con el libro:** capítulo 1, §1.1.1 y distinción entre datos, información, conocimiento y decisión; capítulo 2, introducción de §2.3 y §§2.3.1-2.3.3.
-
-### Qué exponer
-
-La diapositiva 4 define Ciencia de Datos como campo interdisciplinario que obtiene conocimiento y apoya decisiones desde datos. Conocimiento exige validación; apoyar no significa sustituir al decisor.
-
-La diapositiva 5 separa fenómeno, medición y registro. Un dato es una representación producida con unidad, precisión, frecuencia, cobertura y propósito. Dos columnas `demora` pueden significar cálculo horario o categoría declarada.
-
-La diapositiva 6 organiza niveles: **datos**, observaciones codificadas; **información**, datos contextualizados; **conocimiento**, patrones interpretados; **decisión**, selección de acción. El modelo resume o estima, pero no convierte automáticamente un nivel en otro.
-
-### Fórmulas e interpretación
-
-Introducir una representación mínima de medición:
-
-$$
-x_{obs}=g(z, instrumento, contexto)+\varepsilon,
-$$
-
-donde $z$ es el fenómeno, $g$ el proceso de observación y $\varepsilon$ el error. Es una expresión didáctica, no literal del libro: corregir ruido no recupera todo lo omitido por $g$.
-
-### Ejemplo de movilidad
-
-El GPS puede omitir carril, pérdida de señal o contexto. Un reclamo representa a quien usó el canal, no a todos los pasajeros. La hora real se registra después del viaje.
-
-### Recorrido visual
-
-Recorrer fenómeno, captura, registro y tabla; preguntar qué cambia en cada flecha. Terminar en decisión, separada de la fila.
-
-### Error frecuente o advertencia
-
-No decir que un dato es “objetivo” solo porque proviene de un sensor. Los sensores tienen calibración, cobertura y fallos; los registros administrativos contienen reglas del proceso que los genera. Más volumen no elimina un sesgo sistemático de representación.
-
-### Comprobación
-
-Mostrar `sin señal GPS = 0,0` y preguntar si es una ubicación válida. La respuesta esperada es que ausencia, cero y valor inválido son estados diferentes y deben conservar significado.
-
-**Transición sugerida:** “Si los datos son representaciones parciales, necesitamos un proceso que conserve su significado desde la pregunta hasta la evaluación”.
-
-## Diapositivas 7-8. Ciclo general de un proyecto de datos
-
-**Correspondencia con el libro:** capítulo 1, §1.1.1; capítulo 2, propósito, figura inicial y síntesis del capítulo.
-
-### Qué exponer
-
-La diapositiva 7 presenta `problema -> datos -> representación -> análisis -> evidencia -> decisión -> evaluación`: delimitar, observar, construir variables, analizar, validar, decidir con autoridad y observar consecuencias.
-
-La diapositiva 8 niega una lectura lineal. Pregunta no medible, etiqueta inválida o salida tardía obligan a volver y registrar la evidencia que motivó la revisión.
-
-### Fórmulas e interpretación
-
-No se requiere una nueva fórmula cuantitativa. La formalización relevante es la composición de transformaciones:
-
-$$
-D_0 \xrightarrow{T_1} D_1 \xrightarrow{T_2} R
-\xrightarrow{V} E,
-$$
-
-donde $D_0$ son fuentes, $T_i$ transformaciones, $R$ resultado, $V$ validación y $E$ evidencia. Resultado y evidencia no son sinónimos.
-
-### Ejemplo de movilidad
-
-Los cancelados carecen de `hora_real`; eliminarlos haría parecer mejor el servicio. Se debe revisar el resultado y tratar demora y cancelación separadas o juntas.
-
-### Recorrido visual
-
-Recorrer la flecha principal y volver desde evaluación: a representación si cambia la unidad, a datos si falta cobertura y a problema si no hay acción. El modelo ocupa solo un tramo.
-
-### Error frecuente o advertencia
-
-Evitar presentar el ciclo como una cinta transportadora donde cada equipo entrega un archivo al siguiente. Sin retroalimentación, los errores semánticos se consolidan. Tampoco confundir “iterativo” con cambiar criterios después de ver resultados para favorecerlos.
-
-### Comprobación
-
-Preguntar: “¿Qué etapa debe revisarse si la predicción llega diez minutos después de que operaciones asignó los vehículos?”. Deben aparecer formulación temporal, arquitectura de datos y proceso de uso, no solo “hacer más rápido el algoritmo”.
-
-**Transición sugerida:** “Dentro del ciclo, el tipo de pregunta determina qué evidencia debe producirse”.
-
-## Diapositivas 9-11. Taxonomía de objetivos analíticos
-
-**Correspondencia con el libro:** capítulo 1, §1.1.1 y §1.1.5; capítulo 2, §2.1.1, especialmente preguntas descriptivas, predictivas y prescriptivas.
-
-### Qué exponer
-
-La diapositiva 9 presenta cinco objetivos: **describir** lo ocurrido, **diagnosticar** factores asociados, **predecir** lo desconocido, **prescribir** acciones y **monitorear** cambios. Cada uno requiere evidencia distinta.
-
-La diapositiva 10 contrasta descripción y predicción. Una media resume lo observado; anticipar exige casos no usados para ajustar y un protocolo de generalización realista.
-
-La diapositiva 11 separa asociación y causalidad. Lluvia y demora juntas no prueban el efecto de intervenir. Aquí diagnosticar significa explorar asociaciones; una afirmación causal requiere otro diseño.
-
-### Fórmulas e interpretación
-
-Una descripción puede estimar una media $E[Y]$ o proporción $P(Y=1)$. Una predicción utiliza información condicionante:
-
-$$
-P(Y\mid X)
-$$
-
-para una distribución de resultados, o
-
-$$
-E[Y\mid X]
-$$
-
-para un valor esperado. $X$ está disponible y $Y$ no se conoce. La barra se lee “dado”, no “causado por”.
-
-### Ejemplo de movilidad
-
-En movilidad, mediana y P90 describen; hora y lluvia diagnostican asociaciones; la demora siguiente se predice; reasignaciones se prescriben; cambios de demora o GPS se monitorean.
-
-### Recorrido visual
-
-Recorrer preguntas, productos y evaluación. En el gráfico marcar pasado, corte y futuro; la exactitud predictiva no mide el valor de reasignar.
-
-### Error frecuente o advertencia
-
-No usar “predecir” como sinónimo de explicar ni “diagnosticar” como prueba causal. Tampoco exigir a toda iniciativa un modelo predictivo: un inventario de fuentes o una medición de cobertura puede ser el producto correcto.
-
-### Comprobación
-
-Solicitar clasificar: “¿Dónde se concentraron las demoras?”, “¿cuánto demorará el viaje?” y “¿qué vehículo debe moverse?”. Respuestas: descriptiva, predictiva y prescriptiva. Pedir además qué información nueva incorpora cada paso.
-
-**Transición sugerida:** “La diferencia más peligrosa aparece al convertir una predicción en una decisión; ahora haremos explícito ese salto”.
-
-## Diapositivas 12-13. De predicción a decisión
-
-**Correspondencia con el libro:** capítulo 1, §1.1.2, §1.1.5 y §1.2.4; capítulo 2, §2.1.1 y §2.1.5.
-
-### Qué exponer
-
-La diapositiva 12 separa cajas: el modelo estima; la evidencia delimita validez; la decisión compara; la autoridad humana aprueba o rechaza. Así se evita “el modelo decidió”.
-
-La diapositiva 13 agrega costos y utilidad. La misma probabilidad produce acciones distintas según capacidad y costo. Las restricciones excluyen acciones; la autoridad queda fuera de la fórmula.
-
-### Fórmulas e interpretación
-
-La regla general de decisión por utilidad esperada es:
-
-$$
-a^*=\operatorname*{arg\,max}_{a\in\mathcal A}
-\sum_s P(s\mid x)U(a,s).
-$$
-
-$s$ son estados, $P(s\mid x)$ creencias, $U(a,s)$ consecuencias valoradas y $\mathcal A$ acciones factibles. `arg max` devuelve una acción; la incertidumbre se pondera.
-
-Una regla binaria sencilla recomienda intervenir cuando:
-
-$$
-pC_f>C_i,
-$$
-
-donde $p$ es probabilidad, $C_f$ costo de no intervenir y $C_i$ costo de intervención. Con $0{,}30$, 100 y 10, no intervenir cuesta 30 en esperanza. La regla depende de sus supuestos.
-
-### Ejemplo de movilidad
-
-Con 70 % de demanda alta en B, mover dos vehículos reduce espera pero puede dejar A sin cobertura. El sistema presenta opciones; operaciones decide y se registran acción y resultado.
-
-### Recorrido visual
-
-Recorrer $X$, modelo, predicción, evidencia, acciones, recomendación y responsable. Mostrar abstención y retorno del resultado a evaluación.
-
-### Error frecuente o advertencia
-
-No afirmar que una probabilidad alta “ordena” intervenir. La utilidad refleja prioridades discutibles y las restricciones no siempre deben transformarse en costos negociables. Seguridad, normativa y cobertura mínima pueden ser condiciones obligatorias.
-
-### Comprobación
-
-Preguntar: “¿Puede recomendarse una acción con una predicción incierta?”. Sí, si es barata, reversible y tiene buen valor esperado. “¿Puede rechazarse una predicción muy precisa?”. Sí, si no cambia acciones, llega tarde o su uso genera riesgo inaceptable.
-
-**Transición sugerida:** “Construir y evaluar esta cadena requiere perspectivas que ningún perfil aislado reúne por completo”.
-
-## Diapositiva 14. Interdisciplinariedad
-
-**Correspondencia con el libro:** capítulo 1, §1.1.1 y §1.1.4; capítulo 2, §2.2.5.
-
-### Qué exponer
-
-Presentar la interdisciplinariedad como coordinación: estadística estudia evidencia; optimización, objetivos; computación, algoritmos; ingeniería, confiabilidad; dominio, significado; comunicación, comprensión; gobernanza, usos; usuarios, consecuencias.
-
-Una persona puede cubrir varios roles, pero ninguna pregunta desaparece. Debe declararse quién aprueba definiciones, fuentes, métricas y uso.
-
-### Fórmulas e interpretación
-
-No se agrega una fórmula. Retomar la utilidad esperada para indicar que estadística contribuye a $P(s\mid x)$, dominio y gobernanza a $U$ y restricciones, ingeniería a disponer de $x$ a tiempo, y autoridad institucional a aprobar la acción. Ninguna disciplina controla legítimamente toda la expresión por sí sola.
-
-### Ejemplo de movilidad
-
-Operaciones define acciones; ingeniería conserva eventos; Ciencia de Datos evalúa; legal revisa ubicación; afectados aportan cobertura; dirección aprueba. Perjudicar zonas periféricas exige revisar el objetivo.
-
-### Error frecuente o advertencia
-
-Evitar que “interdisciplinario” signifique consultar al dominio solo al final para validar una interfaz. Las definiciones y restricciones deben acordarse antes del modelado. La revisión humana tampoco es efectiva si la persona no tiene tiempo, información o autoridad para contradecir.
-
-### Comprobación
-
-Pedir identificar quién responde: “¿qué significa viaje cancelado?”, “¿puede almacenarse la trayectoria?” y “¿quién autoriza mover vehículos?”. Deben distinguirse conocimiento del dominio, gobernanza de datos y autoridad operativa.
-
-**Transición sugerida:** “El primer artefacto compartido por esas perspectivas es una formulación explícita del problema”.
-
-## Diapositivas 15-16. Formulación: del problema real a una especificación
-
-**Correspondencia con el libro:** capítulo 1, §1.1.1 y §1.1.6; capítulo 2, §§2.1.1, 2.1.2 y 2.1.4.
-
-### Qué exponer
-
-La diapositiva 15 distingue situación (“hay demoras”), pregunta (“¿cuál será la demora por zona?”) y tarea (pronóstico). Reasignar agrega optimización y restricciones. Debe explicarse sin nombrar algoritmos.
-
-La diapositiva 16 presenta una ficha compacta. Para evitar que la población quede implícita y conservar el objetivo del capítulo 1, la clase usa:
-
-$$
-P=(U,R,O,X,Y,A,H,C).
-$$
-
-$U$ es unidad; $R$, población; $O$, objetivo; $X$, entradas; $Y$, resultado; $A$, acciones; $H$, horizonte; y $C$, restricciones. La notación combina formulaciones de ambos capítulos; no es una ecuación literal única del libro.
-
-Interpretar: ¿qué entidad, población, propósito, información previa, resultado, acción, momento y límites? Agregar usuario, afectados, baseline y éxito en la ficha.
-
-### Ejemplo de movilidad
-
-$U$: zona-franja; $R$: zonas cubiertas por los operadores participantes durante operación ordinaria; $O$: reducir espera alta sin degradar cobertura; $X$: solicitudes, vehículos libres, tráfico y calendario conocidos al corte; $Y$: demanda y demora de la franja siguiente; $A$: mantener o proponer reasignaciones factibles; $H$: treinta minutos; $C$: capacidad, distancia, descanso, cobertura y aprobación humana.
-
-### Recorrido visual
-
-Recorrer necesidad, preguntas y tareas, y volver para comprobar correspondencia. En $P$, comenzar por $O$, usuario y acción; revisar luego los demás componentes.
-
-### Error frecuente o advertencia
-
-No usar un indicador disponible como sustituto silencioso del objetivo. Cantidad de reclamos no equivale a mala calidad; depende de acceso y propensión a reclamar. No incluir en $X$ información producida después de decidir.
-
-### Comprobación
-
-Pedir que un estudiante cambie $U$ de zona-franja a viaje y describa qué elementos deben revisarse. Deben cambiar resultado, entradas, partición, producto y quizá acción; no basta renombrar una columna.
-
-**Transición sugerida:** “La unidad no solo organiza filas: determina sobre quién generalizamos y dónde es válida la evidencia”.
-
-## Diapositivas 17-18. Unidad, población y alcance
-
-**Correspondencia con el libro:** capítulo 2, §2.1.3 y conexión con §2.1.4; capítulo 1, §1.1.6.
-
-### Qué exponer
-
-La diapositiva 17 compara viaje, vehículo-día, parada-hora y zona-franja. La unidad determina claves, agregaciones, dependencias, particiones y decisión; una fila no es natural.
-
-La diapositiva 18 separa población objetivo, muestra observada y despliegue. El alcance declara lugar, periodo, condiciones, acciones y exclusiones; operación ordinaria no autoriza uso en emergencias.
-
-### Fórmulas e interpretación
-
-Representar el cambio de distribución como:
-
-$$
-P_T(X,Y)\neq P_D(X,Y),
-$$
-
-donde $P_T$ es entrenamiento y $P_D$ despliegue. La desigualdad advierte que la evaluación puede no transferirse por cambios de población, estación, política o sensores. Tamaño no garantiza representatividad.
-
-La declaración de generalización debe completar: “El resultado pretende aplicarse a ___, bajo ___, durante ___; no se ha evaluado en ___”. Esta frase es una especificación comprobable, no una promesa universal.
-
-### Ejemplo de movilidad
-
-Un millón de viajes céntricos puede representar peor la periferia que una muestra menor deliberada. Reasignar por zona exige agregar predicciones por viaje; evaluar semanas futuras exige separar por tiempo.
-
-### Recorrido visual
-
-Recorrer población objetivo, muestra y despliegue, identificando ausencias. Leer cada unidad desde significado hasta acción.
-
-### Error frecuente o advertencia
-
-No llamar censo de la realidad a un censo del sistema: la base puede contener todos los viajes registrados y omitir viajes de otros operadores o cancelaciones no ingresadas. No ampliar alcance mediante una simple modificación de interfaz; se requiere nueva evidencia.
-
-### Comprobación
-
-Preguntar cómo evaluar si se usará en zonas nunca observadas. La prueba debe reservar zonas, no mezclar viajes de todas las zonas al azar. Si se usará en días futuros de las mismas zonas, corresponde una separación temporal.
-
-**Transición sugerida:** “Con el problema y su alcance definidos, podemos ordenar el trabajo sin confundir orden pedagógico con rigidez”.
-
-## Diapositivas 19-20. Workflow y retroalimentación
-
-**Correspondencia con el libro:** capítulo 2, propósito, §§2.1.5, 2.2.3 y 2.2.4; síntesis del capítulo.
-
-### Qué exponer
-
-La diapositiva 19 recorre necesidad, baseline, inventario, preparación, análisis, evaluación, integración y monitoreo. Asociar ficha, criterios, inventario, dataset versionado, experimento, informe y registro.
-
-La diapositiva 20 usa puertas con evidencia mínima. Un producto mínimo evaluable prueba la incertidumbre crítica: si se desconoce cobertura, primero se perfila, no se modela.
-
-### Fórmulas e interpretación
-
-Introducir el criterio multicriterio del capítulo 2:
-
-$$
-J(m)=w_1Q(m)-w_2C(m)-w_3R(m),
-$$
-
-donde $Q$ mide calidad, $C$ costo y $R$ riesgo. Los pesos son prioridades acordadas. Una restricción dura excluye opciones, aunque su índice sea alto.
-
-### Ejemplo de movilidad
-
-Mejorar 2 % el error puede no compensar doble latencia y una fuente inestable. Descubrir 40 % de GPS oportuno justifica reformular alcance.
-
-### Recorrido visual
-
-Asociar evidencia a cada puerta y seguir retornos por fuga, falta de uso o cambio de esquema. En $J$, las dimensiones requieren documentación.
-
-### Error frecuente o advertencia
-
-No elegir criterios después de ver qué candidato gana. Tampoco confundir el “mejor de los probados” con un candidato aceptable. Puede ganar y no superar baseline, capacidad o riesgo permitido.
-
-### Comprobación
-
-Preguntar qué haría detener el proyecto. Respuestas válidas: datos sin correspondencia con el objetivo, ausencia de proceso de uso, no superar baseline, impacto insuficiente o riesgos no controlables.
-
-**Transición sugerida:** “KDD y CRISP-DM ofrecen dos vocabularios conocidos para organizar estas actividades y hacer visibles omisiones”.
-
-## Diapositivas 21-22. KDD y CRISP-DM
-
-**Correspondencia con el libro:** capítulo 2, §§2.2.1 y 2.2.2.
-
-### Qué exponer
-
-La diapositiva 21 desarrolla KDD: selección, preprocesamiento, transformación, minería e interpretación/evaluación. La minería es una etapa; un patrón aún debe validarse e interpretarse.
-
-La diapositiva 22 desarrolla CRISP-DM: problema, datos, preparación, modelado, evaluación y despliegue. “Negocio” incluye fines públicos; despliegue no implica automatización. Ambas son cíclicas.
-
-### Fórmulas e interpretación
-
-No se añade fórmula numérica. Usar la jerarquía:
-
-$$
-\text{resultado}\rightarrow\text{patrón}\rightarrow
-\text{hipótesis}\rightarrow\text{hallazgo validado}\rightarrow
-\text{regla operativa}.
-$$
-
-Cada transición demanda evidencia o aprobación distinta. La última incorpora autoridad institucional; no la produce el algoritmo de minería.
-
-### Ejemplo de movilidad
-
-Que demanda aumente a las 8:00 puede ser correcto pero trivial. Debe preguntarse si cambia una asignación, existe capacidad y cómo se integra. Reclamos y demora pueden compartir un sesgo de registro.
-
-### Recorrido visual
-
-En KDD recorrer selección a interpretación y volver a preprocesamiento. En CRISP-DM recorrer seis fases y retornos; alinear sin declarar identidad.
-
-### Error frecuente o advertencia
-
-No tratar las fases como casillas administrativas ni considerar conocimiento toda correlación novedosa para el analista. Una metodología hace preguntas visibles; no sustituye juicio, validación ni responsabilidad.
-
-### Comprobación
-
-Preguntar dónde se revisa un cluster bien separado sin significado operativo. En KDD, interpretación/evaluación; en CRISP-DM, evaluación respecto de la comprensión del problema, posiblemente con retorno a formulación.
-
-**Transición sugerida:** “Las metodologías ordenan el trabajo; ahora debemos reconocer qué estructuras concretas pueden tener sus insumos”.
-
-## Diapositivas 23-24. Datos según su estructura
-
-**Correspondencia con el libro:** capítulo 2, §§2.3.1, 2.3.2 y 2.3.3.
-
-### Qué exponer
-
-La diapositiva 23 distingue estructurados con esquema; semiestructurados con claves variables o anidadas; y texto, imagen, audio o video sin variables tabulares inmediatas, aunque con estructura interna.
-
-La diapositiva 24 muestra que aplanar puede multiplicar filas y representar texto o imagen decide qué conservar. El esquema indica almacenamiento; el diccionario, significado.
-
-### Fórmulas e interpretación
-
-Representar $\phi(r)=x$: del registro original a la representación analítica. $\phi$ puede perder información; se conserva original y procedencia.
-
-### Ejemplo de movilidad
-
-SQL de viajes es estructurado; JSON de tráfico, semiestructurado; reclamos o video, no estructurados. Expandir incidentes puede inflar viajes y exige agregar o separar tablas.
-
-### Recorrido visual
-
-Recorrer las tres columnas por pares “forma original -> decisión de representación”. Después seguir el diagrama desde fuente original hasta validación, tabla derivada y análisis. Señalar que el original permanece intacto y que cada derivado conserva clave y versión.
-
-### Error frecuente o advertencia
-
-No afirmar que “no estructurado” significa caótico o sin estructura. No equiparar `null`, clave ausente y lista vacía. No desnormalizar sin comprobar cardinalidades, porque una unión muchos-a-muchos puede multiplicar observaciones.
-
-### Comprobación
-
-Preguntar qué ocurre si cada viaje tiene tres incidentes y se expande la lista antes de contar viajes. El conteo puede triplicarse; debe preservarse la unidad mediante agregación o tablas relacionadas.
-
-**Transición sugerida:** “La forma del dato explica cómo procesarlo; la procedencia explica qué podemos afirmar a partir de él”.
-
-## Diapositivas 25-26. Fuentes, mecanismo generador y procedencia
-
-**Correspondencia con el libro:** capítulo 2, introducción de §2.3 y §§2.3.4-2.3.6; para movilidad, §2.3.8.
-
-### Qué exponer
-
-La diapositiva 25 distingue observacionales, experimentales y simulados; también primarios y secundarios. Estas clasificaciones describen generación y propósito, no formato.
-
-La diapositiva 26 registra propietario, propósito, unidad, cobertura, captura, formato, frecuencia, licencia, sensibilidad, cambios, corte, claves, zona horaria, versión y responsable. El inventario prueba integración y legitimidad.
-
-### Fórmulas e interpretación
-
-No se incorpora una nueva ecuación. Usar la cadena de linaje:
-
-$$
-fuente\xrightarrow{extracción}original\xrightarrow{transformación}
-dataset\xrightarrow{análisis}resultado.
-$$
-
-Cada flecha registra código, configuración y tiempo. Simulación no es observación; asociación observacional no identifica por sí sola efectos.
-
-### Ejemplo de movilidad
-
-Viajes, clima, calendario, obras y polígonos exigen reconciliar relojes, granularidad y geometría. Se declara cobertura parcial y se descartan fuentes inestables.
-
-### Recorrido visual
-
-Leer unidad y reloj de cada fuente, detenerse en las uniones y retroceder desde una celda para comprobar reconstrucción.
-
-### Error frecuente o advertencia
-
-No considerar descargable como sinónimo de permitido. No sobrescribir originales ni ejecutar hoy la misma consulta esperando idéntico resultado en una base mutable. Una API con respuesta exitosa puede estar paginada o incompleta.
-
-### Comprobación
-
-Preguntar qué debe saberse antes de unir clima con demanda. Como mínimo: unidad, hora y zona, cobertura, regla espacial, frecuencia, zona horaria, faltantes y disponibilidad al momento de decisión.
-
-**Transición sugerida:** “Cuando estas fuentes crecen y cambian, las seis V permiten diagnosticar el desafío sin reducirlo al tamaño”.
-
-## Diapositiva 27. Las seis V de Big Data
-
-**Correspondencia con el libro:** capítulo 2, §2.3.7; capítulo 1, §1.3.5, que presenta cinco V y sirve como antecedente.
-
-### Qué exponer
-
-Presentar seis dimensiones: **volumen**, cantidad; **velocidad**, ritmo; **variedad**, formatos; **veracidad**, confiabilidad; **valor**, utilidad; **variabilidad**, cambios de significado o distribución. El capítulo 1 presenta cinco y el 2 agrega variabilidad.
-
-Velocidad exige oportunidad; variedad, integración; volumen, recursos; veracidad, controles; variabilidad, monitoreo; valor, conexión con acciones. Distribuir no corrige semántica.
-
-### Fórmulas e interpretación
-
-No hay fórmula obligatoria. Relacionar valor con $J(m)$: más volumen puede aumentar $Q$, pero también $C$ y $R$. La arquitectura debe justificarse mediante medidas de tamaño, crecimiento, latencia y memoria, no por la etiqueta “Big Data”.
-
-### Ejemplo de movilidad
-
-GPS aporta velocidad y volumen; viajes, clima y obras aportan variedad; pérdida o congelamiento de sensores afecta veracidad; eventos y políticas estacionales introducen variabilidad; una predicción que llega después de reasignar carece de valor operativo aunque procese millones de puntos.
-
-### Recorrido visual
-
-Recorrer el hexágono desde volumen y velocidad hacia variedad y veracidad; terminar en variabilidad y colocar valor en el centro. El recorrido comunica que valor depende de las otras dimensiones y de una decisión, no del tamaño aislado.
-
-### Error frecuente o advertencia
-
-No confundir precisión numérica con validez semántica. Mil millones de registros mal definidos permiten estimar con mucha estabilidad el dato equivocado. Tampoco adoptar distribución cuando una solución simple cabe y puede probarse en una máquina.
-
-### Comprobación
-
-Plantear un dataset pequeño de incidentes críticos, bien medidos y accionables. ¿Puede tener alto valor sin alto volumen? Sí. Pedir además qué V describe que `zona` cambió de definición: variabilidad.
-
-**Transición sugerida:** “Independientemente de la escala, la evidencia necesita poder reconstruirse y auditarse”.
-
-## Diapositiva 28. Reproducibilidad y trazabilidad
-
-**Correspondencia con el libro:** capítulo 1, §1.1.4; capítulo 2, introducción de §2.4 y §§2.4.2, 2.4.5-2.4.7.
-
-### Qué exponer
-
-Reproducibilidad es reconstruir desde entradas y procedimiento identificados, en niveles computacional, analítico, operativo y científico. Un notebook debe ejecutarse completo en entorno limpio.
-
-Enlazar código, datos, esquema, transformaciones, entorno, partición, parámetros, semilla, métricas y conclusión. Fuentes inmutables, productos regenerables, rutas relativas y secretos fuera del repositorio.
-
-### Fórmulas e interpretación
-
-Expresar un resultado como:
-
-$$
-r=F(D,v_c,v_e,\theta,s),
-$$
-
-donde $D$ identifica datos, $v_c$ código, $v_e$ entorno, $\theta$ configuración y $s$ semilla. La semilla no controla hardware o no determinismo; se reportan tolerancias.
-
-### Ejemplo de movilidad
-
-Un gráfico de demora por zona debe indicar corte de datos, operadores incluidos, versión de límites geográficos, zona horaria, consulta, código y reglas para cancelaciones. Otra persona debe regenerarlo sin buscar un archivo local llamado `final_v2.csv`.
-
-### Recorrido visual
-
-En el diagrama de reproducibilidad partir del resultado y retroceder: artefacto, ejecución, código/configuración, dataset derivado y fuentes. Después avanzar nuevamente para mostrar reconstrucción. Si una flecha depende de una acción manual no registrada, marcar la ruptura.
-
-### Error frecuente o advertencia
-
-No equiparar reproducibilidad con “corre en mi equipo” ni creer que guardar el modelo basta. Tampoco almacenar datos sensibles indefinidamente: cuando la retención está restringida se conserva evidencia y metadatos compatibles con privacidad.
-
-### Comprobación
-
-Preguntar qué falta si se conocen código y semilla, pero la API devuelve datos actuales. Falta una instantánea, versión o consulta con corte verificable; repetir el código no reconstruye la entrada original.
-
-**Transición sugerida:** “Apliquemos ahora formulación, procedencia y reproducibilidad a una sola cadena de movilidad”.
-
-## Diapositivas 29-30. Caso transversal de movilidad
-
-**Correspondencia con el libro:** capítulo 1, §1.1.6; capítulo 2, §§2.1.3, 2.1.4 y 2.3.8.
-
-### Qué exponer
-
-La diapositiva 29 formula: usuario, operaciones; unidad, zona-franja; población, cobertura declarada; horizonte, treinta minutos; resultado, demanda y demora; acciones, mantener o mover; restricciones, capacidad, traslado, cobertura, seguridad y aprobación.
-
-La diapositiva 30 muestra: datos antes del corte, modelo, evaluación como evidencia, regla, recomendación, aprobación humana, ejecución y monitoreo. Mantener cada frontera visible.
-
-### Fórmulas e interpretación
-
-Aplicar $P=(U,R,O,X,Y,A,H,C)$ al caso y recordar que $P(Y\mid X)$ estima, no decide. La recomendación podría maximizar utilidad esperada entre planes factibles, mientras una cobertura mínima pertenece a $C$ y no debe compensarse con menor demora promedio.
-
-### Ejemplo de movilidad
-
-A las 17:00 se estima 18:00-19:00 y se propone mover uno, no dos, para conservar cobertura. Operaciones incorpora un evento nuevo, modifica y registra motivo.
-
-### Recorrido visual
-
-En la ficha, recorrer objetivo, unidad, población, horizonte, entradas, resultado, acciones y restricciones. En el flujo, comenzar en el reloj de corte, seguir hasta recomendación y detenerse ante la figura humana. Mostrar ramas aprobar, modificar, rechazar y abstenerse. La retroalimentación vuelve a datos y evaluación, pero no borra quién decidió.
-
-### Error frecuente o advertencia
-
-No escribir “el algoritmo reasigna vehículos” si solo recomienda. No usar una unidad viaje cuando la acción y el impacto se miden por zona sin explicar agregación. No mezclar información retrospectiva corregida con la disponible en línea.
-
-### Comprobación
-
-Preguntar qué debe registrarse si operaciones rechaza. Predicción, versión, evidencia presentada, propuesta, motivo, decisión humana, acción efectiva y resultado; el rechazo puede revelar información no capturada o una interfaz inadecuada.
-
-**Transición sugerida:** “La misma necesidad admite tareas distintas; debemos separarlas y comprobar que cada una use solo información legítimamente disponible”.
-
-## Diapositivas 31-32. Tareas concretas y fuga de información
-
-**Correspondencia con el libro:** capítulo 1, §§1.1.5 y 1.1.6; capítulo 2, §§2.1.1, 2.1.3, 2.1.4 y tiempo de evento, procesamiento y decisión en §2.3.6.
-
-### Qué exponer
-
-La diapositiva 31 separa descripción, predicción, prescripción y monitoreo, cada una con producto y evaluación propios. Prescribir exige acciones y consecuencias, no solo ranking.
-
-La diapositiva 32 define fuga como usar información no disponible en uso real. `hora_real`, cancelación final o tráfico corregido no anticipan el mismo viaje. Repartir al azar viajes dependientes también contamina.
-
-### Fórmulas e interpretación
-
-Definir un instante de decisión $t_0$ y exigir:
+La misma condición puede expresarse como:
 
 $$
 X_i\in\mathcal I(t_0),
 $$
 
-donde $\mathcal I(t_0)$ es lo disponible al corte. $Y$ se observa después para evaluar. En flujo se distinguen evento, recepción y decisión.
+donde $X_i$ es el vector de la fila, $t_0$ el corte, $\mathcal I(t_0)$ la información disponible y $\in$ pertenencia. Es ampliación didáctica, no fórmula literal del libro. Solo impone disponibilidad, no verdad, legitimidad o causalidad, y exige la versión *point-in-time*.
 
-### Ejemplo de movilidad
+Explicar cuatro mecanismos. **Fuga de características o etiquetas**: una entrada contiene resultado o derivado posterior. `hora_real`, cancelación final y demanda total 09:00-09:30 se conocen después; sirven para evaluar, no para decidir esa franja. También puede filtrarse un código administrativo de cierre.
 
-Campos válidos incluyen horario, zona, solicitudes previas, clima recibido y tráfico vigente. `hora_real` y cancelación final son posteriores; de datos corregidos debe reconstruirse la versión conocida al corte.
+**Joins retrospectivos** unen el valor actual o final, no el vigente al corte: polígonos actuales, cancelación final, clima corregido o flota final. La consulta puede ejecutar correctamente y contaminar historia.
 
-### Recorrido visual
+**Contaminación entrenamiento-evaluación**: imputación, escalado, vocabulario, variables o hiperparámetros usan todo el dataset; se consulta la prueba o se agregan periodos futuros. El procedimiento aprende de evaluación.
 
-Marcar captura, corte, predicción, acción y $Y$. Una flecha del futuro a entradas es fuga. Recorrer cada tarea hasta su métrica.
+**Dependencias y duplicados** comparten viaje, vehículo o zona-franja entre entrenamiento y prueba. No siempre son fuga temporal estricta, pero contaminan la evaluación; la clave de separación debe representar la generalización.
 
-### Error frecuente o advertencia
+**Lectura de la fórmula.** Los tiempos usan igual huso y definición; “disponible” exige recepción, validación y publicación. $\le$ se prueba por fila y característica. En $X_i\in\mathcal I(t_0)$, todos los componentes y transformaciones pertenecen al corte: una ventana con 09:01 incumple. Las fórmulas no prueban independencia ni ausencia de fuga entre entidades.
 
-Existencia en el dataset no implica disponibilidad operativa. Un desempeño extraordinario exige auditar fuga, duplicados y particiones.
+**Descripción detallada del diagrama.** Una línea horizontal azul con flecha hacia la derecha representa el avance del tiempo. Una marca dorada vertical representa el corte de las 09:00. Debajo de esa marca, una caja dorada dice “Decidir 09:00 para 09:00-09:30”; combina tiempo de decisión y horizonte. A la izquierda hay dos cajas amarillas válidas: “GPS recibido hasta 08:55” y “Calendario y flota disponible”. Sus flechas azules convergen en la decisión, indicando que estaban disponibles antes del corte. A la derecha hay dos cajas azules de resultado futuro: “Viajes completados a las 09:20” y “Demanda total de la franja”. Sus flechas verdes discontinuas apuntan hacia la decisión y están rotuladas “fuga”. La dirección hacia atrás no describe un flujo real; visualiza el uso retrospectivo prohibido de conocimiento futuro. Los colores distinguen entradas, decisión humana y resultados posteriores; no significan que todo GPS izquierdo sea correcto ni que todo dato derecho quede prohibido para siempre.
 
-### Comprobación
+Orden exacto de lectura: 1) fijar la decisión a las 09:00 y el horizonte 09:00-09:30; 2) recorrer el eje de izquierda a derecha; 3) leer GPS recibido hasta 08:55; 4) leer calendario y flota disponible; 5) seguir las flechas válidas hacia la decisión; 6) leer viajes completados y demanda total; 7) seguir las flechas discontinuas en sentido inverso y nombrarlas como fuga; 8) leer el bloque inferior sobre tres relojes; 9) agregar verbalmente disponibilidad como cuarto reloj operacional.
 
-Preguntar si puede usarse a las 17:00 un evento ocurrido a las 16:55 pero recibido a las 17:08. No para esa decisión. Puede incorporarse a una reconstrucción retrospectiva solo si se mantiene separada de la información en línea.
+Interpretación válida: reconstruir con la versión recibida y procesada. El diagrama **no afirma** que todo GPS previo sea correcto o suficiente, que calendario y flota sean exactos, que resultados no sirvan para decisiones posteriores ni que 08:55 sea regla universal. Tampoco prueba causalidad, independencia, calidad o ausencia de fuga en transformaciones: solo fija la frontera temporal.
 
-**Transición sugerida:** “La actividad integrará estas distinciones en una ficha breve que otro equipo pueda revisar”.
+Ejemplo oral obligatorio: “Para decidir a las 09:00 sobre 09:00-09:30, un GPS con evento 08:54 y recepción 08:55 es temporalmente válido, si además fue procesado y estaba disponible. Un GPS con evento 08:58 pero recepción 09:04 es inválido para esa decisión: ocurrió antes, pero el sistema todavía no lo conocía. Puede incorporarse al histórico retrospectivo y a decisiones posteriores, conservando ambos tiempos, pero no debe reescribir lo que el sistema sabía a las 09:00”. Pregunta de comprobación visual: “¿A qué lado se ubica el GPS 08:58 recibido 09:04?”. Por disponibilidad, a la derecha del corte para esa decisión. Conclusión visual: el pasado del fenómeno y el pasado conocido por el sistema no son el mismo conjunto.
+
+**Ejemplo de movilidad.** A las 09:00 se construye una fila por zona para 09:00-09:30. Son candidatas válidas las solicitudes recibidas y validadas, flota publicada y GPS oportunos. `hora_real`, estado de cancelación final y demanda total de la franja son posteriores. Si `hora_real` nula se rellena después con la hora de cierre o la cancelación se actualiza in situ, una consulta actual no reconstruye el estado de las 09:00. Se requieren snapshots o historial de vigencia.
+
+**Por qué produce evaluación optimista.** El futuro reduce incertidumbre: `hora_real`, cancelación y demanda revelan el resultado; duplicados y transformaciones globales reducen novedad. Las métricas superan lo alcanzable, incluso con modelos simples y validación formal sobre datos ya contaminados.
+
+**Diferencia con sobreajuste.** El **sobreajuste** aprende peculiaridades de entrenamiento legítimo; la fuga accede indebidamente al resultado o evaluación. Regularizar puede reducir el primero, no legitima `hora_real`; hasta un modelo lineal explota fuga.
+
+**Detección.** **Auditoría temporal** por campo; **replay** cronológico sin estados finales; **ablation** de variables sospechosas; **partición temporal** con transformaciones ajustadas en entrenamiento; búsqueda de duplicados, entidades compartidas y agregados que cruzan cortes. Investigar rendimiento extraordinario y diferencias entre retrospectiva y modo sombra.
+
+**Prevención.** **Point-in-time joins** por vigencia y disponibilidad; **snapshots** inmutables; timestamps separados de evento, recepción, procesamiento, disponibilidad y decisión; **contratos de latencia** con tolerancia y degradación; pruebas automatizadas de cortes, ventanas, ajuste en entrenamiento, claves y cardinalidad. Versionar etiquetas y ejecutar replay antes del piloto.
+
+**Error frecuente o límite.** Creer que ordenar por `hora_evento` resuelve todo, que usar datos históricos autoriza conocer su versión final o que una partición temporal elimina fugas creadas antes de dividir. Tampoco toda variable muy predictiva es fuga: se necesita examinar mecanismo y disponibilidad.
+
+**Comprobación.** Plantear cuatro casos: GPS 08:54/recibido 08:55, válido temporalmente; GPS 08:58/recibido 09:04, inválido; demanda total 09:00-09:30, etiqueta posterior; promedio global calculado con semanas futuras, contaminación. Pedir para cada uno reloj violado y control preventivo.
+
+**Conclusión que debe quedar.** La evaluación solo representa producción si cada fila reconstruye lo que el sistema realmente sabía, con versiones, dependencias y transformaciones compatibles con el corte.
+
+**Transición sugerida.** “La actividad reunirá unidad, decisión, fuentes, baseline y este control temporal en una ficha revisable”.
 
 ## Diapositiva 33. Actividad guiada: ficha del problema
 
-**Correspondencia con el libro:** capítulo 1, §1.1.6 y actividad de reflexión; capítulo 2, §§2.1.1-2.1.5 y §2.3.8. La actividad adapta esos contenidos al caso de movilidad; no reproduce una actividad titulada del libro.
+**Correspondencia con el libro.** Capítulo 1, §1.1.6 y actividad de reflexión; capítulo 2, §§2.1.1-2.1.5, §2.3.8 y actividad integradora. La actividad adapta esos contenidos a movilidad; no reproduce una actividad homónima del libro.
 
-### Qué exponer y organizar
+**Propósito.** Producir en equipo una formulación de una página antes de elegir algoritmo y hacer visibles supuestos que otro equipo pueda contrastar.
 
-Asignar 30 minutos de construcción y 10 de contraste, incluida una defensa de un minuto por equipo. Se diseña una ficha para movilidad de la próxima franja, sin elegir algoritmo.
+**Guion sugerido.** Asignar treinta minutos y diez de contraste. Completar: necesidad, usuarios y afectados; zona-franja, población y alcance; decisión, acciones y autoridad; corte y treinta minutos; tres tipos de pregunta; fuentes e integración; baseline, valor y detención; fuga y control.
 
-### Producto esperado
+**Conceptos y términos.** *Afectados* no siempre usan la herramienta. *Exclusión*: uso no evaluado. *Detención*: cobertura, baseline, riesgo o falta de uso. *Entregable*: formulación, no promesa.
 
-Una página, legible y versionada, que contenga:
+**Composición visual relevante.** La lista numerada organiza ocho componentes y la caja inferior fija tiempo. Leer la lista una vez, luego agrupar oralmente en propósito, unidad, reloj, fuentes y evaluación. La numeración ayuda a distribuir trabajo, pero no implica independencia: cambiar horizonte obliga a revisar entradas y etiqueta.
 
-1. necesidad observable, beneficio y personas afectadas;
-2. usuario y autoridad: quién interpreta, aprueba y ejecuta;
-3. especificación $P=(U,R,O,X,Y,A,H,C)$;
-4. una pregunta descriptiva, una predictiva y una prescriptiva;
-5. separación explícita entre modelo, evidencia, decisión y autoridad humana;
-6. inventario mínimo de fuentes con unidad, frecuencia, cobertura, procedencia y reloj;
-7. baseline operativo y criterios técnico, operativo y de riesgo;
-8. declaración de generalización y exclusiones;
-9. una variable que produciría fuga y explicación temporal;
-10. condición de abstención, detención o retorno a formulación.
+**Ejemplo de movilidad.** Corte 09:00, horizonte 09:00-09:30, unidad zona-franja, baseline demanda de franja equivalente anterior, valor P90 sin elevar cancelaciones, abstención si cobertura o latencia cae bajo umbral acordado.
 
-### Ejemplo mínimo
+**Error frecuente o límite.** Comenzar por algoritmo, usar “toda la ciudad” sin cobertura, llamar acción a una probabilidad o escribir “supervisión humana” sin persona y poder concreto.
 
-**Necesidad:** reducir espera en A y B. **Unidad:** zona-franja. **Población:** días laborables y zonas cubiertas. **Autoridad:** operaciones. **Entradas:** solicitudes y vehículos recibidos antes de 17:00. **Resultado:** demanda 17:00-17:30. **Acción:** mantener o mover uno. **Restricción:** un vehículo libre por zona. **Baseline:** solicitudes previas. **Valor:** P90 sin más cancelaciones. **Fuga:** solicitudes posteriores. **Abstención:** GPS menor de 80 %.
+**Comprobación.** Antes del intercambio, cada equipo responde: “¿Qué cambia en el mundo si la evidencia cambia?”. Si no puede nombrar una acción distinta, debe revisar accionabilidad.
 
-### Tres escenarios obligatorios
+**Conclusión que debe quedar.** La ficha hace examinable la coherencia antes de invertir en integración o modelado.
 
-- **Normal:** fuentes oportunas y cobertura suficiente; mostrar evidencia, recomendación y aprobación.
-- **Información incompleta:** GPS tardío en 30 %; ajustar alcance, usar baseline o abstenerse.
-- **Cambio adverso:** cierre vial posterior; explicar caducidad, revisión y retorno seguro.
+**Transición sugerida.** “La revisión no premiará complejidad: buscará correspondencia y límites explícitos”.
 
-### Fórmulas e interpretación
+## Diapositiva 34. Criterios de revisión
 
-Usar $P$ y una conexión: $P(Y\mid X)$, utilidad esperada o $J(m)$. Se evalúa interpretación, no cantidad de fórmulas.
+**Correspondencia con el libro.** Capítulo 2, método de revisión de §2.1.1, §§2.1.3-2.1.5 y criterios de la actividad [AGUA-01], adaptados a movilidad.
 
-### Recorrido visual del producto
+**Propósito.** Proporcionar una lista de control cualitativa para detectar saltos entre unidad, reloj, datos, baseline, valor y autoridad.
 
-Recorrer necesidad, formulación, fuentes, modelo, evidencia, acciones, autoridad, criterios y retorno. Las flechas muestran tiempo sin atribuir ejecución al predictor.
+**Guion sugerido.** Exigir evidencia para: coherencia zona-franja; población, alcance y horizonte; disponibilidad; tipos de pregunta; procedencia e integración; baseline; valor, riesgos y detención; autoridad efectiva. La devolución contiene fortaleza, supuesto no demostrado y corrección prioritaria, sin cuestionario ni puntaje.
 
-### Error frecuente o advertencia
+**Conceptos y términos.** *Verificable*: comprobable por otra persona. *Baseline realista*: alternativa disponible. *Riesgo*: fallo, impacto, control y responsable.
 
-Si comienzan por algoritmos, preguntar quién decide, sobre qué unidad y con qué consecuencia. “Supervisión humana” debe nombrar persona, información y autoridad.
+**Composición visual relevante.** Ocho viñetas ocupan el cuerpo y una caja inferior define el entregable: ficha más diagrama necesidad-evidencia-decisión-impacto. Leer las viñetas en pares: granularidad y alcance; tiempo y tipo de tarea; procedencia y baseline; riesgo y autoridad. Así se evita una revisión puramente documental.
 
-### Comprobación
+**Ejemplo de movilidad.** Una ficha puede ser técnicamente clara y aun fallar si mover dos vehículos viola cobertura. La revisión debe marcar esa restricción como no compensable por menor error esperado.
 
-Antes del intercambio, cada equipo debe responder en veinte segundos: “¿Qué cambia en el mundo si nuestra evidencia es distinta?”. Si la acción no cambia, la conexión con decisión aún no está formulada.
+**Error frecuente o límite.** Aceptar una entrada porque “está en la base”, premiar un baseline irrelevante o compensar fuga y falta de autoridad con otros aciertos.
 
-**Transición sugerida:** “La revisión no premiará complejidad; comprobará que no existan saltos entre necesidad, evidencia, acción y responsabilidad”.
+**Comprobación.** Presentar: “90 % de precisión, sin corte ni usuario”. Debe rechazarse como formulación insuficiente; la métrica aislada no resuelve temporalidad ni uso.
 
-## Diapositiva 34. Criterios y rúbrica de revisión
+**Conclusión que debe quedar.** La calidad de la ficha se juzga por coherencia verificable y capacidad de controlar fallos críticos.
 
-**Correspondencia con el libro:** capítulo 2, método de revisión de la pregunta en §2.1.1, objetivos en §2.1.2, §2.1.5 y criterios de aprobación de la actividad EMO [AGUA-01].
+**Transición sugerida.** “La puesta en común comprobará si esas elecciones resisten una explicación breve y preguntas de contraste”.
 
-### Qué exponer
+## Diapositiva 35. Puesta en común
 
-La revisión marca una fortaleza, un supuesto no demostrado y una corrección prioritaria, y registra su aceptación o rechazo.
+**Correspondencia con el libro.** Capítulo 2, §§2.1.3-2.1.5, §2.2.4 sobre hipótesis y §2.2.5 sobre revisión y responsabilidad.
 
-### Rúbrica
+**Propósito.** Defender las decisiones centrales de la ficha, reconocer el supuesto que puede invalidarla y convertir contraste en evidencia siguiente.
 
-| Criterio | 2: logrado | 1: parcial | 0: ausente o incoherente |
-|---|---|---|---|
-| Formulación | $U,R,O,X,Y,A,H,C$ definidos y compatibles | Hay ambigüedad menor | Faltan elementos críticos o se contradicen |
-| Temporalidad y fuga | Corte explícito; entradas disponibles; fuga identificada | Disponibilidad incompleta | Usa información futura o no hay reloj |
-| Evidencia y decisión | Separa modelo, evidencia, regla y acción | Separación implícita | La predicción aparece como decisión automática |
-| Autoridad y afectados | Aprueba, ejecuta, revisa y afectados están identificados | Solo se nombra un “usuario” | Se atribuye responsabilidad al modelo |
-| Datos y alcance | Fuentes, procedencia, población y exclusiones claros | Inventario parcial | Se supone cobertura universal |
-| Criterios y baseline | Integra técnica, utilidad, riesgo y referencia real | Métrica o baseline débil | Solo propone exactitud o no compara |
-| Escenarios y seguridad | Responde a los tres escenarios y puede abstenerse | Respuesta genérica | No contempla fallos ni retorno seguro |
+**Guion sugerido.** En un minuto: decisión y autoridad; unidad, corte y horizonte; baseline y valor; supuesto invalidante. Contrastar oportunidad y granularidad, muestra y ausencias, modificación o detención. Traducir “datos insuficientes” a cobertura y “decide una persona” a cargo, información y poder.
 
-**Puntaje:** 11-14, defendible; 7-10, corregir; 0-6, reformular. No compensa restricciones críticas.
+**Conceptos y términos.** *Supuesto invalidante*: rompe evidencia-uso. *Incertidumbre*: rango, escenarios o abstención. *Defensa*: límites conocidos y controlados.
 
-### Fórmulas e interpretación
+**Composición visual relevante.** La lista numerada superior fija cuatro contenidos obligatorios; el bloque inferior abre contraste con tres preguntas. Leer primero el minuto como argumento y luego usar el bloque como prueba. No convertir la puesta en común en una exposición de herramientas.
 
-$J(m)=w_1Q-w_2C-w_3R$ recuerda criterios múltiples; una violación dura sigue siendo inaceptable. Se evalúa formulación, no un modelo inexistente.
+**Ejemplo de movilidad.** “Decide operaciones; unidad zona-franja; corte 09:00 para treinta minutos; baseline estacional; valor P90 y cancelaciones; si menos de 80 % de GPS llega antes del corte, el sistema se abstiene y vuelve al baseline”. El 80 % es solo ejemplo de ficha, no umbral prescrito por el libro.
 
-### Ejemplo de movilidad
+**Error frecuente o límite.** Generalizar para parecer ambicioso, ocultar incertidumbre o afirmar que el revisor humano controla sin tiempo ni capacidad de detener.
 
-Una ficha coherente es inaceptable si deja una zona sin cobertura; un baseline simple es válido con alcance, reloj y autoridad claros.
+**Comprobación.** Cerrar cada intervención con “¿qué evidencia mínima buscarían a continuación?”. Debe responderse con perfil, prueba de integración, replay o baseline, no “modelo más complejo”.
 
-### Error frecuente o advertencia
+**Conclusión que debe quedar.** Una formulación defendible explica decisiones y límites con la misma claridad.
 
-No compensar fuga o falta de autoridad con puntos, ni penalizar una abstención justificada.
+**Transición sugerida.** “Las defensas permiten recuperar siete ideas textuales que organizan toda la clase”.
 
-### Comprobación
+## Diapositiva 36. Síntesis: siete ideas para conservar
 
-Presentar una ficha con alta precisión esperada, pero sin baseline ni usuario capaz de actuar. Pedir puntuación y diagnóstico. Debe bajar en evidencia-decisión y criterios; no es suficiente afirmar que el modelo sería bueno.
+**Correspondencia con el libro.** Capítulo 1, síntesis y §§1.1.1, 1.1.4-1.1.6; capítulo 2, síntesis. La diapositiva contiene exactamente siete ideas textuales.
 
-**Transición sugerida:** “La defensa mostrará si las elecciones de la ficha resisten preguntas sobre tiempo, alcance y responsabilidad”.
+**Propósito.** Consolidar las siete afirmaciones de la presentación sin sustituirlas por una síntesis diferente.
 
-## Diapositiva 35. Defensa y contraste
+**Guion sugerido.** Conservar literalmente siete ideas: 1) datos parciales producidos; 2) evidencia, no solo modelos; 3) describir, predecir y decidir difieren; 4) unidad, población, alcance y horizonte preceden al algoritmo; 5) workflow, KDD y CRISP-DM son iterativos y trazables; 6) procedencia y reproducibilidad sostienen afirmaciones; 7) autoridad y responsabilidad son humanas e institucionales. Vincular respectivamente GPS, productos, cuantiles/probabilidad/utilidad, formulación, retornos, linaje y decisión.
 
-**Correspondencia con el libro:** capítulo 2, preguntas para la defensa de la actividad EMO [AGUA-01], §2.2.5 sobre responsabilidad y revisión, y §2.2.4 sobre hipótesis operativas.
+**Conceptos y términos.** Conecta representación, evidencia, pregunta, formulación, metodología, procedencia y autoridad; no agrega vocabulario.
 
-### Qué exponer y organizar
+**Composición visual relevante.** La lista numerada es la composición central y debe leerse como siete afirmaciones completas, no como palabras clave. La caja final “Idea de cierre” comprime la secuencia: primero decisión y evidencia necesaria; después datos, métodos y herramientas. No existe un diagrama de cinco cajas en esta diapositiva.
 
-Cada equipo presenta decisión, unidad, valor y supuesto riesgoso; luego responde dos preguntas. Debe justificar una elección y reconocer un límite.
+**Ejemplo de movilidad.** Zona-franja y corte se fijan antes del modelo; fuentes conservan procedencia; la evaluación temporal produce evidencia; operaciones decide; monitoreo puede detener.
 
-Preguntar por variable posterior, cambio de unidad, población excluida, baseline real, rechazo humano, falta de GPS, detención, reconstrucción o retroalimentación sobre tráfico.
+**Error frecuente o límite.** Alterar la lista para cerrar con herramientas, omitir autoridad o presentar iteración como ausencia de criterios.
 
-### Fórmulas e interpretación
+**Comprobación.** Asignar una idea a cada grupo y pedir una consecuencia práctica. Para la idea 6: conservar versión de zonas y tiempos de recepción.
 
-Para $P(Y\mid X)$ exigir resultado, instante y población; para utilidad, acciones y consecuencias; para $J(m)$, pesos y restricciones.
+**Conclusión que debe quedar.** Primero se diseña la decisión y la evidencia necesaria; después se eligen datos, métodos y herramientas.
 
-### Ejemplo de movilidad
+**Transición sugerida.** “La última figura reúne esas siete ideas en una sola cadena con controles y retorno”.
 
-Defensa mínima: “Elegimos zona-franja porque allí se reasigna; estimamos la franja siguiente con datos al corte; operaciones aprueba; con GPS bajo 80 % usamos baseline; no evaluamos emergencias”.
+## Diapositiva 37. Síntesis visual: la cadena completa
 
-### Recorrido visual
+**Correspondencia con el libro.** Capítulo 1, ciclo general y síntesis; capítulo 2, síntesis del ciclo de vida.
 
-Mantener unidad, reloj, acción y autoridad. Mover el supuesto riesgoso a “evidencia siguiente”.
+**Propósito.** Integrar formulación, procedencia, representación, evaluación, autoridad, impacto y aprendizaje en una lectura visual única.
 
-### Error frecuente o advertencia
+**Guion sugerido.** Recorrer necesidad/alcance, formulación, fuentes/procedencia, representación, evidencia y decisión; bajar a impacto/monitoreo/aprendizaje y volver. Las tarjetas controlan pregunta/valor, calidad/licencia y baseline/riesgos. Cada flecha documenta una decisión; cada retorno, su evidencia.
 
-No premiar incertidumbre oculta. Un límite explícito es mejor que generalización; revisión humana exige capacidad de detener.
+**Conceptos y términos.** *Cadena* no implica rigidez; *impacto* incluye consecuencias no buscadas; *aprendizaje* modifica con justificación; *decisión autorizada* implica responsabilidad.
 
-### Comprobación
+**Descripción detallada del diagrama.** Seis cajas horizontales forman la trayectoria principal. La primera azul dice “Necesidad y alcance”. La segunda verde contiene “Unidad, población, horizonte”. La tercera amarilla, “Fuentes y procedencia”. La cuarta verde, “Representación analítica”. La quinta amarilla, “Evidencia evaluada”. La sexta dorada, “Decisión autorizada”. Cinco flechas azules conectan la secuencia. Debajo de la representación hay una caja azul ancha “Impacto · monitoreo · aprendizaje”. Una flecha baja desde decisión y entra por la derecha; una flecha verde discontinua sale por la izquierda y regresa a necesidad. Tres tarjetas claras se sitúan debajo de necesidad, fuentes y evidencia: “Pregunta y valor”, “Calidad y licencia” y “Baseline y riesgos”. Funcionan como controles asociados, no como etapas posteriores.
 
-Cerrar cada defensa preguntando: “¿Qué evidencia mínima buscarían a continuación?”. La respuesta debe ser un artefacto evaluable, por ejemplo perfil de cobertura o prueba de integración, no “entrenar un modelo más complejo”.
+Orden exacto de lectura: 1) cadena superior de izquierda a derecha; 2) detenerse entre fuentes y representación para recordar construcción de tabla; 3) detenerse entre representación y evidencia para recordar evaluación; 4) detenerse antes de decisión para recordar autoridad; 5) bajar a impacto; 6) seguir el retorno a necesidad; 7) leer las tres tarjetas de izquierda a derecha; 8) cerrar con la alerta. La codificación de colores recupera tipos usados en toda la presentación: azul para necesidad/decisión del dominio, verde para procesos, amarillo para datos/evidencia, dorado para humano y verde discontinuo para retroalimentación.
 
-**Transición sugerida:** “Las defensas muestran que la calidad comienza en la representación del problema y se conserva durante todo el ciclo”.
+Interpretación válida: evidencia depende de formulación, procedencia, representación y evaluación; decidir exige monitorear consecuencias. No afirma necesidad de modelo, causalidad, observación total, retorno sin costo, legitimidad por licencia, baseline exhaustivo ni humano infalible. Ejemplo oral: cambiar límites afecta fuentes, tabla, evidencia y alcance; el linaje indica qué regenerar. Pregunta: si una acción no modifica espera con pronóstico preciso, volver a necesidad y teoría de cambio. Conclusión visual: cadena y retornos son reconstruibles.
 
-## Diapositivas 36-37. Síntesis conceptual y operativa
+**Ejemplo de movilidad.** Necesidad de reducir P90; zona-franja y treinta minutos; viajes/GPS/clima/zonas con procedencia; tabla al corte; pronóstico contra baseline; decisión de operaciones; monitoreo de espera, cancelación, cobertura, abstención y rechazos.
 
-**Correspondencia con el libro:** capítulo 1, síntesis; capítulo 2, síntesis del capítulo.
+**Error frecuente o límite.** Leer la figura como pipeline automático, omitir controles inferiores o atribuir el impacto al modelo sin observar acción y contexto.
 
-### Qué exponer
+**Comprobación.** Pedir recorrer hacia atrás desde una cancelación observada: acción efectiva, decisión y evidencia, versión analítica, fuentes y formulación. Si se rompe una flecha, falta trazabilidad.
 
-La diapositiva 36 recupera que los datos son parciales, las tareas difieren, $P(Y\mid X)$ no decide y las fronteras deben permanecer explícitas.
+**Conclusión que debe quedar.** Cada flecha es una decisión documentable y cada retorno una oportunidad controlada de aprender.
 
-La diapositiva 37 integra formulación, unidad, población, reloj, metodologías, procedencia, seis V, reproducibilidad, baseline, utilidad y riesgo.
+**Transición sugerida.** “Las lecturas permiten profundizar los eslabones; la última lámina indica qué revisar y qué producto continuar”.
 
-Volver a la apertura y transformar “datos y modelo” en usuario, unidad, horizonte, acción, criterios y límites.
+## Diapositiva 38. Lecturas y recursos
 
-### Fórmulas e interpretación
+**Correspondencia con el libro.** Capítulo 1, §§1.1.1, 1.1.4-1.1.6; capítulo 2, §§2.1-2.4, con el énfasis textual indicado en la diapositiva.
 
-Mostrar una secuencia integrada, sin derivarla de nuevo:
+**Propósito.** Orientar lecturas y continuidad sin afirmar enlaces o elementos visuales que no aparecen en la lámina.
 
-$$
-P=(U,R,O,X,Y,A,H,C),\qquad
-P(Y\mid X),\qquad
-a^*=\arg\max_a E[U(a,S)\mid X].
-$$
+**Guion sugerido.** Leer las referencias visibles: capítulo 1, §§1.1.1, 1.1.4-1.1.6; capítulo 2, §§2.1-2.4 con énfasis en 2.1.3, 2.2.1, 2.2.2, 2.3 y 2.4. Continuar con glosarios, ficha y linaje hasta zona-franja. Son referencias textuales; no afirmar hipervínculos visibles.
 
-La primera especifica, la segunda estima y la tercera compara acciones. Entre ellas se necesitan procedencia, evaluación, restricciones y autoridad. Si $P_T\neq P_D$, la evidencia puede no transferirse.
+**Conceptos y términos.** *Continuidad*: corregir formulación; *glosario*: estabilizar términos; *linaje*: origen, extracción, transformación, claves, corte y producto.
 
-### Ejemplo de movilidad
+**Composición visual relevante.** Dos bloques apilados organizan el cierre. El primero contiene dos viñetas, una por capítulo. El segundo contiene tres acciones. Leer de arriba abajo: profundización conceptual y metodológica, luego continuidad práctica. No hay fórmula, diagrama, tabla ni enlaces visibles que deban interpretarse.
 
-La tabla representa, el modelo estima, la evaluación valida, la regla recomienda, operaciones aprueba y el monitoreo puede devolver el proyecto a etapas anteriores.
+**Ejemplo de movilidad.** Elegir GPS y dibujar evento con tiempo de emisión y recepción, extracción, validación, ventana, agregación por zona-franja y característica disponible al corte.
 
-### Recorrido visual
+**Error frecuente o límite.** Inventar enlaces, subsecciones o recursos no visibles; convertir la continuidad en un cuestionario o saltar directamente a un algoritmo.
 
-En la diapositiva 36 recorrer cinco cajas y detenerse entre modelo y evidencia, y entre recomendación y autoridad. En la 37 recorrer el ciclo completo y señalar el reloj transversal: cada dato, salida y acción tiene un instante. Terminar en evaluación y seguir la flecha de retorno hasta problema.
+**Comprobación.** Pedir que cada equipo asocie una corrección con lectura: población y alcance, §2.1.3; inventario, §2.3 y su caso de movilidad; reproducibilidad, §2.4.
 
-### Error frecuente o advertencia
+**Conclusión que debe quedar.** La continuidad consiste en profundizar conceptos y mejorar una ficha y un linaje verificables.
 
-No cerrar con una lista de herramientas. Python y R son medios dentro del ciclo. Tampoco afirmar que toda decisión debe automatizarse o que más datos siempre mejoran evidencia.
+**Transición sugerida.** “Cerramos con la tesis inicial: primero decisión y evidencia; después datos, métodos y herramientas”.
 
-### Comprobación
-
-Solicitar una frase final: “Un proyecto de datos es...”. Respuesta esperada en contenido: proceso reproducible que transforma observaciones situadas en evidencia evaluada para apoyar una decisión bajo objetivos, restricciones y responsabilidad.
-
-**Transición sugerida:** “Las lecturas permiten profundizar primero definición y formulación, y después metodologías, fuentes y reproducibilidad”.
-
-## Diapositiva 38. Lecturas y continuidad
-
-**Correspondencia con el libro:** capítulo 1, propósito, §§1.1.1, 1.1.4-1.1.6 y síntesis; capítulo 2, propósito, §§2.1-2.4 y síntesis.
-
-### Qué exponer
-
-Orientar: capítulo 1, §§1.1.1 y 1.1.4-1.1.6 para definición, tipos y movilidad; capítulo 2, §2.1 para formulación, §2.2 metodologías, §2.3 fuentes y seis V, y §2.4 reproducibilidad.
-
-Incorporar una corrección prioritaria y registrar cómo cambia la validez. Conservar la versión previa y no agregar algoritmos.
-
-### Fórmulas e interpretación
-
-No hay fórmula nueva. Releer especificación, predicción, utilidad, costos, cambio de distribución y multicriterio explicando sus supuestos.
-
-### Ejemplo de movilidad
-
-Corregir “toda la ciudad” a “zonas cubiertas en días laborables” o usar partición temporal vuelve evaluable la afirmación.
-
-### Recorrido visual
-
-Recorrer la diapositiva de arriba hacia abajo: lectura conceptual, lectura metodológica, caso aplicado y producto revisado. Señalar los enlaces relativos, que permiten consultar las fuentes desde el directorio de la clase.
-
-### Error frecuente o advertencia
-
-No sustituir el producto de la clase por un cuestionario. La evidencia de aprendizaje es la ficha revisada y su defensa. No inventar subsecciones: usar las denominaciones y numeración indicadas en los capítulos.
-
-### Comprobación y cierre
-
-Pedir que cada equipo nombre la sección que consultaría para resolver su corrección: §2.1.3 para población, §2.3.8 para inventario de movilidad o §2.4 para reproducibilidad. Cerrar con la idea: “Primero se diseña la pregunta y su uso; después se decide qué datos y métodos necesita”.
-
-## Referencias
+### Referencias
 
 - `../../../Libro/Capitulo_01_Ciencia_de_Datos_e_IA.md`
 - `../../../Libro/Capitulo_02_Ciclo_de_vida_de_un_proyecto_de_datos.md`
