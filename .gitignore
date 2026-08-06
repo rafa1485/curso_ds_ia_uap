@@ -2,3 +2,10 @@
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
+*.aux
+*.toc
+*.out
+*.snm
+*.log
+*.nav
+
