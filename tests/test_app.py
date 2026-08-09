@@ -1,6 +1,7 @@
 import unittest
+from pathlib import Path
 
-from app import app, discover_documents
+from app import BASE_DIR, BOOK_DIR, app, discover_documents
 
 
 class BookAppTestCase(unittest.TestCase):
@@ -12,6 +13,12 @@ class BookAppTestCase(unittest.TestCase):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.location.endswith("/libro_ds_ia/"))
+
+    def test_book_directory_uses_material_courses(self):
+        self.assertEqual(
+            BOOK_DIR.relative_to(BASE_DIR), Path("MATERIAL_CURSOS") / "Libro"
+        )
+        self.assertTrue(BOOK_DIR.is_dir())
 
     def test_book_entrypoint_redirects_to_index(self):
         response = self.client.get("/libro_ds_ia/")

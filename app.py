@@ -10,7 +10,7 @@ from flask import Flask, abort, redirect, render_template, send_from_directory, 
 
 
 BASE_DIR = Path(__file__).resolve().parent
-BOOK_DIR = BASE_DIR / "Libro"
+BOOK_DIR = BASE_DIR / "MATERIAL_CURSOS" / "Libro"
 URL_PREFIX = "/libro_ds_ia"
 CHAPTER_PATTERN = re.compile(r"^Capitulo_(\d+)_")
 MARKDOWN_LINK_PATTERN = re.compile(

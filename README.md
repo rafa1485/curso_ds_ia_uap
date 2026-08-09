@@ -1,6 +1,12 @@
 # Visor web del libro
 
-Aplicación web para leer los capítulos Markdown de `Libro/` con tablas, imágenes y fórmulas matemáticas renderizadas mediante MathJax.
+Aplicación web para leer los capítulos Markdown de `MATERIAL_CURSOS/Libro/` con tablas, imágenes y fórmulas matemáticas renderizadas mediante MathJax.
+
+## Documentacion para agentes de IA
+
+- `AGENTS.md`: punto de entrada para agentes que trabajan en el repositorio.
+- `GUIA_PRESENTACIONES.md`: desarrollo de presentaciones y guias docentes.
+- `GUIA_LIBRO.md`: desarrollo de capitulos y recursos del libro.
 
 ## Instalación
 
