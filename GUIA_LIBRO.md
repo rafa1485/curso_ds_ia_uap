@@ -27,9 +27,9 @@ Al trabajar en el libro, el agente debe preservar la estructura, terminologia y 
 - [Capitulo 14](MATERIAL_CURSOS/Libro/Capitulo_14_Series_temporales.md)
 - [Capitulo 15](MATERIAL_CURSOS/Libro/Capitulo_15_Redes_neuronales_vision_y_aprendizaje_profundo.md)
 - [Capitulo 16](MATERIAL_CURSOS/Libro/Capitulo_16_Procesamiento_del_lenguaje_y_modelos_de_lenguaje.md)
-- [Laboratorios integradores](MATERIAL_CURSOS/Libro/Laboratorios_integradores.md)
+- [Laboratorios integradores](MATERIAL_CURSOS/LABORATORIOS/Laboratorios_integradores.md)
 - [Apendices](MATERIAL_CURSOS/Libro/Apendices.md)
-- [Apendice D: proyectos y datasets](MATERIAL_CURSOS/Libro/Apendice_D_Proyectos_integradores.md)
+- [Apendice D: proyectos y datasets](MATERIAL_CURSOS/LABORATORIOS/Apendice_D_Proyectos_integradores.md)
 
 ## Material grafico
 

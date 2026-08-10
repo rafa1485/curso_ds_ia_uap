@@ -30,8 +30,6 @@ La secuencia sigue el indice detallado de `Indice_detallado_libro_Ciencia_de_Dat
 15. [Redes neuronales y vision](Capitulo_15_Redes_neuronales_vision_y_aprendizaje_profundo.md)
 16. [Lenguaje natural y modelos de lenguaje](Capitulo_16_Procesamiento_del_lenguaje_y_modelos_de_lenguaje.md)
 
-## Apéndices y laboratorios
+## Apéndices
 
-- [Laboratorios integradores](Laboratorios_integradores.md)
 - [Apéndices](Apendices.md)
-- [Apéndice D. Proyectos integradores y contratos de datos](Apendice_D_Proyectos_integradores.md)

@@ -40,18 +40,15 @@ def document_sort_key(path: Path) -> tuple[int, int, str]:
     chapter_match = CHAPTER_PATTERN.match(path.stem)
     if chapter_match:
         return (1, int(chapter_match.group(1)), path.name)
-    if path.stem == "Laboratorios_integradores":
-        return (2, 0, path.name)
     if path.stem == "Apendices":
-        return (3, 0, path.name)
-    return (4, 0, path.name)
+        return (2, 0, path.name)
+    return (3, 0, path.name)
 
 
 def is_book_document(path: Path) -> bool:
     return (
         path.stem == "00_Indice"
         or CHAPTER_PATTERN.match(path.stem) is not None
-        or path.stem == "Laboratorios_integradores"
         or path.stem == "Apendices"
         or path.stem.startswith("Apendice_")
     )

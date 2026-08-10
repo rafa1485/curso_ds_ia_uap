@@ -11,9 +11,3 @@ El codigo practico debe separar entrada, transformacion, analisis y salida; usar
 ## C. Etica, gobernanza y documentacion
 
 Documentar poblacion objetivo, datos, etiquetas, cambios de distribucion, limitaciones, riesgos, responsables, controles y mecanismo de apelacion. Una ficha de datos y una tarjeta de modelo deben indicar usos permitidos y prohibidos. Equidad requiere definir grupos, metricas y trade-offs, no solo declarar ausencia de sesgo.
-
-## D. Proyectos integradores
-
-El desarrollo completo se encuentra en [Apéndice D. Proyectos integradores y contratos de datos](Apendice_D_Proyectos_integradores.md).
-
-El apéndice fija para movilidad, agua, reclamos y sanidad vegetal las fuentes oficiales, variables disponibles, derivados permitidos, particiones, actividades EMO, objetivos realizables, límites y rúbrica común. La versión del dataset forma parte del resultado.

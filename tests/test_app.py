@@ -87,7 +87,16 @@ class BookAppTestCase(unittest.TestCase):
         documents = discover_documents()
         self.assertEqual(documents[0].slug, "00_Indice")
         self.assertEqual(documents[1].slug, "Capitulo_01_Ciencia_de_Datos_e_IA")
-        self.assertGreaterEqual(len(documents), 20)
+        self.assertEqual(len(documents), 18)
+        slugs = {document.slug for document in documents}
+        self.assertNotIn("Laboratorios_integradores", slugs)
+        self.assertNotIn("Apendice_D_Proyectos_integradores", slugs)
+
+    def test_laboratory_documents_are_not_published(self):
+        for slug in ("Laboratorios_integradores", "Apendice_D_Proyectos_integradores"):
+            self.assertEqual(
+                self.client.get(f"/libro_ds_ia/capitulo/{slug}").status_code, 404
+            )
 
 
 if __name__ == "__main__":
