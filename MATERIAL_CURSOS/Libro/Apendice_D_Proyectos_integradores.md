@@ -50,14 +50,13 @@ Todos los estudiantes deben trabajar sobre la misma versión mínima. Se permite
 
 ## D.0.3. Matriz general de viabilidad
 
-| Caso | Fuente principal | Unidad mínima | Objetivo obligatorio realizable | Objetivo que no debe exigirse |
-|---|---|---|---|---|
-| Movilidad | NYC TLC Yellow Taxi | Viaje; luego zona-franja | Demanda, grafo OD, segmentación y pronóstico corto | Ruta calle por calle sin red vial auxiliar |
-| Agua | NYC DEP Distribution Monitoring | Muestra de sitio y fecha | Calidad, detección microbiológica y prioridad de revisión | Fuga hidráulica, presión o caudal |
-| Reclamos | CFPB Consumer Complaint Database | Reclamo con narrativa publicada | Clasificación temática y derivación por confianza | Urgencia real o daño al consumidor sin etiqueta válida |
-| Sanidad vegetal | PlantVillage, configuración color | Imagen con `leaf_id` y clase | Clasificación visual en condiciones PlantVillage | Diagnóstico clínico de campo o severidad de enfermedad |
+| Caso | Fuente principal | Unidad mínima | Objetivo obligatorio realizable |
+|---|---|---|---|
+| Movilidad | NYC TLC Yellow Taxi | Viaje; luego zona-franja | Demanda, grafo OD, segmentación y pronóstico corto |
+| Agua | NYC DEP Distribution Monitoring | Muestra de sitio y fecha | Calidad, detección microbiológica y prioridad de revisión |
+| Reclamos | CFPB Consumer Complaint Database | Reclamo con narrativa publicada | Clasificación temática y derivación por confianza |
+| Sanidad vegetal | PlantVillage, configuración color | Imagen con `leaf_id` y clase | Clasificación visual en condiciones PlantVillage |
 
-Esta matriz prevalece sobre ejemplos genéricos de capítulos anteriores. Si un capítulo menciona presión y caudal para ilustrar limpieza, esa explicación no convierte esas variables en parte del dataset obligatorio de agua.
 
 ---
 
