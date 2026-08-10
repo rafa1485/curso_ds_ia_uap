@@ -46,7 +46,7 @@ No todo grafo almacenado corresponde a un espacio de estados completo. Una tabla
 Un **estado** describe una configuración relevante del problema. Un **nodo de búsqueda** es un registro creado por el algoritmo. Habitualmente contiene:
 
 $$
-n=(\operatorname{estado},\operatorname{padre},\operatorname{acción},g,\operatorname{profundidad}),
+n=(\operatorname{estado},\operatorname{padre},\operatorname{acci\'on},g,\operatorname{profundidad}),
 $$
 
 donde $g(n)$ es el costo acumulado desde la raíz. Dos nodos pueden contener el mismo estado y diferir en su padre, profundidad o costo. Identificar nodos por estado sin considerar el costo puede ser incorrecto cuando existen caminos alternativos.

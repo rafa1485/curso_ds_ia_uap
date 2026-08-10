@@ -774,7 +774,7 @@ Al bajar $t$ aumentan verdaderos positivos y falsos positivos; al subirlo, dismi
 $$
 \text{sensibilidad}=\frac{TP}{TP+FN},\quad
 \text{especificidad}=\frac{TN}{TN+FP},\quad
-\text{precisión}=\frac{TP}{TP+FP}.
+\text{precisi\'on}=\frac{TP}{TP+FP}.
 $$
 
 La curva ROC representa sensibilidad frente a tasa de falsos positivos para todos los umbrales; su AUC es la probabilidad de ordenar un positivo al azar por encima de un negativo al azar. No mide calibración ni utilidad en un umbral concreto. Con clases raras, la curva precisión-recall suele mostrar mejor el compromiso sobre la clase positiva.

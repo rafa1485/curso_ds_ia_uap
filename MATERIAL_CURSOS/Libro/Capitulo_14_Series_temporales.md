@@ -107,7 +107,6 @@ En un modelo elemental,
 $$
 y_t=\mu+\varepsilon_t,\qquad E(\varepsilon_t)=0,
 \quad \operatorname{Var}(\varepsilon_t)=\sigma^2,
-
 $$
 
 y el ruido blanco satisface además $\operatorname{Cov}(\varepsilon_t,\varepsilon_{t-k})=0$ para $k\ne0$. Incorrelación no implica independencia, salvo bajo supuestos adicionales como normalidad conjunta. Un residuo puede tener autocorrelación nula y conservar cambios de varianza o colas pesadas.
@@ -145,7 +144,6 @@ Descomponer consiste en representar la serie mediante componentes interpretables
 
 $$
 y_t=T_t+S_t+R_t,
-
 $$
 
 la magnitud estacional no depende del nivel. En el multiplicativo, $y_t=T_tS_tR_t$, las variaciones son relativas. La elección debe apoyarse en gráficos y estabilidad de varianza, no en una preferencia automática.
@@ -219,7 +217,6 @@ Una serie con tendencia determinista no es estacionaria en media. Un paseo aleat
 
 $$
 Y_t=Y_{t-1}+\varepsilon_t
-
 $$
 
 tampoco lo es: aunque los incrementos tengan media cero, $\operatorname{Var}(Y_t)=t\sigma_\varepsilon^2$ crece. Ambos casos pueden parecer ascendentes, pero requieren tratamientos distintos.
@@ -234,7 +231,6 @@ La autocovarianza de rezago $k$ es
 
 $$
 \gamma_k=\operatorname{Cov}(Y_t,Y_{t-k}),
-
 $$
 
 y la autocorrelación es $\rho_k=\gamma_k/\gamma_0$. Para una muestra de media $\bar y$ se estima, según una convención habitual,

@@ -303,7 +303,7 @@ o como \(r(s,a)\) cuando no se necesita distinguir \(s'\). Una recompensa positi
 En el depósito, una recompensa posible es “servicio menos energía y desgaste”:
 
 \[
-r(s,a,s')=-c_{energía}(a)-c_{desgaste}(s,a)-c_{servicio}(s').
+r(s,a,s')=-c_{\text{energ\'ia}}(a)-c_{\text{desgaste}}(s,a)-c_{\text{servicio}}(s').
 \]
 
 Una penalización alta por llegar a B expresa la importancia de evitar desabastecimiento. Sin embargo, la recompensa es una **representación** del objetivo, no el objetivo mismo. Debe distinguir indicadores sustitutivos, como nivel del depósito, de resultados finales, como continuidad segura y equitativa del servicio.

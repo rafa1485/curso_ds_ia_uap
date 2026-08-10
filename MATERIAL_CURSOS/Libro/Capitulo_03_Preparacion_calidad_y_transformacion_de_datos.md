@@ -615,7 +615,7 @@ La elección expresa una decisión de población. Una unión interna entre viaje
 Para claves $k$, conviene calcular conteos $n_A(k)$ y $n_B(k)$. La cantidad de filas producida por una unión para esa clave es:
 
 $$
-n_{A\Join B}(k)=n_A(k)\,n_B(k).
+n_{A\bowtie B}(k)=n_A(k)\,n_B(k).
 $$
 
 Si ambas tablas tienen varias filas por clave, aparece una relación muchos-a-muchos que multiplica registros. A veces es correcta; con frecuencia indica que falta una clave o una agregación previa.

@@ -68,11 +68,11 @@ Las operaciones de conjuntos traducen expresiones del dominio.
 - **Unión** $A\cup B$: ocurre $A$, ocurre $B$ o ambos.
 - **Intersección** $A\cap B$: ocurren ambos.
 - **Complemento** $A^c$: no ocurre $A$.
-- **Diferencia** $A\setminus B$: ocurre $A$ y no $B$.
+- **Diferencia** $A\mathbin{\backslash} B$: ocurre $A$ y no $B$.
 
 #### “O” inclusivo y exclusivo
 
-En probabilidad, la unión suele ser inclusiva. “Lluvia o congestión” incluye días con ambas. Si se desea exactamente una, el evento es $(A\setminus B)\cup(B\setminus A)$.
+En probabilidad, la unión suele ser inclusiva. “Lluvia o congestión” incluye días con ambas. Si se desea exactamente una, el evento es $(A\mathbin{\backslash} B)\cup(B\mathbin{\backslash} A)$.
 
 #### Particiones
 

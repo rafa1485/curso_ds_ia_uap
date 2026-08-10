@@ -52,10 +52,10 @@ La **tarea computacional** especifica la operación formal que se ejecutará sob
 La relación entre los tres niveles puede representarse así:
 
 $$
-\text{necesidad} \longrightarrow \text{pregunta analítica}
+\text{necesidad} \longrightarrow \text{pregunta anal\'itica}
 \longrightarrow \text{tarea computacional}
 \longrightarrow \text{evidencia}
-\longrightarrow \text{decisión}.
+\longrightarrow \text{decisi\'on}.
 $$
 
 La correspondencia debe verificarse en ambos sentidos. Si la tarea produce una probabilidad, debe existir una decisión capaz de utilizarla. Si la decisión exige actuar sobre una zona, los datos y la evaluación deben conservar esa unidad geográfica. Si el problema requiere una explicación causal, una tarea puramente predictiva no basta, aunque obtenga buen desempeño.
@@ -106,9 +106,9 @@ El **objetivo técnico** describe el comportamiento esperado del sistema analít
 Ambos objetivos deben conectarse mediante una teoría de cambio:
 
 $$
-\text{salida técnica}
-\rightarrow \text{interpretación}
-\rightarrow \text{acción}
+\text{salida t\'ecnica}
+\rightarrow \text{interpretaci\'on}
+\rightarrow \text{acci\'on}
 \rightarrow \text{consecuencia operativa}
 \rightarrow \text{impacto}.
 $$
@@ -228,7 +228,7 @@ Una etiqueta de fuga confirmada puede depender de que una zona haya sido inspecc
 Una restricción dura no puede violarse: capacidad física, presupuesto máximo, normativa o seguridad. Una restricción blanda representa una preferencia cuyo incumplimiento tiene costo. En optimización puede formularse:
 
 $$
-\min_a Costo(a)+\lambda\,Penalización(a)
+\min_a \operatorname{Costo}(a)+\lambda\,\operatorname{Penalizaci\'on}(a)
 $$
 
 sujeto a restricciones obligatorias. La separación ayuda a evitar recomendaciones matemáticamente atractivas pero imposibles de ejecutar.

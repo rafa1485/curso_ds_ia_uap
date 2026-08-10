@@ -183,7 +183,7 @@ Se diseñará un agente que supervise lotes sensibles durante almacenamiento y t
 **Paso 4. Definir acciones y precondiciones.** El conjunto de recomendaciones es:
 
 $$
-A=\{vigilar,\ recomendar\ medición,\ recomendar\ inspección,\ recomendar\ aislamiento\ de\ lote\}.
+A=\{\text{vigilar},\ \text{recomendar medici\'on},\ \text{recomendar inspecci\'on},\ \text{recomendar aislamiento de lote}\}.
 $$
 
 Recomendar una medición es apropiado cuando la evidencia es insuficiente o contradictoria. La inspección requiere una anomalía plausible que pueda confirmarse en el equipo, el recinto o el registro operativo. Recomendar aislamiento exige identificar los lotes potencialmente expuestos y superar un umbral de riesgo acordado; si la trazabilidad es incompleta, el agente debe abstenerse de afirmar qué unidades están afectadas y escalar el caso.
@@ -305,7 +305,7 @@ Un entorno es **estático** si no cambia mientras el agente delibera. Es **diná
 La clasificación depende de la relación entre escalas temporales. Un problema puede considerarse estático si calcular toma milisegundos y el entorno cambia cada hora; la misma técnica deja de ser adecuada si deliberar requiere veinte minutos. La razón
 
 $$
-\rho=\frac{tiempo\ de\ deliberación}{escala\ de\ cambio\ relevante}
+\rho=\frac{\text{tiempo de deliberaci\'on}}{\text{escala de cambio relevante}}
 $$
 
 ofrece una guía: cuanto mayor es $\rho$, más necesario resulta actualizar, interrumpir o actuar con una política de respaldo.
@@ -453,7 +453,7 @@ Un **agente que aprende** modifica algún componente de su conducta a partir de 
 Sea $\theta_t$ el conjunto de parámetros o conocimiento. Una actualización general es:
 
 $$
-\theta_{t+1}=L(\theta_t,experiencia_t,retroalimentación_t).
+\theta_{t+1}=L(\theta_t,\text{experiencia}_t,\text{retroalimentaci\'on}_t).
 $$
 
 La experiencia puede ser supervisada, cuando existe una respuesta de referencia; no supervisada, cuando se descubren estructuras; o basada en recompensas, cuando las consecuencias llegan después de actuar. Este último caso se estudiará en el capítulo 8.
@@ -667,10 +667,10 @@ Un centro de datos debe asignar tres técnicos a cuatro intervenciones durante u
 **Paso 2. Definir variables.** Sea $x_{ijt}=1$ si el técnico $i$ inicia la intervención $j$ en el bloque temporal $t$, y $0$ en otro caso. Para una formulación como búsqueda, un estado puede expresarse como:
 
 $$
-s=(t,pendientes,estado_T,ubicación_T,liberación_T,presupuesto),
+s=(t,\operatorname{pendientes},\operatorname{estado}_T,\operatorname{ubicaci\'on}_T,\operatorname{liberaci\'on}_T,\operatorname{presupuesto}),
 $$
 
-donde $estado_T$ indica si cada técnico está disponible u ocupado y $liberación_T$ conserva cuándo terminará su trabajo actual. La ubicación permite calcular el tiempo de acceso entre salas; omitir la liberación impediría decidir correctamente acciones posteriores.
+donde $\operatorname{estado}_T$ indica si cada técnico está disponible u ocupado y $\operatorname{liberaci\'on}_T$ conserva cuándo terminará su trabajo actual. La ubicación permite calcular el tiempo de acceso entre salas; omitir la liberación impediría decidir correctamente acciones posteriores.
 
 **Paso 3. Estado inicial y conocimiento.** A las 08:00 los tres técnicos están disponibles, las cuatro intervenciones están pendientes y el presupuesto permanece completo. La base de conocimiento registra `Posee(técnico, habilidad)`, `Certificado(técnico, intervención)` y `Requiere(intervención, habilidad)`. Una competencia o certificación no registrada se considera desconocida y bloquea la asignación hasta su verificación; no se presume habilitación por ausencia de datos.
 

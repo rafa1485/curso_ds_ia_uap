@@ -247,7 +247,7 @@ Es un problema convexo: cualquier óptimo local es global. La norma actúa como 
 La formulación dual introduce multiplicadores $\alpha_i\geq0$ y conduce a
 
 $$
-\max_\alpha\sum_i\alpha_i-rac{1}{2}\sum_i\sum_j
+\max_\alpha\sum_i\alpha_i-\frac{1}{2}\sum_i\sum_j
 \alpha_i\alpha_jy_iy_jx_i^Tx_j,
 $$
 
@@ -318,7 +318,7 @@ K_{\text{lineal}}(x,z)=x^Tz,
 $$
 
 $$
-K_{\text{polinómico}}(x,z)=(\gamma x^Tz+r)^d,
+K_{\text{polin\'omico}}(x,z)=(\gamma x^Tz+r)^d,
 $$
 
 $$
@@ -654,7 +654,7 @@ Un buen informe incluye distribución del atributo, intervalos por remuestreo, I
 Los valores SHAP se inspiran en valores de Shapley de teoría de juegos. Los atributos son “jugadores”, la predicción es el pago y cada contribución promedia el aporte marginal del atributo sobre todas las coaliciones posibles. Para $p$ atributos,
 
 $$
-\phi_j=\sum_{S\subseteq F\setminus\{j\}}
+\phi_j=\sum_{S\subseteq F\mathbin{\backslash}\{j\}}
 \frac{|S|!(p-|S|-1)!}{p!}
 [v(S\cup\{j\})-v(S)],
 $$

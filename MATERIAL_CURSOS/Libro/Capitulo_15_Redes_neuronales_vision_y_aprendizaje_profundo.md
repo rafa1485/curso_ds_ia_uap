@@ -537,7 +537,7 @@ El ajuste fino no autoriza evaluar reiteradamente prueba. Todas las decisiones, 
 Para cada clase, verdaderos positivos $TP$, falsos positivos $FP$ y falsos negativos $FN$ definen
 
 $$
-\text{precisión}=\frac{TP}{TP+FP},\quad
+\text{precisi\'on}=\frac{TP}{TP+FP},\quad
 \text{recall}=\frac{TP}{TP+FN},\quad
 F1=\frac{2PR}{P+R}.
 $$
