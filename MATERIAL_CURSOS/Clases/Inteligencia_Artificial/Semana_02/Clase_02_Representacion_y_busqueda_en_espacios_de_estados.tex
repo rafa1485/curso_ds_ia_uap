@@ -1,0 +1,695 @@
+% Compilar dos veces con pdflatex.
+\documentclass[aspectratio=169,11pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit}
+
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+
+\tikzset{
+  flow/.style={-{Stealth[length=2.4mm]},thick,draw=UAPNavy},
+  state/.style={circle,draw=UAPTeal,fill=UAPTeal!12,very thick,minimum size=9mm,font=\bfseries},
+  goal/.style={state,double,double distance=1.2pt,draw=UAPGold},
+  card/.style={draw=UAPTeal,fill=UAPLight,rounded corners=3pt,align=center,minimum height=11mm},
+  data/.style={draw=UAPGold,fill=UAPGold!15,rounded corners=2pt,align=center,minimum height=9mm},
+  searchnode/.style={draw=UAPNavy,fill=white,rounded corners=2pt,align=center,minimum width=12mm,minimum height=8mm}
+}
+
+\usetheme{Boadilla}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alerted text}{fg=UAPTeal}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{%
+  \leavevmode\hbox{%
+    \begin{beamercolorbox}[wd=.78\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}%
+      \color{UAPGray}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}%
+      \color{UAPGray}\hfill Semana 2 \enspace | \enspace \insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}}}
+
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\newcommand{\pregunta}[1]{\begin{block}{Pregunta clave}#1\end{block}}
+\title[IA · Clase 2]{Representación de problemas y búsqueda}
+\subtitle{Estados, grafos y estrategias no informadas}
+\author{Curso de Inteligencia Artificial}
+\institute{Semana 2 · Clase 2}
+\date{}
+
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+    \vfill {\Huge\bfseries\inserttitle\par}\vspace{.5em}
+    {\color{UAPGold}\Large\insertsubtitle\par}\vspace{2em}
+    {\color{white}\large\insertauthor\par\insertinstitute\par}\vfill
+  \end{beamercolorbox}
+\end{frame}
+
+% 2
+\begin{frame}{Propósito de la clase}
+  Transformar una necesidad operativa en un \concepto{problema de búsqueda} y justificar una estrategia para resolverlo.
+  \begin{block}{Al finalizar, podremos}
+    \begin{itemize}
+      \item formular estados, acciones, transiciones, objetivo y costos;
+      \item distinguir estado, nodo, camino, frontera y conjunto explorado;
+      \item representar un espacio de estados como grafo;
+      \item comparar estrategias no informadas y sus garantías;
+      \item formular una búsqueda sobre el caso de movilidad.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% 3
+\begin{frame}{De PEAS a una solución}
+  \centering
+  \begin{tikzpicture}[node distance=8mm]
+    \node[card,text width=4.7cm,font=\small] (peas) {\textbf{PEAS}\\desempeño · entorno · actuadores · sensores};
+    \node[card,text width=5.5cm,font=\small,right=of peas] (search) {\textbf{Búsqueda}\\estado · acciones · transición · objetivo · costo};
+    \draw[flow] (peas) -- node[above,font=\small]{formalizar} (search);
+  \end{tikzpicture}
+  \vfill
+  \begin{block}{Continuidad}
+    PEAS define la tarea; la formulación de búsqueda define qué puede explorar el algoritmo.
+  \end{block}
+\end{frame}
+
+% 4
+\begin{frame}{Pregunta de apertura}
+  \pregunta{¿Qué necesita conocer un algoritmo para encontrar una secuencia de decisiones?}
+  \begin{itemize}
+    \item ¿Cómo describe cada situación posible?
+    \item ¿Qué acciones son legales y qué cambia después de actuar?
+    \item ¿Cómo reconoce una solución?
+    \item ¿Qué significa que una solución sea mejor?
+    \item ¿En qué orden debería explorar las alternativas?
+  \end{itemize}
+\end{frame}
+
+% 5
+\begin{frame}{Del agente al problema de búsqueda}
+  \centering
+  \begin{tikzpicture}[node distance=5mm,scale=.93,transform shape]
+    \node[data,minimum width=2.7cm] (s) {Situación actual};
+    \node[card,minimum width=2.7cm,right=of s] (a) {Alternativas};
+    \node[card,minimum width=2.7cm,right=of a] (t) {Consecuencias};
+    \node[data,minimum width=2.7cm,right=of t] (g) {Objetivo};
+    \draw[flow] (s)--(a); \draw[flow] (a)--(t); \draw[flow] (t)--(g);
+  \end{tikzpicture}
+  \vfill
+  La representación determina:
+  \begin{itemize}
+    \item qué soluciones existen y qué acciones parecen legales;
+    \item qué costos se consideran;
+    \item qué diferencias puede reconocer el algoritmo.
+  \end{itemize}
+  \alert{Una estrategia correcta no repara una representación incorrecta.}
+\end{frame}
+
+% 6
+\begin{frame}{Formulación general}
+  \[
+    \boxed{P=(S,A,T,s_0,G,c)}
+  \]
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \begin{itemize}
+        \item $S$: espacio de estados.
+        \item $A(s)$: acciones aplicables.
+        \item $T(s,a)$: estado resultante.
+      \end{itemize}
+    \column{.48\textwidth}
+      \begin{itemize}
+        \item $s_0$: estado inicial.
+        \item $G(s)$: prueba de objetivo.
+        \item $c(s,a,s')$: costo de transición.
+      \end{itemize}
+  \end{columns}
+  \begin{block}{Solución}
+    Secuencia de acciones legales que lleva de $s_0$ a un estado que satisface $G$.
+  \end{block}
+\end{frame}
+
+% 7
+\begin{frame}{¿Qué es un estado?}
+  Un \concepto{estado} reúne la información necesaria para:
+  \begin{itemize}
+    \item decidir qué acciones son legales;
+    \item predecir consecuencias relevantes;
+    \item evaluar si se alcanzó el objetivo;
+    \item calcular costos futuros.
+  \end{itemize}
+  \vfill
+  \begin{alertblock}{No es la realidad completa}
+    Es una representación orientada a una decisión, un horizonte y un conjunto de restricciones.
+  \end{alertblock}
+\end{frame}
+
+% 8
+\begin{frame}{Diseñar variables de estado}
+  \begin{block}{Movilidad}
+    \centering $s=(\text{zona},\text{hora},\text{vehículos disponibles},\text{demanda pendiente})$
+  \end{block}
+  \centering
+  \begin{tikzpicture}[node distance=5mm]
+    \node[data,minimum width=2.7cm] (z) {Zona};
+    \node[data,minimum width=2.7cm,right=of z] (h) {Hora};
+    \node[data,minimum width=3.2cm,right=of h] (v) {Disponibilidad};
+    \node[data,minimum width=3.2cm,right=of v] (d) {Demanda};
+  \end{tikzpicture}
+  \vfill
+  Cada variable debe cambiar al menos una respuesta:
+  \begin{center}
+    \concepto{¿qué puedo hacer? · ¿qué ocurrirá? · ¿cuánto costará? · ¿alcancé el objetivo?}
+  \end{center}
+\end{frame}
+
+% 9
+\begin{frame}{Estado, percepción y nodo}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.24\textwidth}X}
+    \toprule
+    Concepto & Función \\\midrule
+    Estado del mundo & Situación que existe aunque no se observe por completo \\
+    Percepción & Evidencia recibida por sensores \\
+    Estado interno & Estimación mantenida por el agente \\
+    Nodo de búsqueda & Registro con estado, padre, acción, costo y profundidad \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \alert{Dos nodos pueden contener el mismo estado y representar caminos distintos.}
+\end{frame}
+
+% 10
+\begin{frame}{Suficiencia del estado}
+  Un estado conserva la información del pasado que cambia el futuro relevante:
+  \[
+    P(S_{t+1}\mid S_{0:t},A_{0:t})=P(S_{t+1}\mid S_t,A_t)
+  \]
+  \begin{block}{Ejemplo}
+    Si una calle cierra a las 18:00, representar solo la zona no basta: la hora modifica acciones y transiciones.
+  \end{block}
+  \begin{alertblock}{Error frecuente}
+    Omitir una variable para reducir el espacio y eliminar con ella una restricción decisiva.
+  \end{alertblock}
+\end{frame}
+
+% 11
+\begin{frame}{Acciones, precondiciones y efectos}
+  \small
+  \begin{columns}[T]
+    \column{.47\textwidth}
+      \begin{block}{ACCIÓN trasladar}
+        \textbf{Precondiciones}
+        \begin{itemize}
+          \item vehículo disponible;
+          \item conexión habilitada;
+          \item capacidad y seguridad válidas.
+        \end{itemize}
+      \end{block}
+    \column{.47\textwidth}
+      \begin{block}{EFECTOS}
+        \begin{itemize}
+          \item cambia la disponibilidad;
+          \item avanza el tiempo;
+          \item aumenta el costo;
+          \item cambia la cobertura.
+        \end{itemize}
+      \end{block}
+  \end{columns}
+  \alert{Especificar solo el efecto favorable permite reutilizar recursos inexistentes.}
+\end{frame}
+
+% 12
+\begin{frame}{Modelo de transición}
+  En un problema determinista:
+  \[s'=T(s,a)\]
+  \centering
+  \begin{tikzpicture}[node distance=13mm]
+    \node[state] (s) {$s$};
+    \node[card,minimum width=3.0cm,right=of s] (a) {acción $a$\\precondiciones};
+    \node[state,right=of a] (sp) {$s'$};
+    \draw[flow] (s)--(a); \draw[flow] (a)--(sp);
+    \node[data,below=8mm of a,minimum width=6.2cm] (inv) {invariantes · tiempo · recursos · efectos secundarios};
+    \draw[flow,UAPGold] (inv)--(a);
+  \end{tikzpicture}
+  \vfill
+  Los eventos externos cambian el estado, pero no deben atribuirse como acciones del agente.
+\end{frame}
+
+% 13
+\begin{frame}{Estado inicial y objetivo}
+  \begin{columns}[c]
+    \column{.48\textwidth}
+      \begin{block}{Estado inicial $s_0$}
+        Situación fechada desde la que comienza la búsqueda. Debe distinguir valores desconocidos.
+      \end{block}
+    \column{.48\textwidth}
+      \begin{block}{Objetivo $G(s)$}
+        Predicado que reconoce cualquier estado aceptable, no un único camino.
+      \end{block}
+  \end{columns}
+  \vfill
+  \begin{center}
+    $G(s)=$ demanda crítica cubierta \textbf{y} restricciones satisfechas
+  \end{center}
+  \alert{El objetivo declara el resultado; no prescribe el método para alcanzarlo.}
+\end{frame}
+
+% 14
+\begin{frame}{Longitud y costo}
+  Para un camino de $k$ acciones:
+  \[
+    g=\sum_{i=0}^{k-1}c(s_i,a_i,s_{i+1})
+  \]
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \begin{block}{Longitud}
+        Cantidad de aristas o acciones: $k$.
+      \end{block}
+    \column{.48\textwidth}
+      \begin{block}{Costo}
+        Suma de los pesos de las transiciones.
+      \end{block}
+  \end{columns}
+  \alert{Solo coinciden cuando todas las acciones cuestan una unidad.}
+\end{frame}
+
+% 15
+\begin{frame}{Costos y restricciones}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.23\textwidth}p{.25\textwidth}X}
+    \toprule
+    Concepto & Tratamiento & Ejemplo \\\midrule
+    Restricción dura & Excluir alternativa & Capacidad o seguridad \\
+    Restricción blanda & Penalizar & Evitar reasignaciones \\
+    Costo & Comparar caminos & Minutos o kilómetros \\
+    Utilidad & Valorar consecuencias & Riesgo y calidad \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{alertblock}{Criterio normativo}
+    Una ilegalidad no debe convertirse solamente en un costo alto: el optimizador podría aceptarla.
+  \end{alertblock}
+\end{frame}
+
+% 16
+\begin{frame}{Nivel de abstracción}
+  \centering
+  \begin{tikzpicture}[node distance=4mm]
+    \node[data,minimum width=4cm] (low) {Demasiado detalle\\espacio intratable};
+    \node[card,minimum width=4cm,right=of low] (fit) {Abstracción útil\\decisiones válidas};
+    \node[data,minimum width=4cm,right=of fit] (high) {Demasiada omisión\\planes inviables};
+    \draw[flow] (low)--(fit); \draw[flow] (fit)--(high);
+  \end{tikzpicture}
+  \vfill
+  Una representación útil conserva diferencias que cambian:
+  \begin{itemize}
+    \item legalidad de las acciones;
+    \item costo o consecuencia futura;
+    \item cumplimiento del objetivo.
+  \end{itemize}
+  \alert{El estado correcto depende de la pregunta, el horizonte y las restricciones.}
+\end{frame}
+
+% 17
+\begin{frame}{Ejemplo: una red vial}
+  Objetivo: viajar de $A$ a $F$ minimizando minutos.
+  \begin{itemize}
+    \item \concepto{Estado}: intersección actual.
+    \item \concepto{Acción}: recorrer una calle saliente.
+    \item \concepto{Transición}: llegar al extremo de la calle.
+    \item \concepto{Objetivo}: estado igual a $F$.
+    \item \concepto{Costo}: tiempo indicado en la arista.
+  \end{itemize}
+  \begin{block}{Prueba de suficiencia}
+    Si existen cierres por horario o combustible limitado, la intersección deja de ser un estado suficiente.
+  \end{block}
+\end{frame}
+
+% 18
+\begin{frame}{Grafo dirigido y ponderado}
+  \centering
+  \begin{tikzpicture}[scale=.95,transform shape]
+    \node[state] (a) at (0,0) {A}; \node[state] (b) at (2.6,1.2) {B};
+    \node[state] (c) at (2.6,-1.2) {C}; \node[state] (d) at (5.2,1.2) {D};
+    \node[state] (e) at (5.2,-1.2) {E}; \node[goal] (f) at (7.8,0) {F};
+    \draw[flow] (a)--node[above,sloped]{4}(b); \draw[flow] (a)--node[below,sloped]{2}(c);
+    \draw[flow] (c)--node[right]{1}(b); \draw[flow] (b)--node[above]{5}(d);
+    \draw[flow] (b)--node[below,sloped]{2}(e); \draw[flow] (c)--node[below]{7}(e);
+    \draw[flow] (e)--node[right]{1}(d); \draw[flow] (d)--node[above,sloped]{3}(f);
+    \draw[flow] (e)--node[below,sloped]{6}(f);
+  \end{tikzpicture}
+  \vfill
+  Vértices = estados · aristas = transiciones · dirección = avance legal · peso = minutos
+\end{frame}
+
+% 19
+\begin{frame}{Grafo de estados y árbol de búsqueda}
+  \begin{columns}[c]
+    \column{.46\textwidth}
+      \begin{block}{Grafo de estados}
+        Contiene una vez cada estado y todas las transiciones legales.
+      \end{block}
+      \centering $A\rightarrow B\rightarrow D$\quad y\quad $A\rightarrow C\rightarrow D$
+    \column{.46\textwidth}
+      \begin{block}{Árbol de búsqueda}
+        Contiene las distintas maneras de llegar: el estado $D$ puede aparecer en dos nodos.
+      \end{block}
+      \centering $(A,B,D)$\quad y\quad $(A,C,D)$
+  \end{columns}
+  \vfill
+  \alert{El dominio puede ser finito y el árbol de búsqueda infinito si contiene ciclos.}
+\end{frame}
+
+% 20
+\begin{frame}{El nodo de búsqueda}
+  \[
+    n=(\operatorname{estado},\operatorname{padre},\operatorname{accion},g,\operatorname{profundidad})
+  \]
+  \centering
+  \begin{tikzpicture}[node distance=4mm]
+    \node[searchnode] (s) {estado}; \node[searchnode,right=of s] (p) {padre};
+    \node[searchnode,right=of p] (a) {acción}; \node[searchnode,right=of a] (g) {$g$};
+    \node[searchnode,right=of g] (d) {profundidad};
+  \end{tikzpicture}
+  \vfill
+  El nodo permite reconstruir el camino, comparar costos y conservar rutas alternativas.
+  \begin{block}{Tres operaciones distintas}
+    Generar un nodo · insertarlo en frontera · extraerlo y expandirlo.
+  \end{block}
+\end{frame}
+
+% 21
+\begin{frame}{La frontera}
+  La \concepto{frontera} reúne nodos generados pero aún no expandidos.
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.30\textwidth}p{.28\textwidth}X}
+    \toprule
+    Política de extracción & Estructura & Estrategia \\\midrule
+    Más antiguo & Cola FIFO & Anchura \\
+    Más reciente & Pila LIFO & Profundidad \\
+    Menor costo $g$ & Cola de prioridad & Costo uniforme \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{block}{Idea central}
+    Cambiar la frontera cambia el orden de exploración, no la definición del problema.
+  \end{block}
+\end{frame}
+
+% 22
+\begin{frame}{El conjunto explorado}
+  Registra estados ya expandidos para:
+  \begin{itemize}
+    \item evitar ciclos;
+    \item reducir trabajo repetido;
+    \item reconocer convergencias;
+    \item conservar el mejor costo conocido cuando corresponde.
+  \end{itemize}
+  \begin{alertblock}{Error de implementación}
+    Comparar objetos nodo por identidad no detecta estados equivalentes. Se necesita una clave canónica con significado en el dominio.
+  \end{alertblock}
+\end{frame}
+
+% 23
+\begin{frame}{Ciclos y estados repetidos}
+  \centering
+  \begin{tikzpicture}[scale=.9,transform shape]
+    \node[state] (a) at (0,0) {A}; \node[state] (b) at (2.2,1) {B};
+    \node[state] (c) at (2.2,-1) {C}; \node[state] (d) at (4.5,0) {D};
+    \draw[flow] (a)--(b); \draw[flow] (a)--(c); \draw[flow] (b)--(d); \draw[flow] (c)--(d);
+    \draw[flow,UAPGold,bend left=28] (d) to (a);
+    \node[card,minimum width=4.0cm] at (7,1) {Convergencia\\$B\rightarrow D\leftarrow C$};
+    \node[data,minimum width=4.0cm] at (7,-1) {Ciclo\\$A\rightarrow B\rightarrow D\rightarrow A$};
+  \end{tikzpicture}
+  \vfill
+  Controles: ancestros · estados descubiertos · mejor costo y reapertura.
+\end{frame}
+
+% 24
+\begin{frame}[fragile]{Esquema de búsqueda en grafo}
+\small
+\begin{verbatim}
+insertar nodo inicial en frontera
+mientras frontera no esté vacía:
+    nodo <- EXTRAER(frontera)
+    si ES-OBJETIVO(nodo.estado): devolver camino
+    registrar nodo.estado como explorado
+    para cada sucesor legal:
+        nuevo_g <- nodo.g + costo_paso
+        si es nuevo o mejora el costo:
+            INSERTAR-O-ACTUALIZAR(sucesor)
+devolver fracaso
+\end{verbatim}
+\alert{La política de EXTRAER define la estrategia de búsqueda.}
+\end{frame}
+
+% 25
+\begin{frame}{Tiempo y memoria}
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \begin{itemize}
+        \item $b$: factor de ramificación.
+        \item $d$: profundidad de solución mínima.
+        \item $m$: profundidad máxima.
+      \end{itemize}
+    \column{.48\textwidth}
+      \begin{itemize}
+        \item $C^*$: costo óptimo.
+        \item $\varepsilon$: costo mínimo positivo.
+        \item $N$: nodos generados o expandidos.
+      \end{itemize}
+  \end{columns}
+  \[
+    1+b+b^2+\cdots+b^d=O(b^d)
+  \]
+  \begin{block}{Lectura}
+    La mayoría de los nodos está en el último nivel; reducir el ramificado efectivo puede ser decisivo.
+  \end{block}
+\end{frame}
+
+% 26
+\begin{frame}{Búsqueda en anchura}
+  BFS expande por niveles:
+  \begin{center}
+    \concepto{profundidad 0 $\rightarrow$ 1 $\rightarrow$ 2 $\rightarrow\cdots$}
+  \end{center}
+  \begin{itemize}
+    \item Frontera: cola FIFO.
+    \item Marca estados al descubrirlos.
+    \item Encuentra primero una solución de menor profundidad.
+    \item Conserva casi todo el nivel más reciente.
+  \end{itemize}
+  \begin{alertblock}{No confundir}
+    Menor profundidad no implica menor costo si las aristas tienen pesos distintos.
+  \end{alertblock}
+\end{frame}
+
+% 27
+\begin{frame}{BFS paso a paso}
+  \centering
+  \begin{tikzpicture}[level distance=11mm,sibling distance=21mm,scale=.92,transform shape]
+    \node[state] {A}
+      child {node[state] {B} child {node[state] {D}} child {node[state] {E}}}
+      child {node[state] {C} child {node[state] {F}} child {node[state] {G}}};
+    \node[data,minimum width=10cm] at (0,-4) {Extracción: A · B · C · D · E · F · G};
+  \end{tikzpicture}
+  \vfill
+  \begin{enumerate}
+    \item desencolar el más antiguo; \item comprobar objetivo;
+    \item encolar sucesores no descubiertos.
+  \end{enumerate}
+\end{frame}
+
+% 28
+\begin{frame}{Garantías de BFS}
+  BFS es:
+  \begin{itemize}
+    \item \concepto{completa} si $b$ es finito y existe solución a profundidad finita;
+    \item \concepto{óptima} cuando todas las acciones tienen igual costo;
+    \item no óptima con pesos diferentes;
+    \item costosa en memoria: tiempo y espacio $O(b^d)$.
+  \end{itemize}
+  \begin{block}{Cuándo elegirla}
+    Soluciones poco profundas, costos unitarios y memoria suficiente.
+  \end{block}
+\end{frame}
+
+% 29
+\begin{frame}{Búsqueda en profundidad}
+  DFS expande el nodo más profundo disponible.
+  \begin{itemize}
+    \item Frontera: pila LIFO o recursión.
+    \item Sigue una rama y luego retrocede.
+    \item Usa menos memoria que BFS: $O(bm)$ en árbol.
+    \item Puede quedar atrapada en ramas profundas o ciclos.
+  \end{itemize}
+  \begin{alertblock}{Garantías}
+    No es completa en espacios infinitos y no garantiza el camino más corto ni el de menor costo.
+  \end{alertblock}
+\end{frame}
+
+% 30
+\begin{frame}{DFS paso a paso}
+  \centering
+  \begin{tikzpicture}[level distance=11mm,sibling distance=21mm,scale=.92,transform shape]
+    \node[state] {A}
+      child {node[state] {B} child {node[state] {D}} child {node[state] {E}}}
+      child {node[state] {C} child {node[state] {F}} child {node[state] {G}}};
+    \draw[UAPGold,very thick,-{Stealth}] (-.15,-.35) -- (-1.35,-1.1) -- (-1.85,-2.15);
+    \node[data,minimum width=10cm] at (0,-4) {Un orden posible: A · B · D · E · C · F · G};
+  \end{tikzpicture}
+  \vfill
+  El orden de sucesores debe fijarse para que la comparación sea reproducible.
+\end{frame}
+
+% 31
+\begin{frame}{Profundidad limitada}
+  Impide expandir nodos más allá de un límite $\ell$.
+  \begin{columns}[T]
+    \column{.31\textwidth}\begin{block}{Solución}Objetivo encontrado.\end{block}
+    \column{.31\textwidth}\begin{block}{Fracaso}No existe solución en el espacio revisado.\end{block}
+    \column{.31\textwidth}\begin{block}{Corte}El límite impide concluir.\end{block}
+  \end{columns}
+  \vfill
+  \begin{alertblock}{Selección del límite}
+    Un máximo real de transbordos o pasos puede justificar $\ell$; un número arbitrario no.
+  \end{alertblock}
+\end{frame}
+
+% 32
+\begin{frame}{Profundización iterativa}
+  Ejecuta profundidad limitada con límites crecientes:
+  \begin{center}
+    \Large $\ell=0,1,2,3,\ldots$
+  \end{center}
+  Combina:
+  \begin{itemize}
+    \item completitud y optimalidad por profundidad de BFS;
+    \item memoria lineal de DFS;
+    \item repetición controlada de niveles poco profundos.
+  \end{itemize}
+  \begin{block}{Por qué la repetición es aceptable}
+    En un árbol exponencial, el último nivel contiene la mayor parte del trabajo.
+  \end{block}
+\end{frame}
+
+% 33
+\begin{frame}{Búsqueda de costo uniforme}
+  UCS extrae el nodo con menor costo acumulado $g$.
+  \begin{itemize}
+    \item Frontera: cola de prioridad.
+    \item Expande por costo, no por profundidad.
+    \item Conserva el menor costo conocido por estado.
+    \item Actualiza o reabre si aparece un camino más barato.
+  \end{itemize}
+  \begin{block}{Garantía}
+    Es completa y óptima bajo costos no negativos y condiciones apropiadas de costo mínimo y ramificación.
+  \end{block}
+\end{frame}
+
+% 34
+\begin{frame}{Comparación de estrategias}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.17\textwidth}p{.19\textwidth}p{.14\textwidth}p{.16\textwidth}X}
+    \toprule
+    Estrategia & Frontera & Completa & Óptima & Riesgo principal \\\midrule
+    BFS & FIFO & Sí* & Costos iguales & Memoria \\
+    DFS & LIFO & No general & No & Rama infinita \\
+    Limitada & LIFO + $\ell$ & Si $\ell\ge d$* & No & Límite incorrecto \\
+    Iterativa & Límites crecientes & Sí* & Costos iguales & Repetición \\
+    UCS & Prioridad por $g$ & Sí* & Sí* & Memoria y prioridad \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \alert{* Las garantías solo valen bajo los supuestos declarados sobre el espacio y los costos.}
+\end{frame}
+
+% 35
+\begin{frame}{Caso transversal: movilidad como grafo}
+  \begin{columns}[c]
+    \column{.44\textwidth}
+      \centering
+      \begin{tikzpicture}[scale=.78,transform shape]
+        \node[state] (n) at (0,1.8) {N}; \node[state] (c) at (0,0) {C};
+        \node[state] (s) at (0,-1.8) {S}; \node[state] (e) at (2.8,0) {E};
+        \draw[flow,<->] (n)--node[left]{6}(c); \draw[flow,<->] (c)--node[left]{4}(s);
+        \draw[flow,<->] (c)--node[above]{3}(e); \draw[flow,<->] (n)--node[above,sloped]{8}(e);
+        \draw[flow,<->] (s)--node[below,sloped]{5}(e);
+      \end{tikzpicture}
+    \column{.53\textwidth}
+      \small
+      \begin{itemize}
+        \item Estado: zona y configuración de flota.
+        \item Acción: trasladar un vehículo.
+        \item Transición: actualizar ubicación y tiempo.
+        \item Objetivo: cubrir demanda crítica.
+        \item Costo: demora + distancia vacía.
+      \end{itemize}
+  \end{columns}
+  \vfill
+  \alert{El grafo es una simplificación del sistema, no una copia de la ciudad.}
+\end{frame}
+
+% 36
+\begin{frame}{Actividad guiada}
+  En equipos, construir una instancia con 5 a 7 estados:
+  \begin{enumerate}
+    \item definir $S,A,T,s_0,G,c$;
+    \item dibujar el grafo y asignar pesos;
+    \item ejecutar BFS y costo uniforme;
+    \item registrar orden de expansión, camino y costo;
+    \item explicar por qué los resultados coinciden o difieren;
+    \item identificar una variable omitida que cambiaría la solución.
+  \end{enumerate}
+  \begin{block}{Tiempo y entregable}
+    30 minutos + 10 de contraste · tabla de formulación, grafo y comparación.
+  \end{block}
+\end{frame}
+
+% 37
+\begin{frame}{Síntesis}
+  \begin{itemize}
+    \item Representar es decidir qué diferencias cambian acciones y costos.
+    \item Estado y nodo no son sinónimos.
+    \item La frontera define el orden de exploración.
+    \item El conjunto explorado controla repetidos y ciclos.
+    \item Longitud y costo solo coinciden con costos unitarios.
+    \item Ninguna estrategia domina bajo todos los criterios.
+    \item Las garantías dependen de supuestos explícitos.
+  \end{itemize}
+\end{frame}
+
+% 38
+\begin{frame}{Lecturas y continuidad}
+  \begin{block}{Lectura principal}
+    \begin{itemize}
+      \item \textbf{Capítulo 6, sección 6.4}: representación computacional de problemas.
+      \item \textbf{Capítulo 7, secciones 7.1 y 7.2}: espacios de estados y búsqueda no informada.
+    \end{itemize}
+  \end{block}
+  \begin{block}{Próxima clase}
+    Heurísticas · búsqueda voraz · algoritmo A* · admisibilidad · consistencia.
+  \end{block}
+  \vfill
+  \centering\Large\concepto{Representar bien precede a buscar bien.}
+\end{frame}
+
+\end{document}

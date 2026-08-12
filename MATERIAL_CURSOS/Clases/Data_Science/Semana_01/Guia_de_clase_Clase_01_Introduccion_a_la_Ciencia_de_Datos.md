@@ -21,7 +21,7 @@ strong { color: #17324d; }
 
 **Semana y clase:** semana 1, clase 1
 
-**Presentación asociada:** *Introducción a la Ciencia de Datos: de una necesidad a evidencia útil para decidir* (38 diapositivas)
+**Presentación asociada:** *Introducción a la Ciencia de Datos: de una necesidad a evidencia útil para decidir* (40 diapositivas)
 
 **Fuentes principales:** capítulos 1 y 2 del libro *Ciencia de Datos e Inteligencia Artificial*
 
@@ -38,10 +38,10 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 | Apertura y concepto | 1-6 | Delimitar Ciencia de Datos y entender los datos como representaciones |
 | Proceso y propósitos | 7-14 | Explicar el ciclo, clasificar preguntas y separar descripción, predicción y decisión |
 | Formulación | 15-18 | Especificar problema, unidad, población, alcance, corte y horizonte |
-| Organización del trabajo | 19-28 | Comparar metodologías, estructuras, fuentes y reproducibilidad |
-| Caso aplicado | 29-32 | Formular movilidad, distinguir tareas y detectar fuga temporal |
-| Producción y defensa | 33-35 | Elaborar, revisar y defender una ficha del problema |
-| Cierre | 36-38 | Recuperar siete ideas, leer la síntesis visual y orientar la continuidad |
+| Organización del trabajo | 19-30 | Comparar metodologías, estructuras, fuentes y reproducibilidad |
+| Caso aplicado | 31-34 | Formular movilidad, distinguir tareas y detectar fuga temporal |
+| Producción y defensa | 35-37 | Elaborar, revisar y defender una ficha del problema |
+| Cierre | 38-40 | Recuperar siete ideas, leer la síntesis visual y orientar la continuidad |
 
 > **Tesis de la clase:** un proyecto de datos es un sistema de producción de evidencia para una decisión. Un modelo puede formar parte de ese sistema, pero no reemplaza la formulación, la validación, la responsabilidad ni la autoridad de uso.
 
@@ -501,9 +501,25 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Conclusión que debe quedar.** La minería produce patrones; KDD organiza el trabajo necesario para convertir algunos en conocimiento validado.
 
+**Transición sugerida.** “Antes de comparar con otra metodología, traduzcamos cada caja de KDD a una tarea y un resultado verificable”.
+
+## Diapositiva 22. Etapas de KDD explicadas
+
+**Correspondencia con el libro.** Capítulo 2, §2.2.1.
+
+**Propósito.** Convertir el diagrama de KDD en una secuencia operativa de tareas, controles y productos.
+
+**Guion sugerido.** Recorrer la tabla por filas. Selección delimita fuentes, población, unidad y variables; deja datos relevantes y alcance justificado. Preprocesamiento no significa borrar todo valor extraño: diagnostica faltantes, errores, duplicados, sesgos y consistencia, y documenta decisiones. Transformación construye la representación analítica mediante agregación, codificación, escalado o atributos derivados. Minería aplica métodos y produce patrones o modelos candidatos. Interpretación y evaluación contrasta validez, novedad, utilidad y límites; puede aceptar un hallazgo o exigir volver atrás.
+
+**Lectura detallada de la tabla.** La columna central responde “qué trabajo ocurre”; la derecha exige un producto auditable. Leer primero las cinco tareas y luego verticalmente los cinco resultados. Destacar que “resultado candidato” impide confundir minería con conocimiento. En movilidad: seleccionar viajes, revisar duplicados, agregar a zona-franja, detectar un patrón y validarlo en otro periodo con operaciones.
+
+**Comprobación.** “¿En qué etapa se decide que un cluster estadísticamente separado no tiene significado operativo?”. En interpretación y evaluación; esa conclusión puede provocar una nueva transformación o formulación.
+
+**Conclusión que debe quedar.** Cada etapa de KDD reduce una incertidumbre distinta y deja evidencia para justificar el paso siguiente.
+
 **Transición sugerida.** “KDD enfoca el descubrimiento; CRISP-DM amplía la mirada a la organización completa del proyecto”.
 
-## Diapositiva 22. CRISP-DM: organizar el proyecto completo
+## Diapositiva 23. CRISP-DM: organizar el proyecto completo
 
 **Correspondencia con el libro.** Capítulo 2, §2.2.2.
 
@@ -523,9 +539,25 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Conclusión que debe quedar.** CRISP-DM organiza desde propósito hasta uso y mantiene retornos después de la entrega.
 
+**Transición sugerida.** “El ciclo muestra relaciones; ahora explicaremos qué trabajo y qué producto corresponden a cada fase”.
+
+## Diapositiva 24. Etapas de CRISP-DM explicadas
+
+**Correspondencia con el libro.** Capítulo 2, §2.2.2.
+
+**Propósito.** Traducir las seis fases de CRISP-DM a responsabilidades y entregables concretos.
+
+**Guion sugerido.** Comprensión del problema acuerda necesidad, usuarios, acciones, éxito y restricciones; deja una ficha y criterios de aceptación. Comprensión de datos inventaría significado, cobertura, calidad y riesgos; deja diccionario, perfil y límites. Preparación construye datos versionados y reproducibles. Modelado compara baseline y candidatos bajo un protocolo registrado. Evaluación contrasta desempeño técnico, utilidad, equidad y riesgo para continuar, modificar o detener. Despliegue integra el resultado en el uso real con monitoreo, responsables, incidentes y retirada.
+
+**Lectura detallada de la tabla.** Leer cada fase como verbo y luego su evidencia. Subrayar que el entregable no es siempre un modelo: puede ser una decisión de detener, una tabla versionada o un plan de retirada. Los retornos del diagrama significan que un producto insuficiente reabre fases anteriores.
+
+**Comprobación.** “La métrica técnica mejora, pero el tablero llega después de que operaciones decide. ¿Qué fases deben revisarse?”. Evaluación, despliegue y comprensión del problema; la entrega no satisface el horizonte de uso.
+
+**Conclusión que debe quedar.** CRISP-DM coordina propósito, datos, análisis y uso mediante productos revisables, no mediante una secuencia rígida.
+
 **Transición sugerida.** “Para comprender los datos debemos distinguir su forma de almacenamiento de su significado”.
 
-## Diapositiva 23. Estructura de los datos
+## Diapositiva 25. Estructura de los datos
 
 **Correspondencia con el libro.** Capítulo 2, §§2.3.1-2.3.3.
 
@@ -547,7 +579,7 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Transición sugerida.** “Ahora veremos cómo fuentes con unidades distintas se convierten, mediante reglas explícitas, en una tabla zona-franja”.
 
-## Diapositiva 24. De fuentes heterogéneas a una tabla analítica
+## Diapositiva 26. De fuentes heterogéneas a una tabla analítica
 
 **Correspondencia con el libro.** Capítulo 2, §2.3.1, especialmente normalización, tablas analíticas y estado al corte; §2.3.8. Esta lámina trata construcción de tabla analítica.
 
@@ -569,7 +601,7 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Transición sugerida.** “Antes de integrar masivamente, el equipo necesita inventariar qué es y cómo falla cada fuente”.
 
-## Diapositiva 25. Fuentes: inventariar antes de integrar
+## Diapositiva 27. Fuentes: inventariar antes de integrar
 
 **Correspondencia con el libro.** Capítulo 2, introducción de §2.3, §§2.3.5-2.3.6 y §2.3.8. Esta lámina es el inventario de fuentes.
 
@@ -591,7 +623,7 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Transición sugerida.** “Además de acceso y formato, necesitamos saber qué mecanismo produjo los datos y qué recorrido siguieron”.
 
-## Diapositiva 26. Procedencia: ejes distintos, preguntas distintas
+## Diapositiva 28. Procedencia: ejes distintos, preguntas distintas
 
 **Correspondencia con el libro.** Capítulo 2, introducción de §2.3 y §§2.3.4-2.3.7. La clasificación primario/secundario es una ampliación didáctica.
 
@@ -613,7 +645,7 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Transición sugerida.** “Cuando cantidad, ritmo y diversidad crecen, estas mismas preguntas se organizan mediante seis diagnósticos”.
 
-## Diapositiva 27. Big Data: seis V, seis diagnósticos
+## Diapositiva 29. Big Data: seis V, seis diagnósticos
 
 **Correspondencia con el libro.** Capítulo 2, §2.3.7; capítulo 1, §1.3.5 como antecedente de cinco V. El capítulo 2 incorpora variabilidad.
 
@@ -635,7 +667,7 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Transición sugerida.** “Sea pequeño o grande, un resultado confiable debe poder reconstruirse y auditarse”.
 
-## Diapositiva 28. Herramientas y reproducibilidad
+## Diapositiva 30. Herramientas y reproducibilidad
 
 **Correspondencia con el libro.** Capítulo 1, §1.1.4; capítulo 2, §§2.4, 2.4.1-2.4.2 y 2.4.5-2.4.7.
 
@@ -657,7 +689,7 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Transición sugerida.** “Apliquemos ahora toda la formulación a un caso único y coherente de movilidad”.
 
-## Diapositiva 29. Caso movilidad: formulación coherente
+## Diapositiva 31. Caso movilidad: formulación coherente
 
 **Correspondencia con el libro.** Capítulo 1, §1.1.6; capítulo 2, §§2.1.3-2.1.5 y §2.3.8.
 
@@ -679,7 +711,7 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Transición sugerida.** “La ficha se convierte ahora en una cadena operativa que preserva la frontera entre recomendación y autoridad”.
 
-## Diapositiva 30. Movilidad: evidencia, recomendación y autoridad
+## Diapositiva 32. Movilidad: evidencia, recomendación y autoridad
 
 **Correspondencia con el libro.** Capítulo 1, §§1.1.5-1.1.6 y §1.4.4; capítulo 2, §§2.1.2, 2.1.4 y 2.2.5.
 
@@ -701,7 +733,7 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Transición sugerida.** “Una misma cadena contiene tareas distintas; la tabla siguiente vuelve a separarlas por producto y evaluación”.
 
-## Diapositiva 31. Del caso amplio a tareas concretas
+## Diapositiva 33. Del caso amplio a tareas concretas
 
 **Correspondencia con el libro.** Capítulo 1, §§1.1.5-1.1.6; capítulo 2, §§2.1.1, 2.1.5 y 2.2.4.
 
@@ -723,7 +755,7 @@ El caso transversal es una empresa de **movilidad urbana**. Se conservan unidad 
 
 **Transición sugerida.** “Antes de confiar en el pronóstico, auditaremos el fallo que más fácilmente produce resultados extraordinarios e irreales: usar futuro”.
 
-## Diapositiva 32. Fuga temporal: saber hoy lo que mañana ocurrió
+## Diapositiva 34. Fuga temporal: saber hoy lo que mañana ocurrió
 
 **Correspondencia con el libro.** Capítulo 1, §§1.1.3, 1.1.6 y §1.4.5; capítulo 2, §§2.1.3-2.1.5 y tiempos de evento, recepción y decisión en §2.3.6.
 
@@ -783,7 +815,7 @@ Ejemplo oral obligatorio: “Para decidir a las 09:00 sobre 09:00-09:30, un GPS 
 
 **Transición sugerida.** “La actividad reunirá unidad, decisión, fuentes, baseline y este control temporal en una ficha revisable”.
 
-## Diapositiva 33. Actividad guiada: ficha del problema
+## Diapositiva 35. Actividad guiada: ficha del problema
 
 **Correspondencia con el libro.** Capítulo 1, §1.1.6 y actividad de reflexión; capítulo 2, §§2.1.1-2.1.5, §2.3.8 y actividad integradora. La actividad adapta esos contenidos a movilidad; no reproduce una actividad homónima del libro.
 
@@ -805,7 +837,7 @@ Ejemplo oral obligatorio: “Para decidir a las 09:00 sobre 09:00-09:30, un GPS 
 
 **Transición sugerida.** “La revisión no premiará complejidad: buscará correspondencia y límites explícitos”.
 
-## Diapositiva 34. Criterios de revisión
+## Diapositiva 36. Criterios de revisión
 
 **Correspondencia con el libro.** Capítulo 2, método de revisión de §2.1.1, §§2.1.3-2.1.5 y criterios de la actividad [AGUA-01], adaptados a movilidad.
 
@@ -827,7 +859,7 @@ Ejemplo oral obligatorio: “Para decidir a las 09:00 sobre 09:00-09:30, un GPS 
 
 **Transición sugerida.** “La puesta en común comprobará si esas elecciones resisten una explicación breve y preguntas de contraste”.
 
-## Diapositiva 35. Puesta en común
+## Diapositiva 37. Puesta en común
 
 **Correspondencia con el libro.** Capítulo 2, §§2.1.3-2.1.5, §2.2.4 sobre hipótesis y §2.2.5 sobre revisión y responsabilidad.
 
@@ -849,7 +881,7 @@ Ejemplo oral obligatorio: “Para decidir a las 09:00 sobre 09:00-09:30, un GPS 
 
 **Transición sugerida.** “Las defensas permiten recuperar siete ideas textuales que organizan toda la clase”.
 
-## Diapositiva 36. Síntesis: siete ideas para conservar
+## Diapositiva 38. Síntesis: siete ideas para conservar
 
 **Correspondencia con el libro.** Capítulo 1, síntesis y §§1.1.1, 1.1.4-1.1.6; capítulo 2, síntesis. La diapositiva contiene exactamente siete ideas textuales.
 
@@ -871,7 +903,7 @@ Ejemplo oral obligatorio: “Para decidir a las 09:00 sobre 09:00-09:30, un GPS 
 
 **Transición sugerida.** “La última figura reúne esas siete ideas en una sola cadena con controles y retorno”.
 
-## Diapositiva 37. Síntesis visual: la cadena completa
+## Diapositiva 39. Síntesis visual: la cadena completa
 
 **Correspondencia con el libro.** Capítulo 1, ciclo general y síntesis; capítulo 2, síntesis del ciclo de vida.
 
@@ -897,7 +929,7 @@ Interpretación válida: evidencia depende de formulación, procedencia, represe
 
 **Transición sugerida.** “Las lecturas permiten profundizar los eslabones; la última lámina indica qué revisar y qué producto continuar”.
 
-## Diapositiva 38. Lecturas y recursos
+## Diapositiva 40. Lecturas y recursos
 
 **Correspondencia con el libro.** Capítulo 1, §§1.1.1, 1.1.4-1.1.6; capítulo 2, §§2.1-2.4, con el énfasis textual indicado en la diapositiva.
 

@@ -26,7 +26,7 @@ Al finalizar, podremos:
 - distinguir dato, representación, modelo, evidencia y decisión;
 - diferenciar descripción, predicción y prescripción;
 - formular unidad, población, alcance y horizonte antes de modelar;
-- explicar workflow, KDD, CRISP-DM, procedencia y reproducibilidad;
+- explicar el Descubrimiento de Conocimiento en Bases de Datos (KDD, por *Knowledge Discovery in Databases*) y el Proceso Estándar Intersectorial para Minería de Datos (CRISP-DM, por *Cross-Industry Standard Process for Data Mining*), además de procedencia y reproducibilidad;
 - especificar un problema de movilidad con unidad **zona-franja**.
 
 ---
@@ -310,6 +310,8 @@ Un **producto mínimo evaluable** es el artefacto más pequeño que permite prob
 
 # KDD: del dato al conocimiento validado
 
+**KDD** significa **Descubrimiento de Conocimiento en Bases de Datos**, del inglés *Knowledge Discovery in Databases*.
+
 **Diagrama iterativo:** `selección → preprocesamiento → transformación → minería de datos → interpretación y evaluación`, con retorno hacia preprocesamiento.
 
 - La minería es una etapa dentro de KDD, no un sinónimo del proceso completo.
@@ -321,7 +323,23 @@ Evitar el salto: `resultado → patrón → hallazgo validado → regla aprobada
 
 ---
 
+# Etapas de KDD explicadas
+
+| Etapa | Qué se hace | Qué debe quedar |
+|---|---|---|
+| Selección | Elegir fuentes, población, unidad y variables pertinentes | Datos relevantes y alcance justificado |
+| Preprocesamiento | Examinar faltantes, errores, duplicados, sesgos y consistencia | Datos con calidad conocida y decisiones registradas |
+| Transformación | Agregar, codificar, escalar o construir atributos | Representación adecuada para el análisis |
+| Minería de datos | Aplicar métodos para encontrar patrones o ajustar modelos | Resultados candidatos, no conocimiento definitivo |
+| Interpretación y evaluación | Contrastar validez, novedad, utilidad y limitaciones | Hallazgos defendibles o razones para iterar |
+
+**KDD convierte datos seleccionados en conocimiento evaluado, no solo en resultados computacionales.**
+
+---
+
 # CRISP-DM: organizar el proyecto completo
+
+**CRISP-DM** significa **Proceso Estándar Intersectorial para Minería de Datos**, del inglés *Cross-Industry Standard Process for Data Mining*.
 
 **Diagrama circular:** `comprensión del problema → comprensión de datos → preparación → modelado → evaluación → despliegue o entrega → comprensión del problema`.
 
@@ -331,6 +349,21 @@ Evitar el salto: `resultado → patrón → hallazgo validado → regla aprobada
 - Operación, monitoreo, incidentes y retirada retroalimentan el ciclo.
 
 **CRISP-DM no termina al publicar un modelo.**
+
+---
+
+# Etapas de CRISP-DM explicadas
+
+| Etapa | Qué se hace | Qué debe quedar |
+|---|---|---|
+| Comprensión del problema | Acordar necesidad, usuarios, acciones, éxito y restricciones | Ficha del problema y criterios de aceptación |
+| Comprensión de datos | Inventariar fuentes, significado, cobertura, calidad y riesgos | Diccionario, perfil y límites conocidos |
+| Preparación | Limpiar, integrar, transformar y construir la tabla analítica | Datos versionados y reproducibles |
+| Modelado | Crear baseline, entrenar candidatos y registrar experimentos | Modelos comparables y trazables |
+| Evaluación | Contrastar desempeño técnico, utilidad, equidad y riesgo | Decisión de continuar, modificar o detener |
+| Despliegue o entrega | Integrar el resultado en su uso real y observar sus efectos | Producto, monitoreo, responsables y retirada |
+
+**Las fases orientan el proyecto, pero permiten retornos cuando la evidencia contradice los supuestos.**
 
 ---
 

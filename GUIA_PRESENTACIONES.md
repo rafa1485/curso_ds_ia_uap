@@ -43,4 +43,12 @@ pdflatex Clase_01_Fundamentos_de_IA_agentes_y_racionalidad.tex
 pdflatex Clase_01_Fundamentos_de_IA_agentes_y_racionalidad.tex
 ```
 
+## Inteligencia Artificial, semana 2
+
+```bash
+cd MATERIAL_CURSOS/Clases/Inteligencia_Artificial/Semana_02
+pdflatex Clase_02_Representacion_y_busqueda_en_espacios_de_estados.tex
+pdflatex Clase_02_Representacion_y_busqueda_en_espacios_de_estados.tex
+```
+
 La segunda ejecucion actualiza correctamente la numeracion total de diapositivas. Los PDF se generan en los respectivos directorios de cada clase.

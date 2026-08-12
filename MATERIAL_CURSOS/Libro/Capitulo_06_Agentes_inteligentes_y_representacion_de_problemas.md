@@ -159,7 +159,67 @@ $$
 VEIP=\mathbb{E}_I\left[\max_a\mathbb{E}(J\mid I,a)\right]-\max_a\mathbb{E}(J\mid a).
 $$
 
-El valor es no negativo si observar no tiene costo y no obliga a actuar, pero la información real puede ser imperfecta, tardía o costosa. Obtener más datos no siempre es racional; su mejora esperada debe superar adquisición y demora.
+La sigla **VEIP** significa **valor esperado de la información perfecta**. La fórmula compara el mejor desempeño esperado en dos situaciones: decidir después de conocer $I$ y decidir sin conocerlo. $J$ es la medida de desempeño que se desea maximizar; $a$ representa una acción factible; e $I$ es una observación que revela sin error la incertidumbre relevante antes de actuar. La distribución de $I$ representa lo que el agente cree posible con la información que posee en ese momento.
+
+El primer término,
+
+$$
+\mathbb{E}_I\left[\max_a\mathbb{E}(J\mid I,a)\right],
+$$
+
+se evalúa de adentro hacia afuera. Primero se supone que la observación tomó un valor concreto $I=i$. Para cada acción se calcula $\mathbb{E}(J\mid I=i,a)$, porque aun con esa observación pueden quedar otras fuentes de azar. Luego se elige la acción con mayor desempeño esperado para ese valor observado. Finalmente se promedia el resultado óptimo sobre todos los valores que podría tomar $I$. Si $I$ es discreta, este término puede escribirse como
+
+$$
+\sum_i P(I=i)\max_a\mathbb{E}(J\mid I=i,a).
+$$
+
+Por tanto, la acción puede depender de la información recibida: ante $I=i_1$ se puede elegir $a_1$, y ante $I=i_2$, otra acción $a_2$. En términos de políticas, el primer término evalúa la mejor regla contingente $a(I)$.
+
+El segundo término,
+
+$$
+\max_a\mathbb{E}(J\mid a),
+$$
+
+es el mejor desempeño esperado con la información actual. Primero se promedia la consecuencia de cada acción sobre los estados todavía desconocidos y después se selecciona una única acción. La ubicación del máximo es decisiva: en el primer término se observa y luego se elige; en el segundo se elige sin poder adaptar la acción al valor de $I$. En general,
+
+$$
+\mathbb{E}_I\left[\max_a\mathbb{E}(J\mid I,a)\right]
+\geq
+\max_a\mathbb{E}(J\mid a),
+$$
+
+porque un agente que recibe información siempre puede ignorarla y ejecutar la acción que habría elegido sin observar. La posibilidad de adaptar la decisión puede mejorar el desempeño y, si la misma acción es óptima para todos los valores de $I$, lo deja igual. Esta es la razón por la que el VEIP es no negativo cuando observar no tiene costo, no demora la decisión y no obliga a actuar.
+
+El ejemplo de la falla permite calcular cada término. Para mantener la convención de maximizar, sea $J=-C$, donde $C$ es el costo. Sin información perfecta hay dos acciones:
+
+| Acción | Costo si hay falla | Costo si no hay falla | Costo esperado | Desempeño esperado |
+|---|---:|---:|---:|---:|
+| Inspeccionar | 10 | 10 | $0{,}30(10)+0{,}70(10)=10$ | $-10$ |
+| No inspeccionar | 100 | 0 | $0{,}30(100)+0{,}70(0)=30$ | $-30$ |
+
+El segundo término vale entonces
+
+$$
+\max_a\mathbb{E}(J\mid a)=\max\{-10,-30\}=-10.
+$$
+
+Con información perfecta, el agente inspecciona cuando sabe que existe la falla y no inspecciona cuando sabe que no existe. El desempeño es $-10$ en el primer caso y $0$ en el segundo. Por ello,
+
+$$
+\mathbb{E}_I\left[\max_a\mathbb{E}(J\mid I,a)\right]
+=0{,}30(-10)+0{,}70(0)=-3,
+$$
+
+y
+
+$$
+VEIP=(-3)-(-10)=7.
+$$
+
+Las 7 unidades representan la reducción máxima de costo esperado que podría aportar conocer con certeza si existe la falla antes de decidir. Equivalen a pasar de un costo esperado de 10 a uno de 3. En consecuencia, no sería racional pagar más de 7 unidades por esa información perfecta bajo los supuestos del ejemplo. Si obtenerla costara 4, su valor neto sería $7-4=3$; si costara 9, su valor neto sería negativo.
+
+El VEIP es una cota superior, no el valor automático de cualquier sensor o prueba. La información real puede ser imperfecta, tardía o costosa. Una prueba con falsos positivos y falsos negativos cambia las probabilidades pero no revela el estado; su valor se calcula promediando las decisiones óptimas posteriores a cada resultado posible y suele ser menor que el VEIP. Además deben restarse el costo de adquisición, el costo de procesar el dato y las pérdidas ocasionadas por esperar. Obtener más datos solo es racional cuando la mejora esperada de la decisión supera esos costos.
 
 También debe evitarse el sesgo de resultado: juzgar solo por éxito o fracaso. Una auditoría correcta reconstruye percepciones, modelo, alternativas y restricciones disponibles en el instante de decisión. Esta distinción prepara el análisis de utilidad y decisiones bajo incertidumbre del capítulo 8.
 
