@@ -35,6 +35,16 @@ pdflatex Clase_01_Introduccion_a_la_Ciencia_de_Datos.tex
 pdflatex Clase_01_Introduccion_a_la_Ciencia_de_Datos.tex
 ```
 
+## Data Science, semana 2
+
+```bash
+cd MATERIAL_CURSOS/Clases/Data_Science/Semana_02
+pdflatex Clase_02_Adquisicion_comprension_y_preparacion_inicial_de_datos.tex
+pdflatex Clase_02_Adquisicion_comprension_y_preparacion_inicial_de_datos.tex
+```
+
+El taller asociado se encuentra en `Taller_Clase_02_Movilidad.ipynb`. Su modo predeterminado procesa una semana consecutiva de enero de 2024 y requiere acceso a las fuentes públicas NYC TLC y NOAA.
+
 ## Inteligencia Artificial, semana 1
 
 ```bash

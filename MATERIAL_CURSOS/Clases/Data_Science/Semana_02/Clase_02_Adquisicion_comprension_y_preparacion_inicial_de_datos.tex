@@ -1,0 +1,685 @@
+% Compilar desde este directorio con:
+% pdflatex Clase_02_Adquisicion_comprension_y_preparacion_inicial_de_datos.tex
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+
+\tikzset{
+  flow/.style={-{Stealth[length=2.4mm]},thick,draw=UAPNavy},
+  datum/.style={draw=UAPGold,fill=UAPGold!16,rounded corners=2pt,align=center,minimum height=8mm},
+  process/.style={draw=UAPTeal,fill=UAPTeal!12,rounded corners=3pt,very thick,align=center,minimum height=10mm},
+  decision/.style={draw=UAPNavy,fill=UAPNavy!9,rounded corners=3pt,very thick,align=center,minimum height=10mm},
+  card/.style={draw=UAPTeal,fill=UAPLight,rounded corners=3pt,align=center,minimum height=11mm}
+}
+
+\usetheme{Boadilla}
+\usecolortheme{default}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alerted text}{fg=UAPTeal}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.78\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}%
+      \color{UAPGray}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}%
+      \color{UAPGray}\hfill Semana 2 \enspace | \enspace \insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}%
+  }%
+}
+
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\newcommand{\br}{\\}
+\newcommand{\codigo}[1]{\texttt{\detokenize{#1}}}
+
+\title[Data Science · Clase 2]{Adquisición, comprensión y preparación inicial de datos}
+\subtitle{De fuentes heterogéneas a una tabla analítica defendible}
+\author{Curso de Data Science}
+\institute{Semana 2 · Clase 2}
+\date{}
+
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+    \vfill
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\Huge\inserttitle\par}
+    \vspace{0.5em}
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\Large\insertsubtitle\par}
+    \vspace{2em}
+    {\color{white}\large\insertauthor\par}
+    {\color{white}\insertinstitute\par}
+    \vfill
+  \end{beamercolorbox}
+\end{frame}
+
+% 2
+\begin{frame}{Propósito y resultados de aprendizaje}
+  \small
+  \textbf{Propósito:} adquirir, comprender y preparar datos sin separar decisiones técnicas de su significado y uso.
+  \begin{block}{Al finalizar, podremos}
+    \begin{itemize}
+      \item distinguir fuente, archivo, tabla, dataset y producto;
+      \item documentar procedencia, unidad, granularidad y regla de una fila;
+      \item evaluar calidad, faltantes, duplicados, claves y cardinalidad;
+      \item integrar viajes, zonas y clima en una tabla \textbf{zona-hora};
+      \item explicar pérdidas de agregación y límites del análisis.
+    \end{itemize}
+  \end{block}
+  \centering Correspondencia: capítulos \textbf{2, 3 y 4} del libro.
+\end{frame}
+
+% 3
+\begin{frame}{La preparación comienza con una pregunta}
+  \begin{alertblock}{Punto de partida}
+    ``Tenemos muchos archivos'' no define un problema de datos.
+  \end{alertblock}
+  Para describir entregas tardías por sucursal-día debemos precisar:
+  \begin{itemize}
+    \item producto esperado: tabla, gráfico o decisión;
+    \item unidad final: sucursal-día;
+    \item población, periodo y exclusiones;
+    \item variables necesarias y momento de disponibilidad.
+  \end{itemize}
+  \centering\alert{La pregunta determina qué adquirir y cómo representarlo.}
+\end{frame}
+
+% 4
+\begin{frame}{Fuente, archivo, tabla, dataset y producto}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.16\textwidth} p{.29\textwidth} X}
+    \toprule
+    Concepto & Función & Ejemplo breve \\
+    \midrule
+    Fuente & Sistema o institución de origen & portal municipal \\
+    Archivo & Objeto de intercambio & \codigo{enero.parquet} \\
+    Tabla & Estructura de filas y columnas & viajes \\
+    Dataset & Colección delimitada y documentada & viajes + diccionario \\
+    Producto & Evidencia destinada a un uso & perfil zona-hora \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{block}{Distinción}
+    Un dataset puede usar varios archivos; el producto es una transformación, no otro nombre para la fuente.
+  \end{block}
+\end{frame}
+
+% 5
+\begin{frame}{Procedencia y linaje}
+  \centering
+  \begin{tikzpicture}[node distance=4mm,scale=.82,transform shape]
+    \node[decision] (f) {Fenómeno};
+    \node[process,right=of f] (c) {Captura};
+    \node[datum,right=of c] (s) {Fuente};
+    \node[process,right=of s] (e) {Extracción};
+    \node[process,right=of e] (t) {Transformación};
+    \node[datum,right=of t] (p) {Producto};
+    \foreach \x/\y in {f/c,c/s,s/e,e/t,t/p}{\draw[flow] (\x)--(\y);}
+  \end{tikzpicture}
+  \vspace{.6em}
+  \begin{itemize}
+    \item Registrar responsable, propósito, URL, acceso, versión y licencia.
+    \item Conservar filtros, conversiones, uniones y artefactos resultantes.
+  \end{itemize}
+  \begin{block}{Dos preguntas}
+    Procedencia: ¿de dónde viene? \quad Linaje: ¿qué le hicimos?
+  \end{block}
+\end{frame}
+
+% 6
+\begin{frame}{Unidad y granularidad}
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \begin{block}{Unidad de análisis}
+        Entidad elemental sobre la que se describe o compara.
+      \end{block}
+    \column{.48\textwidth}
+      \begin{block}{Granularidad}
+        Nivel de detalle temporal, espacial y de entidad.
+      \end{block}
+  \end{columns}
+  \vspace{.5em}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.24\textwidth} X X}
+    \toprule
+    Representación & Unidad & Granularidad \\
+    \midrule
+    ventas & transacción & producto-instante \\
+    resumen & tienda-día & tienda $\times$ día \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \centering\alert{Cambiar granularidad cambia preguntas válidas, dependencias y filas.}
+\end{frame}
+
+% 7
+\begin{frame}{La regla de una fila}
+  \begin{block}{Completar antes de limpiar}
+    \centering\large Una fila representa \rule{5cm}{.4pt}.
+  \end{block}
+  Ejemplo: ``una medición de un sensor en un instante'', no ``un sensor''.
+  \begin{itemize}
+    \item ¿Qué columnas identifican esa unidad?
+    \item ¿Una clave repetida es repetición, corrección o duplicado?
+    \item ¿Listas, intervalos o medidas repetidas rompen la regla?
+  \end{itemize}
+  \begin{alertblock}{Riesgo}
+    Sin esta regla, \codigo{drop_duplicates()} puede borrar observaciones legítimas.
+  \end{alertblock}
+\end{frame}
+
+% 8
+\begin{frame}{Tipos físicos y tipos semánticos}
+  \small
+  \begin{tabularx}{\textwidth}{>{\ttfamily}p{.19\textwidth} p{.22\textwidth} X}
+    \toprule
+    \normalfont\textbf{Valor} & \textbf{Tipo físico} & \textbf{Tipo semántico correcto} \\
+    \midrule
+    00123 & texto & identificador nominal \\
+    2024-01-05 & texto & fecha \\
+    1, 2, 3 & entero & categoría ordinal \\
+    -73.98 & decimal & longitud geográfica \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{block}{Principio}
+    El tipo físico permite operaciones; el semántico determina cuáles tienen sentido.
+  \end{block}
+  \centering Promediar códigos postales es computable, pero inválido.
+\end{frame}
+
+% 9
+\begin{frame}{Calidad apta al propósito}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth} X}
+    \toprule
+    Dimensión & Pregunta de control \\
+    \midrule
+    Completitud & ¿Faltan campos o unidades necesarias? \\
+    Validez & ¿Cumple dominio, formato y rango? \\
+    Consistencia & ¿Concuerdan campos y fuentes? \\
+    Unicidad & ¿La clave identifica una fila? \\
+    Oportunidad & ¿Llega antes de usarla? \\
+    Cobertura & ¿Representa población, lugar y periodo? \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \centering\alert{Un dato puede ser correcto y aun así no ser apto.}
+\end{frame}
+
+% 10
+\begin{frame}{Faltantes: ausencia con significado}
+  Un nulo puede significar:
+  \begin{itemize}
+    \item no medido, no aplicable o desconocido;
+    \item fallo de captura o unión sin correspondencia;
+    \item valor censurado o todavía no disponible.
+  \end{itemize}
+  \begin{block}{Diagnóstico mínimo}
+    Proporción por variable, patrón por grupo y periodo, y relación con el proceso de captura.
+  \end{block}
+  \centering\alert{No imputar hasta explicar el mecanismo y el costo de equivocarse.}
+\end{frame}
+
+% 11
+\begin{frame}{Duplicados: definir antes de eliminar}
+  \begin{columns}[T]
+    \column{.32\textwidth}\begin{block}{Exacto}Todas las columnas coinciden.\end{block}
+    \column{.32\textwidth}\begin{block}{De clave}Coincide la clave; difieren atributos.\end{block}
+    \column{.32\textwidth}\begin{block}{De entidad}Mismo objeto sin clave común.\end{block}
+  \end{columns}
+  \vspace{.6em}
+  Ejemplo: dos lecturas del mismo paciente-hora pueden ser duplicados, reintentos o mediciones válidas.
+  \begin{alertblock}{Decisión documentada}
+    Conservar, consolidar, versionar o excluir según la regla de una fila y el proceso generador.
+  \end{alertblock}
+\end{frame}
+
+% 12
+\begin{frame}{Claves y cardinalidad}
+  \begin{itemize}
+    \item \concepto{Clave primaria}: identifica filas en una tabla.
+    \item \concepto{Clave foránea}: referencia otra tabla.
+    \item \concepto{Cardinalidad}: \codigo{one_to_one}, \codigo{many_to_one}, \codigo{one_to_many} o \codigo{many_to_many}.
+  \end{itemize}
+  \begin{block}{Ejemplo}
+    Muchas ventas pertenecen a una tienda: ventas $\rightarrow$ tiendas es \textbf{many-to-one}.
+  \end{block}
+  \centering\alert{Una unión many-to-many accidental multiplica filas y totales.}
+\end{frame}
+
+% 13
+\begin{frame}{Integración segura}
+  \begin{enumerate}
+    \item Declarar unidad y clave de cada tabla.
+    \item Verificar unicidad del lado que debe ser ``uno''.
+    \item Validar cardinalidad en el código.
+    \item Medir coincidencias y no coincidencias.
+    \item Comprobar filas, unidades y totales antes y después.
+  \end{enumerate}
+  \vfill
+  \begin{block}{Principio}
+    \centering Toda unión es una hipótesis sobre correspondencia.
+  \end{block}
+\end{frame}
+
+% 14
+\begin{frame}{Integración temporal}
+  \centering
+  \begin{tikzpicture}[node distance=8mm,scale=.9,transform shape]
+    \node[datum] (ev) {Tiempo del evento};
+    \node[process,right=of ev] (reg) {Tiempo de registro};
+    \node[decision,right=of reg] (disp) {Disponibilidad};
+    \draw[flow] (ev)--(reg); \draw[flow] (reg)--(disp);
+  \end{tikzpicture}
+  \vspace{.7em}
+  \begin{itemize}
+    \item Interpretar zona horaria de origen y convertir a una común.
+    \item Definir intervalos, bordes y horario de verano.
+    \item Agregar fuentes a granularidad compatible.
+  \end{itemize}
+  \begin{alertblock}{No equivalencia}
+    \centering 10:00 UTC $\neq$ 10:00 America/New\_York
+  \end{alertblock}
+\end{frame}
+
+% 15
+\begin{frame}{Integración espacial}
+  Una relación espacial puede usar:
+  \begin{itemize}
+    \item identificador administrativo estable;
+    \item punto dentro de polígono;
+    \item zona más cercana o intersección.
+  \end{itemize}
+  \begin{block}{Registrar siempre}
+    Sistema de referencia de coordenadas (CRS), versión de límites y casos sin zona.
+  \end{block}
+  \centering\alert{Un centroide resume geometría; no reemplaza el polígono.}
+\end{frame}
+
+% 16
+\begin{frame}{Agregación y pérdida de información}
+  \[
+    n_g=\sum_i \mathbb{1}(G_i=g), \qquad
+    \bar{x}_g=\frac{1}{n_g}\sum_{i:G_i=g}x_i
+  \]
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \begin{block}{Ganamos}
+        Comparabilidad, menor volumen y unidad útil para la pregunta.
+      \end{block}
+    \column{.48\textwidth}
+      \begin{block}{Perdemos}
+        Orden intra-grupo, detalle individual y reconstrucción de casos.
+      \end{block}
+  \end{columns}
+  \vfill
+  \centering Conservar conteo, dispersión, cobertura y regla junto a la media.
+\end{frame}
+
+% 17
+\begin{frame}{Reproducibilidad desde la adquisición}
+  Una ejecución reconstruible registra:
+  \begin{itemize}
+    \item URL, fecha de acceso, periodo y parámetros;
+    \item versiones de librerías y formato;
+    \item código ordenado de inicio a fin;
+    \item validaciones y decisiones de exclusión;
+    \item salida con esquema, clave y procedencia.
+  \end{itemize}
+  \begin{block}{Notebook de la clase}
+    \centering\codigo{Taller_Clase_02_Movilidad.ipynb}
+  \end{block}
+\end{frame}
+
+% 18
+\begin{frame}{Del concepto al taller}
+  \begin{block}{Pregunta descriptiva}
+    ¿Cómo varían los viajes Yellow Taxi reportados por zona de origen y hora, y qué asociación muestran con el clima?
+  \end{block}
+  \centering
+  \begin{tikzpicture}[node distance=6mm,scale=.86,transform shape]
+    \node[datum] (v) {TLC viajes};
+    \node[datum,below=of v] (z) {Zonas + shapefile};
+    \node[process,right=of v,yshift=-5mm] (a) {Zona-hora};
+    \node[datum,right=of a] (c) {NOAA clima};
+    \draw[flow] (v)--(a); \draw[flow] (z)--(a); \draw[flow] (c)--(a);
+  \end{tikzpicture}
+  \vfill
+  \alert{Viajes reportados por TLC $\neq$ demanda total de movilidad.}
+\end{frame}
+
+% 19
+\begin{frame}{Taller 1: fuentes y contrato analítico}
+  \scriptsize
+  \textbf{Notebook:} \codigo{Taller_Clase_02_Movilidad.ipynb}
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.15\textwidth} p{.43\textwidth} X}
+    \toprule
+    Fuente & Archivo / tabla & Unidad original \\
+    \midrule
+    NYC TLC & Yellow Taxi enero 2024, Parquet & viaje reportado \\
+    NYC TLC & \codigo{taxi_zone_lookup.csv} & zona-ID \\
+    NYC TLC & \codigo{taxi_zones.zip}, shapefile & polígono-zona \\
+    NOAA GHCNh & estación USW00094728, PSV & estación-observación \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{block}{Producto}
+    Una fila = \textbf{zona de origen-hora local}; clave: \codigo{PULocationID, hora}.
+  \end{block}
+\end{frame}
+
+% 20
+\begin{frame}[fragile]{Taller 2: construir la URL TLC}
+\begin{verbatim}
+def construir_url_tlc(tipo, anio, mes):
+    prefijos = {
+        "yellow": "yellow_tripdata",
+        "green": "green_tripdata",
+        "fhv": "fhv_tripdata",
+        "fhvhv": "fhvhv_tripdata",
+    }
+    return ("https://d37ci6vzurychx.cloudfront.net/trip-data/"
+            f"{prefijos[tipo]}_{anio}-{mes:02d}.parquet")
+\end{verbatim}
+  \small Parámetros explícitos hacen visible el periodo y evitan editar URL manualmente.
+\end{frame}
+
+% 21
+\begin{frame}[fragile]{Taller 3: cargar Parquet con proyección}
+\begin{verbatim}
+cols = ["tpep_pickup_datetime", "tpep_dropoff_datetime",
+        "PULocationID", "DOLocationID", "passenger_count",
+        "trip_distance", "fare_amount", "total_amount"]
+url = construir_url_tlc("yellow", 2024, 1)
+viajes = pd.read_parquet(url, columns=cols)
+print(viajes.shape)
+\end{verbatim}
+  \begin{block}{Procedencia}
+    Fuente pública y secundaria, generada con propósito operativo/administrativo.
+  \end{block}
+\end{frame}
+
+% 22
+\begin{frame}[fragile]{Taller 4: inspeccionar antes de transformar}
+\begin{verbatim}
+viajes.info()
+display(viajes.head(3))
+display(viajes.describe(include="all").T)
+print(viajes.dtypes)
+\end{verbatim}
+  \begin{itemize}
+    \item ¿Qué representa una fila y qué rango temporal aparece?
+    \item ¿Los ID son medidas o categorías?
+    \item ¿Hay importes o duraciones imposibles?
+  \end{itemize}
+  \centering\alert{La inspección genera hipótesis; los controles las verifican.}
+\end{frame}
+
+% 23
+\begin{frame}[fragile]{Taller 5: controles de calidad básicos}
+\begin{verbatim}
+clave = ["tpep_pickup_datetime", "tpep_dropoff_datetime",
+         "PULocationID", "DOLocationID", "total_amount"]
+qc = {
+    "nulos_pct": viajes.isna().mean().mul(100),
+    "duplicados_clave": viajes.duplicated(clave).sum(),
+    "duracion_no_positiva": (viajes.tpep_dropoff_datetime <=
+                              viajes.tpep_pickup_datetime).sum(),
+}
+\end{verbatim}
+  \small La clave es una aproximación operativa, no un ID oficial de viaje.
+\end{frame}
+
+% 24
+\begin{frame}[fragile]{Taller 6: validez y filtros explícitos}
+\begin{verbatim}
+validos = (
+    viajes["PULocationID"].notna()
+    & (viajes["trip_distance"] >= 0)
+    & (viajes["total_amount"] >= 0)
+    & (viajes["tpep_dropoff_datetime"] >
+       viajes["tpep_pickup_datetime"])
+)
+viajes_limpios = viajes.loc[validos].copy()
+\end{verbatim}
+  \small El catálogo TLC validará los ID al unir. Plausibilidad no equivale a verdad.
+\end{frame}
+
+% 25
+\begin{frame}[fragile]{Taller 7: zonas y unión many-to-one}
+\begin{verbatim}
+zones_url = ("https://d37ci6vzurychx.cloudfront.net/"
+             "misc/taxi_zone_lookup.csv")
+zonas = pd.read_csv(zones_url)
+assert zonas["LocationID"].is_unique
+viajes_z = viajes_limpios.merge(
+    zonas, left_on="PULocationID", right_on="LocationID",
+    how="left", validate="many_to_one", indicator=True)
+\end{verbatim}
+  \small Auditar \codigo{_merge}: cada viaje encuentra como máximo una zona.
+\end{frame}
+
+% 26
+\begin{frame}[fragile]{Taller 8: cobertura y pérdidas de la unión}
+\begin{verbatim}
+cobertura = viajes_z["_merge"].value_counts(dropna=False)
+sin_zona = viajes_z.loc[
+    viajes_z["_merge"] == "left_only", "PULocationID"
+].value_counts()
+assert len(viajes_z) == len(viajes_limpios)
+print(cobertura, sin_zona.head())
+\end{verbatim}
+  \begin{block}{Interpretación}
+    Una unión izquierda conserva viajes, pero puede dejar atributos nulos.
+  \end{block}
+\end{frame}
+
+% 27
+\begin{frame}[fragile]{Taller 9: shapefile y geometría}
+\begin{verbatim}
+geo_url = ("https://d37ci6vzurychx.cloudfront.net/"
+           "misc/taxi_zones.zip")
+zonas_geo = gpd.read_file(f"zip://{geo_url}")
+zonas_geo["LocationID"] = zonas_geo["LocationID"].astype(int)
+zonas_geo = zonas_geo.to_crs(4326)
+assert zonas_geo["LocationID"].is_unique
+\end{verbatim}
+  \small El lookup aporta nombres; el shapefile, polígonos. Registrar CRS y versión.
+\end{frame}
+
+% 28
+\begin{frame}[fragile]{Taller 10: construir zona-hora}
+\begin{verbatim}
+viajes_z["hora"] = (
+    viajes_z["tpep_pickup_datetime"]
+    .dt.tz_localize("America/New_York", ambiguous="NaT",
+                    nonexistent="shift_forward")
+    .dt.floor("h")
+)
+zona_hora = (viajes_z.groupby(["PULocationID", "hora"])
+  .agg(viajes_reportados=("PULocationID", "size"),
+       distancia_media=("trip_distance", "mean")).reset_index())
+\end{verbatim}
+  \small Cambia la unidad de viaje a zona-hora y elimina detalle individual.
+\end{frame}
+
+% 29
+\begin{frame}[fragile]{Taller 11: NOAA e interpretación UTC}
+\begin{verbatim}
+meteo_url = ("https://www.ncei.noaa.gov/oa/global-historical-"
+  "climatology-network/hourly/access/by-year/2024/psv/"
+  "GHCNh_USW00094728_2024.psv")
+clima = pd.read_csv(meteo_url, sep="|", low_memory=False)
+clima["DATE_UTC"] = pd.to_datetime(clima["DATE"], utc=True)
+clima["DATE_NY"] = clima["DATE_UTC"].dt.tz_convert(
+    "America/New_York")
+\end{verbatim}
+  \small Convertimos un instante UTC; no solo la etiqueta de una hora ingenua.
+\end{frame}
+
+% 30
+\begin{frame}[fragile]{Taller 12: clima horario de enero}
+\begin{verbatim}
+inicio = pd.Timestamp("2024-01-01", tz="America/New_York")
+fin = pd.Timestamp("2024-02-01", tz="America/New_York")
+clima_mes = clima[clima["DATE_NY"].between(
+    inicio, fin, inclusive="left")].copy()
+clima_mes["hora"] = clima_mes["DATE_NY"].dt.floor("h")
+vars_num = ["temperature", "relative_humidity",
+            "wind_speed", "precipitation"]
+clima_h = clima_mes.groupby("hora")[vars_num].mean().reset_index()
+\end{verbatim}
+  \small Promediar muestras subhorarias pierde extremos y secuencia.
+\end{frame}
+
+% 31
+\begin{frame}[fragile]{Taller 13: unir zona-hora con clima}
+\begin{verbatim}
+assert clima_h["hora"].is_unique
+analitica = zona_hora.merge(
+    clima_h, on="hora", how="left",
+    validate="many_to_one", indicator="union_clima")
+print(analitica["union_clima"].value_counts())
+print(analitica.isna().mean()
+      .sort_values(ascending=False).head())
+\end{verbatim}
+  \small Una estación para muchas zonas supone representatividad espacial.
+\end{frame}
+
+% 32
+\begin{frame}[fragile]{Taller 14: perfil horario de viajes reportados}
+\begin{verbatim}
+perfil_hora = (analitica.assign(
+    hora_dia=analitica["hora"].dt.hour)
+    .groupby("hora_dia", as_index=False)
+    ["viajes_reportados"].sum())
+plt.plot(perfil_hora["hora_dia"],
+         perfil_hora["viajes_reportados"], marker="o")
+plt.ylabel("Viajes Yellow Taxi reportados")
+plt.xlabel("Hora local")
+\end{verbatim}
+  \small Describe registros TLC de enero de 2024, no demanda total.
+\end{frame}
+
+% 33
+\begin{frame}[fragile]{Taller 15: mapa por zona}
+\begin{verbatim}
+por_zona = (analitica.groupby("PULocationID", as_index=False)
+            ["viajes_reportados"].sum())
+mapa = zonas_geo.merge(
+    por_zona, left_on="LocationID", right_on="PULocationID",
+    how="left", validate="one_to_one")
+mapa.plot(column="viajes_reportados", cmap="YlGnBu",
+          legend=True, missing_kwds={"color": "lightgrey"})
+\end{verbatim}
+  \small Los conteos mezclan actividad, tamaño, cobertura y registro.
+\end{frame}
+
+% 34
+\begin{frame}[fragile]{Taller 16: clima y asociación descriptiva}
+\begin{verbatim}
+por_hora = (analitica.groupby("hora", as_index=False)
+  .agg(viajes_reportados=("viajes_reportados", "sum"),
+       temperatura=("temperature", "first"),
+       precipitacion=("precipitation", "first")))
+plt.scatter(por_hora["temperatura"], por_hora["viajes_reportados"],
+            c=por_hora["precipitacion"], cmap="Blues")
+r = por_hora[
+    ["temperatura", "viajes_reportados"]
+].corr().iloc[0, 1]
+\end{verbatim}
+  \small Hora y calendario pueden confundir. \alert{Correlación no implica causalidad.}
+\end{frame}
+
+% 35
+\begin{frame}[fragile]{Taller 17: guardar un producto reproducible}
+\begin{verbatim}
+analitica = analitica.sort_values(["hora", "PULocationID"])
+assert not analitica.duplicated(
+    ["PULocationID", "hora"]).any()
+alcance = "semana_1_enero_2024" if MODO_CLASE else "enero_2024"
+ruta = Path(tempfile.gettempdir()) / f"zona_hora_{alcance}.parquet"
+analitica.to_parquet(ruta, index=False)
+metadatos = {"unidad": "zona de origen-hora local",
+             "zona_horaria": "America/New_York",
+             "fuentes": [url, zones_url, geo_url, meteo_url]}
+\end{verbatim}
+  \small Entregar controles, exclusiones, versiones y fecha de ejecución.
+\end{frame}
+
+% 36
+\begin{frame}{Producto y evidencia de aprendizaje}
+  \small
+  \textbf{Entregable:} \codigo{Taller_Clase_02_Movilidad.ipynb} ejecutado de inicio a fin.
+  \begin{itemize}
+    \item inventario de cuatro fuentes y procedencia;
+    \item regla de una fila y diccionario semántico mínimo;
+    \item reporte de faltantes, duplicados, validez, cobertura y cardinalidad;
+    \item tabla zona-hora temporal con alcance explícito y clave única;
+    \item perfil horario, mapa y gráfico clima-viajes;
+    \item cinco hallazgos con evidencia y tres límites.
+  \end{itemize}
+  \begin{block}{Criterio}
+    Otra persona puede ejecutar, auditar y explicar cada transformación.
+  \end{block}
+\end{frame}
+
+% 37
+\begin{frame}{Límites y afirmaciones permitidas}
+  Podemos describir \textbf{viajes Yellow Taxi reportados} y asociaciones en el periodo y cobertura analizados.
+  \vspace{.4em}
+  \textbf{No podemos afirmar directamente:}
+  \begin{itemize}
+    \item demanda total de movilidad o solicitudes no atendidas;
+    \item comportamiento de todas las plataformas, personas o meses;
+    \item causalidad del clima sobre los viajes;
+    \item clima idéntico en toda zona por usar una estación;
+    \item exactitud de cada registro por superar controles de plausibilidad.
+  \end{itemize}
+\end{frame}
+
+% 38
+\begin{frame}{Cierre: de datos disponibles a evidencia defendible}
+  \small
+  \begin{enumerate}
+    \item Formular propósito y producto antes de descargar.
+    \item Declarar fuente, procedencia, unidad y regla de una fila.
+    \item Tratar tipos, faltantes y duplicados según significado.
+    \item Validar claves, cardinalidad y cobertura al integrar.
+    \item Alinear tiempo y espacio antes de agregar.
+    \item Documentar pérdidas, límites y cadena reproducible.
+  \end{enumerate}
+  \vfill
+  \begin{block}{Para continuar}
+    Capítulos 2, 3 y 4. Próximo paso: exploración estadística sin exceder lo que los datos representan.
+  \end{block}
+\end{frame}
+
+\end{document}
