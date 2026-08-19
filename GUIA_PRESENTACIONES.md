@@ -53,6 +53,14 @@ pdflatex Clase_01_Fundamentos_de_IA_agentes_y_racionalidad.tex
 pdflatex Clase_01_Fundamentos_de_IA_agentes_y_racionalidad.tex
 ```
 
+### Resolucion del agente didactico de movilidad
+
+```bash
+cd MATERIAL_CURSOS/Clases/Inteligencia_Artificial/Semana_01
+pdflatex Presentacion_resolucion_agente_didactico_movilidad.tex
+pdflatex Presentacion_resolucion_agente_didactico_movilidad.tex
+```
+
 ## Inteligencia Artificial, semana 2
 
 ```bash

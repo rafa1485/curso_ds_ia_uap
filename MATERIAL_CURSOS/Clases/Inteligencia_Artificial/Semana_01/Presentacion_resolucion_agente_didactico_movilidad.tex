@@ -1,0 +1,573 @@
+% Compilar dos veces con pdflatex.
+\documentclass[aspectratio=169,11pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit}
+
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+
+\tikzset{
+  flow/.style={-{Stealth[length=2.4mm]},thick,draw=UAPNavy},
+  card/.style={draw=UAPTeal,fill=UAPLight,rounded corners=3pt,align=center,minimum height=11mm},
+  data/.style={draw=UAPGold,fill=UAPGold!15,rounded corners=2pt,align=center,minimum height=9mm},
+  safe/.style={draw=UAPGold,fill=UAPGold!12,rounded corners=3pt,align=center,minimum height=10mm},
+  step/.style={circle,draw=UAPTeal,fill=UAPTeal!12,very thick,minimum size=9mm,font=\bfseries}
+}
+
+\usetheme{Boadilla}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alerted text}{fg=UAPTeal}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{%
+  \leavevmode\hbox{%
+    \begin{beamercolorbox}[wd=.72\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}%
+      \color{UAPGray}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.28\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}%
+      \color{UAPGray}\hfill Semana 1 \enspace | \enspace \insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}}}
+
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\newcommand{\accion}[1]{\texttt{#1}}
+\title[IA · Agente didáctico]{Resolución: agente didáctico de movilidad}
+\subtitle{Racionalidad, PEAS y límites de una recomendación en replay}
+\author{Curso de Inteligencia Artificial}
+\institute{Semana 1 · Resolución de actividad}
+\date{}
+
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+    \vfill {\Huge\bfseries\inserttitle\par}\vspace{.5em}
+    {\color{UAPGold}\Large\insertsubtitle\par}\vspace{2em}
+    {\color{white}\large\insertauthor\par\insertinstitute\par}\vfill
+  \end{beamercolorbox}
+\end{frame}
+
+% 2
+\begin{frame}{Propósito de la resolución}
+  Especificar un \concepto{asistente operativo didáctico} para una zona-hora simulada de Nueva York.
+  \begin{block}{Qué se practica}
+    Agente, racionalidad, PEAS, percepción, acción y propiedades del ambiente.
+  \end{block}
+  \begin{itemize}
+    \item Convertir evidencia histórica parcial en una recomendación explicable.
+    \item Separar datos, estado interno y realidad no observada.
+    \item Aplicar corte temporal, capacidad simulada y falla segura.
+  \end{itemize}
+  \alert{No se busca demostrar una mejora operativa real.}
+\end{frame}
+
+% 3
+\begin{frame}{Caso y límite de interpretación}
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \begin{block}{TLC sí registra}
+        Viajes Yellow Taxi \textbf{realizados y reportados}: zona, hora y \textit{pickups} observados.
+      \end{block}
+      No registra demanda total, solicitudes no atendidas, espera ni vehículos libres.
+    \column{.48\textwidth}
+      \begin{block}{NOAA sí aporta}
+        Observaciones meteorológicas de \textbf{una estación}.
+      \end{block}
+      No representa el clima espacial completo de todas las zonas de Nueva York.
+  \end{columns}
+  \vfill
+  \begin{alertblock}{Conclusión obligatoria}
+    Actividad observada no equivale a demanda completa ni a necesidad insatisfecha.
+  \end{alertblock}
+\end{frame}
+
+% 4
+\begin{frame}{Los datos no están en tiempo real}
+  \begin{center}
+    \begin{tikzpicture}[node distance=9mm]
+      \node[data,text width=4.0cm] (files) {Archivos TLC\\históricos y publicados después};
+      \node[card,text width=4.0cm,right=of files] (course) {Uso didáctico\\en reproducción histórica};
+      \draw[flow] (files)--node[above,font=\small]{no es un flujo vivo}(course);
+    \end{tikzpicture}
+  \end{center}
+  \begin{itemize}
+    \item El agente real no podría reevaluar la ciudad hora por hora con estos archivos.
+    \item Tampoco podría reaccionar inmediatamente a viajes recién ocurridos.
+    \item Un despliegue requeriría fuentes con latencia conocida y datos de solicitudes, flota, espera, tráfico y ejecución.
+  \end{itemize}
+  \alert{La simulación no transforma TLC en un sensor en vivo.}
+\end{frame}
+
+% 5
+\begin{frame}{Replay: de $h$ hacia $h+1$}
+  \centering
+  \begin{tikzpicture}[node distance=10mm]
+    \node[data,text width=4.2cm] (h) {Datos revelados hasta\\el cierre de $h$};
+    \node[card,text width=4.2cm,right=of h] (hp) {Recomendación simulada\\para la hora $h+1$};
+    \draw[flow] (h)--node[above,font=\bfseries]{replay}(hp);
+  \end{tikzpicture}
+  \vfill
+  \begin{block}{Convención exclusivamente didáctica}
+    El reproductor revela los registros al cierre de cada hora simulada; se supone disponibilidad inmediata de los viajes de $h$.
+  \end{block}
+  \begin{alertblock}{Regla causal}
+    Nunca usar viajes, clima observado, umbrales ni resúmenes de $h+1$ o posteriores para recomendar sobre $h+1$.
+  \end{alertblock}
+\end{frame}
+
+% 6
+\begin{frame}{Cuatro tiempos que no deben confundirse}
+  \small
+  \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash\bfseries}p{.29\textwidth}X}
+    \toprule
+    Tiempo & Significado en el ejercicio \\\midrule
+    Del evento & Momento reportado de inicio o fin; ordena viajes en el replay. \\
+    De publicación real & Momento posterior en que TLC publica el archivo; impide afirmar uso horario real. \\
+    De disponibilidad simulada & Instante artificial en que el replay revela el registro: cierre de su hora. \\
+    Objetivo de la recomendación & Franja $h+1$ para la que se emite la acción, no $h$ ya observada. \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+% 7
+\begin{frame}{Estado real, percepción y estado interno}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.18\textwidth}X X}
+    \toprule
+    Concepto & Contenido & Consecuencia \\\midrule
+    Estado real & Pasajeros, solicitudes, flota, posiciones, tráfico y clima local. & Existe aunque no se observe por completo. \\
+    Percepción & Zona-hora, actividad histórica hasta $h$, clima admisible y capacidad simulada. & Evidencia parcial, ruidosa o faltante; no es flujo vivo. \\
+    Estado interno & Validez, categorías de actividad y clima, prioridad y capacidad restante. & Representación para decidir; no es la realidad. \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+% 8
+\begin{frame}{Sensores lógicos, no columnas físicas}
+  \centering
+  \begin{tikzpicture}[node distance=6mm]
+    \node[data,text width=2.7cm] (tlc) {TLC histórico};
+    \node[data,text width=2.7cm,below=of tlc] (noaa) {NOAA y zonas};
+    \node[card,text width=3.5cm,right=10mm of tlc,yshift=-8mm] (sensor) {Mecanismo lógico\\revela · une · valida\\filtra por corte};
+    \node[safe,text width=3.2cm,right=of sensor] (p) {Percepción derivada\\para la política};
+    \draw[flow] (tlc)--(sensor); \draw[flow] (noaa)--(sensor); \draw[flow] (sensor)--(p);
+  \end{tikzpicture}
+  \vfill
+  \begin{itemize}
+    \item El replay controla qué filas quedan visibles en cada paso.
+    \item Recibe además la capacidad simulada y deriva indicadores de calidad.
+    \item Una columna como \texttt{PULocationID} no es, por sí sola, un sensor.
+  \end{itemize}
+\end{frame}
+
+% 9
+\begin{frame}{Supuestos didácticos}
+  \begin{columns}[T]
+    \column{.49\textwidth}
+      \begin{itemize}
+        \item Unidad: una zona-hora simulada.
+        \item $h$ es la última hora cerrada; $h+1$, la hora objetivo.
+        \item Umbrales \texttt{BAJA}, \texttt{MEDIA}, \texttt{ALTA} se fijan antes de evaluar.
+        \item El archivo puede estar cargado, pero el futuro se enmascara.
+      \end{itemize}
+    \column{.49\textwidth}
+      \begin{itemize}
+        \item NOAA es contexto de estación, no clima zonal exacto.
+        \item Capacidad simulada es un parámetro externo, no flota libre.
+        \item La salida registra política, $h$, $h+1$, evidencia y \texttt{modo\_replay}.
+        \item No se inventan umbrales ni resultados numéricos.
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+% 10
+\begin{frame}{Objetivo y usuario}
+  \begin{block}{Objetivo}
+    Analizar evidencia histórica revelada hasta el cierre de $h$ y recomendar al responsable \accion{OBSERVAR}, \accion{MONITOREAR} o \accion{RECOMENDAR\_REFUERZO} para $h+1$, respetando calidad, corte temporal y capacidad simulada.
+  \end{block}
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \concepto{Usuario directo}\par
+      Responsable de operaciones simulado: revisa la justificación y acepta, posterga o rechaza.
+    \column{.48\textwidth}
+      \concepto{Estado interno}\par
+      Prioridad \accion{BAJA}, \accion{MEDIA} o \accion{ALTA}: separa necesidad estimada de factibilidad.
+  \end{columns}
+  \vfill
+  \alert{Si no puede justificar una acción, \accion{ABSTENERSE} es la salida excepcional de seguridad.}
+\end{frame}
+
+% 11
+\begin{frame}{¿Por qué un recomendador?}
+  \begin{columns}[c]
+    \column{.48\textwidth}
+      \begin{block}{Lo que hace}
+        Comunica una acción sugerida, evidencia, explicación y limitaciones a una persona responsable.
+      \end{block}
+      La prioridad se conserva internamente para decidir y auditar.
+    \column{.48\textwidth}
+      \begin{alertblock}{Lo que no hace}
+        No traslada vehículos, asigna conductores, modifica rutas ni controla una flota.
+      \end{alertblock}
+  \end{columns}
+  \vfill
+  Faltan demanda no atendida, espera, flota libre, origen del refuerzo, ruta, tráfico completo y costo real del traslado. Por eso se adopta \concepto{asistencia humana, no autonomía}.
+\end{frame}
+
+% 12
+\begin{frame}{Desempeño: cinco criterios auditables}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.25\textwidth}X p{.31\textwidth}}
+    \toprule
+    Criterio & Pregunta & Error que revela \\\midrule
+    Coherencia & ¿Acción, prioridad, suficiencia y política concuerdan? & Refuerzo con prioridad media o evidencia insuficiente. \\
+    Capacidad simulada & ¿Nunca se refuerza con capacidad agotada? & Violación de una restricción dura. \\
+    Refuerzos innecesarios & ¿Se refuerza sin prioridad alta o precondiciones? & Sobreintervención y consumo injustificado. \\
+    Abstención correcta & ¿Se abstiene ante datos críticos faltantes o inválidos? & Confianza aparente sin soporte. \\
+    Consistencia entre zonas & ¿Casos equivalentes reciben igual tratamiento? & Regla arbitraria o sesgo no explicado. \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \alert{Se evalúan salidas y restricciones de la simulación, no reducción real de espera.}
+\end{frame}
+
+% 13
+\begin{frame}{Utilidad conceptual y restricción dura}
+  \begin{block}{Función de desempeño}
+    \[
+      U = w_1 C_{\text{coherencia}} + w_2 C_{\text{abstención}} + w_3 C_{\text{consistencia entre zonas}} - w_4 E_{\text{refuerzo innecesario}}
+    \]
+  \end{block}
+  \begin{alertblock}{Sujeta a no exceder capacidad}
+    La capacidad simulada es una restricción dura: no debe ocultarse dentro de un promedio ni compensarse con otros criterios.
+  \end{alertblock}
+  Los pesos no se fijan aquí; deben decidirse explícitamente y revisarse por una persona.
+\end{frame}
+
+% 14
+\begin{frame}{Riesgo de una métrica inadecuada}
+  Premiar solo cantidad de refuerzos o zonas con más \textit{pickups} puede hacer racional una conducta dañina respecto de esa métrica.
+  \begin{columns}[T]
+    \column{.49\textwidth}
+      \begin{block}{Puede producir}
+        \begin{itemize}
+          \item repetición de patrones históricos de oferta;
+          \item preferencia por zonas con más actividad reportada;
+          \item consumo temprano de capacidad.
+        \end{itemize}
+      \end{block}
+    \column{.49\textwidth}
+      \begin{block}{Puede ocultar}
+        \begin{itemize}
+          \item necesidad no observada;
+          \item incertidumbre y abstención legítima;
+          \item cobertura desigual entre zonas.
+        \end{itemize}
+      \end{block}
+  \end{columns}
+  \alert{Ejecutar una función sin errores no garantiza una decisión aceptable.}
+\end{frame}
+
+% 15
+\begin{frame}{Entorno: realidad y simulación}
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \begin{block}{Entorno real}
+        Zonas, vías, pasajeros, conductores, vehículos, otros transportes, tráfico, clima, regulación y operaciones humanas.
+      \end{block}
+    \column{.48\textwidth}
+      \begin{block}{Entorno informacional didáctico}
+        TLC histórico, replay horario, catálogo y geometría de zonas, NOAA, capacidad, política y bitácora.
+      \end{block}
+  \end{columns}
+  \vfill
+  \begin{alertblock}{Frontera del agente}
+    Termina en el mensaje de recomendación. Una acción externa pertenecería a otro sistema sociotécnico.
+  \end{alertblock}
+\end{frame}
+
+% 16
+\begin{frame}{Actores afectados}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.28\textwidth}X}
+    \toprule
+    Actor & Posible efecto \\\midrule
+    Responsable simulado & Carga de revisión, apoyo o falsa confianza. \\
+    Conductores y operadores & Traslado posterior, oportunidad de servicio o recorrido vacío. \\
+    Pasajeros atendidos & Su patrón puede sobrerrepresentarse en TLC. \\
+    Solicitantes no atendidos & Invisibilidad en datos y posible perpetuación de brechas. \\
+    Otras zonas & Costo de oportunidad por atención y capacidad simulada. \\
+    TLC, NOAA, docentes y estudiantes & Cobertura, demora y responsabilidad de no exagerar el alcance. \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+% 17
+\begin{frame}{Acciones permitidas y prioridad interna}
+  \centering
+  \begin{tikzpicture}[node distance=5mm]
+    \node[card,text width=3.2cm] (o) {\accion{OBSERVAR}};
+    \node[card,text width=3.2cm,right=of o] (m) {\accion{MONITOREAR}};
+    \node[card,text width=4.0cm,right=of m] (r) {\accion{RECOMENDAR\_REFUERZO}};
+    \node[safe,text width=4.0cm,below=10mm of m] (a) {\accion{ABSTENERSE}\\salida excepcional};
+  \end{tikzpicture}
+  \vfill
+  \begin{block}{Prioridad interna}
+    \accion{BAJA} · \accion{MEDIA} · \accion{ALTA}: clasificación para decidir y auditar, no acción visible obligatoria.
+  \end{block}
+  La salida incluye zona, $h$, $h+1$, acción, evidencia, restricciones, explicación, limitaciones y \texttt{modo\_replay}.
+\end{frame}
+
+% 18
+\begin{frame}{Acción: OBSERVAR}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.21\textwidth}X}
+    \toprule
+    Elemento & Definición operacional \\\midrule
+    Precondición & Evidencia suficiente y válida; prioridad interna \accion{BAJA}; sin falla que obligue a abstenerse. \\
+    Salida & Registro para $h+1$ con evidencia hasta $h$, limitaciones y regla; sin alerta prioritaria ni cambio sugerido. \\
+    Efecto & Entrada informativa y auditable para la persona; no altera calle ni vehículos. \\
+    No significa & Ignorar, cerrar seguimiento, captar datos, vigilar continuamente, confirmar demanda baja ni ausencia de espera. \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+% 19
+\begin{frame}{Acción: MONITOREAR}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.21\textwidth}X}
+    \toprule
+    Elemento & Definición operacional \\\midrule
+    Precondición & Evidencia suficiente y prioridad \accion{MEDIA}; o prioridad \accion{ALTA} sin capacidad; o revisión explícita de política. \\
+    Salida & Alerta informativa para revisar en el siguiente paso, con evidencia, límites y explicación de capacidad agotada si aplica. \\
+    Efecto & Cambia visibilidad y orden de revisión en la interfaz o bitácora. \\
+    No significa & Mover vehículos, reservar capacidad, capturar datos nuevos, vigilar TLC en vivo ni asegurar empeoramiento. \\
+    \bottomrule
+  \end{tabularx}
+  \alert{Monitorear es reevaluar en el siguiente paso histórico simulado.}
+\end{frame}
+
+% 20
+\begin{frame}{Acción: RECOMENDAR\_REFUERZO}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.21\textwidth}X}
+    \toprule
+    Elemento & Definición operacional \\\midrule
+    Precondición & Prioridad \accion{ALTA}, datos suficientes y válidos, y capacidad simulada disponible: todo simultáneamente. \\
+    Salida & Propuesta para considerar capacidad adicional en $h+1$, con evidencia histórica hasta $h$, límites y regla. \\
+    Efecto & Propuesta humana; la simulación puede descontar capacidad tras aceptación explícita. \\
+    No significa & Ordenar traslado, elegir vehículo, origen o ruta, confirmar recurso libre, garantizar beneficio ni reducir espera. \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+% 21
+\begin{frame}{Salida excepcional: ABSTENERSE}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.21\textwidth}X}
+    \toprule
+    Elemento & Definición operacional \\\midrule
+    Precondición & Evidencia insuficiente o inválida: zona, tiempo, faltantes, fuga temporal, clima requerido, capacidad desconocida o conflicto. \\
+    Salida & ``Sin recomendación'', motivo específico, datos problemáticos y solicitud de revisión humana. \\
+    Efecto & Detiene la recomendación automática y conserva evidencia para diagnóstico. \\
+    No significa & Prioridad baja, ausencia de actividad, caso resuelto, autorización tácita ni eliminación del registro. \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+% 22
+\begin{frame}{Política ilustrativa completa}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{.34\textwidth}>{\raggedright\arraybackslash}p{.25\textwidth}X}
+    \toprule
+    Evidencia · prioridad · capacidad & Acción visible & Justificación \\\midrule
+    Insuficiente o inválida · no confiable · cualquiera & \accion{ABSTENERSE} & La seguridad epistemológica precede a la optimización. \\
+    Suficiente · \accion{BAJA} · cualquiera & \accion{OBSERVAR} & Registra sin escalar ni sugerir cambio. \\
+    Suficiente · \accion{MEDIA} · cualquiera & \accion{MONITOREAR} & Eleva la revisión, no la intervención. \\
+    Suficiente · \accion{ALTA} · disponible & \accion{RECOMENDAR\_REFUERZO} & Cumple prioridad, datos y capacidad. \\
+    Suficiente · \accion{ALTA} · no disponible & \accion{MONITOREAR} & Explica la restricción sin infringirla. \\
+    Suficiente · \accion{ALTA} · desconocida & \accion{ABSTENERSE} & No puede comprobar una precondición crítica. \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \alert{La tabla no fija los umbrales que producen la prioridad.}
+\end{frame}
+
+% 23
+\begin{frame}{Percepciones y corte temporal}
+  Para decidir sobre $h+1$, solo entra información con disponibilidad simulada no posterior al cierre de $h$:
+  \begin{columns}[T]
+    \column{.49\textwidth}
+      \begin{itemize}
+        \item zona válida, $h$ y $h+1$;
+        \item \textit{pickups} reportados de referencias comparables;
+        \item categorías con umbrales prefijados;
+        \item NOAA habilitado hasta el corte;
+      \end{itemize}
+    \column{.49\textwidth}
+      \begin{itemize}
+        \item faltantes, cobertura y validez;
+        \item capacidad del escenario;
+        \item historial anterior y consumo;
+        \item versión de política y reglas.
+      \end{itemize}
+  \end{columns}
+  \[
+    H_h=\{r_i:\operatorname{disponible\_sim}(r_i)\leq\operatorname{cierre}(h)\}.
+  \]
+\end{frame}
+
+% 24
+\begin{frame}{Observado, derivado y no observado}
+  \small
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \begin{block}{Disponible bajo controles}
+        \begin{itemize}
+          \item \textit{pickups} realizados y reportados;
+          \item zona y hora reportadas;
+          \item NOAA de la estación;
+          \item capacidad simulada;
+          \item prioridad derivada por reglas.
+        \end{itemize}
+      \end{block}
+    \column{.48\textwidth}
+      \begin{alertblock}{No observado}
+        \begin{itemize}
+          \item datos TLC en tiempo real;
+          \item demanda total y solicitudes no atendidas;
+          \item espera y vehículos libres;
+          \item clima exacto por zona;
+          \item tráfico, origen y ruta del refuerzo.
+        \end{itemize}
+      \end{alertblock}
+  \end{columns}
+\end{frame}
+
+% 25
+\begin{frame}{Propiedades del ambiente}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.20\textwidth}X}
+    \toprule
+    Propiedad & Caracterización según nivel de abstracción \\\midrule
+    Observabilidad & Parcial: faltan demanda, espera, flota, tráfico e intenciones. \\
+    Resultado & Realidad estocástica; transición didáctica determinista con entrada congelada. \\
+    Dependencia & Secuencial si decisiones consumen capacidad o condicionan pasos posteriores. \\
+    Cambio & Realidad dinámica; ciclo estático al cierre de $h$ y actualización simulada entre ciclos. \\
+    Estado & Mixto continuo/discreto; el prototipo discretiza hora, clima y prioridad. \\
+    Participantes & Realidad multiagente; simulación con recomendador y humano supervisor. \\
+    Conocimiento & Parcial: reglas conocidas, relación con demanda latente y efectos reales desconocidos. \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+% 26
+\begin{frame}{Supervisión y falla segura}
+  \begin{columns}[T]
+    \column{.49\textwidth}
+      \begin{block}{Human-in-the-loop}
+        El humano ve evidencia, límites y regla; acepta, rechaza o solicita revisión. No hay orden automática a una flota.
+      \end{block}
+      Registrar fuentes, versión, prioridad, acción, motivo, capacidad antes/después y decisión humana.
+    \column{.49\textwidth}
+      \begin{alertblock}{Controles mínimos}
+        Validar esquema, zona, tiempo y faltantes; enmascarar futuro; marcar \texttt{modo\_replay}; verificar NOAA, suficiencia y capacidad; detenerse ante anomalías.
+      \end{alertblock}
+  \end{columns}
+  \vfill
+  \concepto{Falla segura:} incertidumbre crítica $\Rightarrow$ \accion{ABSTENERSE}; prioridad alta con capacidad agotada $\Rightarrow$ \accion{MONITOREAR}.
+\end{frame}
+
+% 27
+\begin{frame}{PEAS consolidado}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.08\textwidth}X}
+    \toprule
+    P & Coherencia, capacidad, refuerzos innecesarios, abstención correcta y consistencia entre zonas. \\
+    E & Replay horario; zona objetivo $h+1$; TLC hasta $h$; NOAA, zonas, capacidad y política simuladas; realidad urbana parcialmente observada. \\
+    A & Mensajes \accion{OBSERVAR}, \accion{MONITOREAR}, \accion{RECOMENDAR\_REFUERZO}; \accion{ABSTENERSE} como salida excepcional. Sin actuadores físicos. \\
+    S & Mecanismos lógicos para revelar TLC, leer zona y NOAA, recibir $h$ y capacidad, cortar temporalmente y derivar percepciones. \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \alert{PEAS especifica un agente acotado, no una capacidad operacional ya demostrada.}
+\end{frame}
+
+% 28
+\begin{frame}{Ciclo percepción--acción: ejemplo $h\rightarrow h+1$}
+  \centering
+  \begin{tikzpicture}[node distance=3.5mm,scale=.83,transform shape]
+    \node[data,text width=2.2cm] (r) {Revelar hasta $h$};
+    \node[card,text width=2.2cm,right=of r] (v) {Validar corte y calidad};
+    \node[card,text width=2.2cm,right=of v] (d) {Derivar contexto};
+    \node[card,text width=2.2cm,right=of d] (p) {Asignar prioridad};
+    \node[data,text width=2.2cm,right=of p] (a) {Elegir para $h+1$};
+    \draw[flow] (r)--(v); \draw[flow] (v)--(d); \draw[flow] (d)--(p); \draw[flow] (p)--(a);
+  \end{tikzpicture}
+  \vfill
+  \small
+  Sin cifras inventadas: prioridad alta, evidencia suficiente y capacidad disponible permiten \accion{RECOMENDAR\_REFUERZO}; con capacidad agotada corresponde \accion{MONITOREAR}. El humano revisa la propuesta.
+  \begin{alertblock}{Fuga temporal}
+    Si el cálculo usa viajes de $h+1$ para recomendar al inicio de $h+1$, la salida correcta es \accion{ABSTENERSE}.
+  \end{alertblock}
+\end{frame}
+
+% 29
+\begin{frame}{Invariantes y lenguaje responsable}
+  \scriptsize
+  \begin{columns}[T]
+    \column{.49\textwidth}
+      \begin{block}{Debe cumplirse}
+        \begin{itemize}
+          \item identificar zona, $h$, $h+1$ y \texttt{modo\_replay};
+          \item usar solo información revelada hasta $h$;
+          \item refuerzo $\Rightarrow$ prioridad alta, evidencia y capacidad;
+          \item evidencia inválida $\Rightarrow$ abstención;
+          \item decir ``actividad histórica reportada'' y ``contexto de estación''.
+        \end{itemize}
+      \end{block}
+    \column{.49\textwidth}
+      \begin{alertblock}{Está prohibido afirmar}
+        \begin{itemize}
+          \item ``la demanda total es alta'';
+          \item ``TLC se monitorea en tiempo real'';
+          \item ``hay pasajeros esperando'';
+          \item ``hay un vehículo libre'';
+          \item ``el clima exacto de la zona'';
+          \item ``la acción reducirá la espera''.
+        \end{itemize}
+      \end{alertblock}
+  \end{columns}
+\end{frame}
+
+% 30
+\begin{frame}{Cierre y puente a Semana 2}
+  \begin{block}{Resultado de Semana 1}
+    Un agente recomendador acotado, auditable y seguro: evidencia histórica parcial, corte $h\rightarrow h+1$, prioridad interna, capacidad dura y supervisión humana.
+  \end{block}
+  \[
+    \boxed{P=(S,A,T,s_0,G,c)}
+  \]
+  \begin{itemize}
+    \item $S$: estado interno, corte, zona, evidencia, prioridad y capacidad.
+    \item $A$: decisiones permitidas; $T$: registro, capacidad y avance del replay.
+    \item $s_0$: evidencia y capacidad iniciales; $G$: revisión verificable; $c$: costo didáctico transparente.
+  \end{itemize}
+  \alert{Siguiente paso: representar el problema sin romper el invariante datos hasta $h$ $\rightarrow$ recomendación para $h+1$.}
+\end{frame}
+
+\end{document}
