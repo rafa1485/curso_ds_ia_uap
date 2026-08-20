@@ -1,0 +1,48 @@
+try:
+    import folium
+    import geopandas as gpd
+    import requests
+    import zipfile
+except ModuleNotFoundError as error:
+    print(
+        f"Sección espacial omitida: falta '{error.name}'. "
+        "Descomenta `%pip install -q geopandas folium requests`, reinicia si es necesario y vuelve a ejecutar."
+    )
+else:
+    with tempfile.TemporaryDirectory() as directorio_base:
+        ruta_zip = Path(directorio_base) / "taxi_zones.zip"
+        respuesta = requests.get(URL_GEOMETRIAS, timeout=60)
+        respuesta.raise_for_status()
+        ruta_zip.write_bytes(respuesta.content)
+
+        # Extract the zip file to a subdirectory
+        directorio_extraido = Path(directorio_base) / "extracted_taxi_zones"
+        directorio_extraido.mkdir()
+        with zipfile.ZipFile(ruta_zip, 'r') as zip_ref:
+            zip_ref.extractall(directorio_extraido)
+        
+        # Find the .shp file within the extracted directory, searching recursively
+        shp_files = list(directorio_extraido.rglob('*.shp')) # Changed glob to rglob for recursive search
+        if not shp_files:
+            raise FileNotFoundError("No .shp file found in the extracted zip or its subdirectories.")
+        ruta_shp = shp_files[0]
+
+        # Read the shapefile directly
+        geo_zonas = gpd.read_file(ruta_shp).to_crs(4326)
+
+    pickups_mapa = viajes_zonas["PULocationID"].value_counts().rename("pickups").reset_index()
+    geo_zonas["LocationID"] = pd.to_numeric(geo_zonas["LocationID"])
+    geo_mapa = geo_zonas.merge(pickups_mapa, left_on="LocationID", right_on="PULocationID", how="left", validate="one_to_one")
+    geo_mapa["pickups"] = geo_mapa["pickups"].fillna(0)
+    centro = [geo_mapa.geometry.centroid.y.mean(), geo_mapa.geometry.centroid.x.mean()]
+    mapa = folium.Map(location=centro, zoom_start=10, tiles="CartoDB positron")
+    folium.Choropleth(
+        geo_data=geo_mapa, data=geo_mapa, columns=["LocationID", "pickups"],
+        key_on="feature.properties.LocationID", fill_color="YlOrRd",
+        fill_opacity=0.7, line_opacity=0.3, legend_name="Pickups",
+    ).add_to(mapa)
+    folium.GeoJson(
+        geo_mapa, style_function=lambda _: {"fillOpacity": 0, "weight": 0},
+        tooltip=folium.GeoJsonTooltip(fields=["zone", "borough", "pickups"], aliases=["Zona", "Borough", "Pickups"]),
+    ).add_to(mapa)
+    display(mapa)
