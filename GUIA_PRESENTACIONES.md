@@ -53,6 +53,8 @@ pdflatex Clase_01_Fundamentos_de_IA_agentes_y_racionalidad.tex
 pdflatex Clase_01_Fundamentos_de_IA_agentes_y_racionalidad.tex
 ```
 
+El ejemplo programable asociado se encuentra en `MATERIAL_CURSOS/Clases/Inteligencia_Artificial/Semana_01/Ejemplo_agente_recomendador_movilidad.ipynb`. El notebook implementa un agente recomendador de reglas sobre una reproducción histórica de NYC TLC y NOAA, con corte temporal `datos hasta h -> recomendación para h+1`, capacidad simulada, supervisión humana y abstención segura.
+
 ### Resolucion del agente didactico de movilidad
 
 ```bash
