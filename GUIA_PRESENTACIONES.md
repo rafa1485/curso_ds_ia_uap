@@ -45,6 +45,16 @@ pdflatex Clase_02_Adquisicion_comprension_y_preparacion_inicial_de_datos.tex
 
 El taller asociado se encuentra en `Taller_Clase_02_Movilidad.ipynb`. Su modo predeterminado procesa una semana consecutiva de enero de 2024 y requiere acceso a las fuentes públicas NYC TLC y NOAA.
 
+## Data Science, semana 3
+
+```bash
+cd MATERIAL_CURSOS/Clases/Data_Science/Semana_03
+pdflatex Clase_03_Exploracion_diagnostico_y_visualizacion_de_datos.tex
+pdflatex Clase_03_Exploracion_diagnostico_y_visualizacion_de_datos.tex
+```
+
+La clase desarrolla de forma teórica y conceptual la exploración, el diagnóstico descriptivo y la visualización. Continúa la tabla zona-hora de la semana anterior y fija el contrato de cinco hallazgos defendibles que se implementará posteriormente en un notebook práctico independiente.
+
 ## Inteligencia Artificial, semana 1
 
 ```bash
@@ -70,5 +80,7 @@ cd MATERIAL_CURSOS/Clases/Inteligencia_Artificial/Semana_02
 pdflatex Clase_02_Representacion_y_busqueda_en_espacios_de_estados.tex
 pdflatex Clase_02_Representacion_y_busqueda_en_espacios_de_estados.tex
 ```
+
+El ejemplo programable asociado se encuentra en `MATERIAL_CURSOS/Clases/Inteligencia_Artificial/Semana_02/Ejemplo_agente_reactivo_basado_en_modelo_movilidad.ipynb`. El notebook continúa el caso de NYC TLC de la semana anterior e implementa un agente reactivo basado en modelo con estado persistente por zona, actualización temporal, incertidumbre ante observaciones faltantes y comparación con una línea base sin memoria.
 
 La segunda ejecucion actualiza correctamente la numeracion total de diapositivas. Los PDF se generan en los respectivos directorios de cada clase.

@@ -1,0 +1,1018 @@
+% Compilar desde este directorio con:
+% pdflatex Clase_03_Exploracion_diagnostico_y_visualizacion_de_datos.tex
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+
+\tikzset{
+  flow/.style={-{Stealth[length=2.4mm]},thick,draw=UAPNavy},
+  datum/.style={draw=UAPGold,fill=UAPGold!16,rounded corners=2pt,align=center,minimum height=8mm},
+  process/.style={draw=UAPTeal,fill=UAPTeal!12,rounded corners=3pt,very thick,align=center,minimum height=10mm},
+  decision/.style={draw=UAPNavy,fill=UAPNavy!9,rounded corners=3pt,very thick,align=center,minimum height=10mm},
+  card/.style={draw=UAPTeal,fill=UAPLight,rounded corners=3pt,align=center,minimum height=11mm}
+}
+
+\usetheme{Boadilla}
+\usecolortheme{default}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alerted text}{fg=UAPTeal}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.78\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}%
+      \color{white}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}%
+      \color{UAPGray}\hfill Semana 3 \enspace | \enspace \insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}%
+  }%
+}
+
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\newcommand{\br}{\\}
+\newcommand{\codigo}[1]{\texttt{\detokenize{#1}}}
+
+\title[Data Science · Clase 3]{Exploración, diagnóstico y visualización de datos}
+\subtitle{De una tabla analítica a hallazgos defendibles}
+\author{Curso de Data Science}
+\institute{Semana 3 · Clase 3}
+\date{}
+
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+    \vfill
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\Huge\inserttitle\par}
+    \vspace{0.45em}
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\Large\insertsubtitle\par}
+    \vspace{1.3em}
+    \begin{tikzpicture}[node distance=4mm,scale=.77,transform shape,every node/.style={text=UAPNavy}]
+      \node[datum] (t) {Tabla analítica};
+      \node[process,right=of t] (v) {Vistas y\br resúmenes};
+      \node[decision,right=of v] (c) {Controles};
+      \node[datum,right=of c] (h) {Hallazgo\br defendible};
+      \draw[flow] (t)--(v); \draw[flow] (v)--(c); \draw[flow] (c)--(h);
+    \end{tikzpicture}
+    \vspace{1.2em}
+    {\color{white}\large\insertauthor\par}
+    {\color{white}\insertinstitute\par}
+    \vfill
+    {\color{UAPGold}\small Diagnóstico descriptivo: no identificación causal.}
+  \end{beamercolorbox}
+\end{frame}
+
+% 2
+\begin{frame}{Propósito y resultados}
+  \small
+  \textbf{Propósito:} explorar una tabla analítica mediante preguntas coordinadas sobre representación, distribución, relación y cobertura.
+  \begin{block}{Al finalizar, podremos}
+    \begin{itemize}
+      \item delimitar población, unidad, estimando y denominador;
+      \item describir posición, dispersión, forma y extremos;
+      \item elegir gráficos según la comparación requerida;
+      \item estudiar asociaciones y estratos sin convertirlos en causas;
+      \item redactar hallazgos trazables, limitados y comprobables.
+    \end{itemize}
+  \end{block}
+  \centering Clase teórica y conceptual: sin programación ni resultados empíricos.
+\end{frame}
+
+% 3
+\begin{frame}{Continuidad semanas 1--3}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.2\textwidth} X X}
+    \toprule
+    Semana & Pregunta central & Producto \\
+    \midrule
+    1. Formulación & ¿Qué necesidad, población y decisión importan? & problema analítico \\
+    2. Preparación & ¿Qué representa cada fila y cómo se construyó? & tabla analítica defendible \\
+    3. Exploración & ¿Cómo se distribuyen y relacionan los registros? & hallazgos limitados \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.5em}
+  \centering
+  \begin{tikzpicture}[node distance=6mm,scale=.77,transform shape]
+    \node[decision] (f) {Formulación};
+    \node[process,right=of f] (p) {Adquisición y preparación};
+    \node[process,right=of p] (e) {Exploración};
+    \node[datum,right=of e] (h) {Hallazgo};
+    \draw[flow] (f)--(p); \draw[flow] (p)--(e); \draw[flow] (e)--(h);
+    \draw[flow,dashed,bend left=28] (e) to (p);
+    \draw[flow,dashed,bend left=38] (e) to (f);
+  \end{tikzpicture}
+  \par\alert{Explorar audita decisiones previas; no autoriza redefinirlas para obtener un patrón atractivo.}
+\end{frame}
+
+% 4
+\begin{frame}{Alcance del cronograma}
+  \small
+  \begin{tabularx}{\textwidth}{X r}
+    \toprule
+    Bloque conceptual & Diapositivas \\
+    \midrule
+    Contrato y fundamentos & 1--10 \\
+    Descripción univariada & 11--19 \\
+    Codificación visual & 20--25 \\
+    Relaciones & 26--34 \\
+    Tiempo, espacio y multivariado & 35--37 \\
+    Hallazgos y cierre & 38--40 \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{alertblock}{Fuera del alcance de hoy}
+    Pruebas confirmatorias, identificación causal, predicción y despliegue. La práctica se realizará después en un notebook que todavía no forma parte de esta entrega.
+  \end{alertblock}
+\end{frame}
+
+% 5
+\begin{frame}{Pregunta de apertura}
+  \small
+  \begin{alertblock}{Caso transversal}
+    Tenemos una tabla \textbf{zona-hora} con pickups reportados, atributos de zona y clima de una estación: ¿qué miraríamos primero y qué podríamos afirmar?
+  \end{alertblock}
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.2\textwidth} X}
+    \toprule
+    Dimensión & Pregunta inicial \\
+    \midrule
+    Representación & ¿Qué significa una fila y qué quedó fuera? \\
+    Distribución & ¿Qué valores, frecuencias, ceros y faltantes existen? \\
+    Relación & ¿Qué variables varían juntas y bajo qué estratos? \\
+    Límite & ¿A qué población y periodo alcanza la evidencia? \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \centering TLC: viajes realizados/reportados, \textbf{no demanda total}. NOAA: una estación, \textbf{no clima zonal}.
+\end{frame}
+
+% 6
+\begin{frame}{Qué es y qué no es EDA}
+  \small
+  El \concepto{análisis exploratorio de datos (EDA)} combina revisión semántica, controles de calidad, resúmenes y visualizaciones complementarias.
+  \vspace{.4em}
+  \begin{tabularx}{\textwidth}{X X}
+    \toprule
+    \textbf{EDA sí} & \textbf{EDA no} \\
+    \midrule
+    examina distribuciones y cobertura & repara automáticamente los datos \\
+    contrasta representaciones & confirma historias descubiertas al mirar \\
+    localiza casos que requieren explicación & sustituye inferencia o diseño causal \\
+    genera hipótesis y controles & garantiza representatividad \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{block}{Límite}
+    Diagnóstico exploratorio es comprensión provisional, no un veredicto causal.
+  \end{block}
+\end{frame}
+
+% 7
+\begin{frame}{Ciclo exploratorio}
+  \centering
+  \begin{tikzpicture}[scale=.75,transform shape]
+    \node[datum] (q) at (90:2.7) {Preguntar};
+    \node[process] (u) at (30:3.1) {Revisar unidad\br y cobertura};
+    \node[datum] (v) at (-30:2.7) {Visualizar};
+    \node[process] (r) at (-90:2.7) {Resumir};
+    \node[decision] (e) at (-150:3.1) {Contrastar\br por estratos};
+    \node[datum] (g) at (150:2.7) {Registrar};
+    \node[card] (b) at (0,0) {Bitácora:\br filtros, límites\br y alternativas};
+    \foreach \x/\y in {q/u,u/v,v/r,r/e,e/g,g/q}{\draw[flow] (\x)--(\y);}
+    \draw[flow,dashed,bend right=16] (v) to (u);
+    \draw[flow,dashed,bend left=16] (e) to (q);
+  \end{tikzpicture}
+  \begin{block}{Iteración disciplinada}
+    Cada cambio responde a evidencia y deja trazados filtros, transformaciones, descartes y explicaciones alternativas.
+  \end{block}
+\end{frame}
+
+% 8
+\begin{frame}{Población, muestra y población registrada}
+  \begin{columns}[T]
+    \column{.55\textwidth}
+      \small
+      \begin{tabularx}{\textwidth}{>{\bfseries}p{.4\textwidth} X}
+        \toprule
+        Concepto & Delimitación \\
+        \midrule
+        Población objetivo & unidades sobre las que interesa afirmar \\
+        Muestra observada & subconjunto obtenido por un mecanismo de selección \\
+        Población registrada & eventos materializados por el sistema en el alcance \\
+        \bottomrule
+      \end{tabularx}
+    \column{.42\textwidth}
+      \centering
+      \begin{tikzpicture}[scale=.69,transform shape]
+        \draw[very thick,UAPNavy,fill=UAPNavy!8] (0,0) ellipse (2.35 and 1.55);
+        \draw[very thick,UAPTeal,fill=UAPTeal!12] (1.1,-.1) ellipse (1.75 and 1.1);
+        \draw[very thick,UAPGold,fill=UAPGold!18] (1.1,-.35) ellipse (.8 and .48);
+        \node at (-.65,.95) {Objetivo};
+        \node at (1.75,.55) {Registrada};
+        \node at (1.1,-.35) {Muestra};
+      \end{tikzpicture}
+  \end{columns}
+  \begin{alertblock}{Cobertura}
+    Un archivo completo de TLC aún excluye solicitudes no atendidas, otros operadores y viajes no reportados. Más filas no corrigen esa frontera.
+  \end{alertblock}
+\end{frame}
+
+% 9
+\begin{frame}{Unidad, estimando, ponderación y denominador}
+  \small
+  El \concepto{estimando} es la cantidad precisa que se desea describir. Cambia si cada zona, zona-hora o viaje reportado recibe el mismo peso.
+  \[
+    \widehat{p}=\frac{n_A}{n_{\mathrm{val}}}
+  \]
+  \begin{block}{Frase profesional}
+    Este estadístico describe \rule{1.3cm}{.3pt} para \rule{1.3cm}{.3pt} durante \rule{1.3cm}{.3pt}, dando a cada \rule{1.3cm}{.3pt} un peso de \rule{1.1cm}{.3pt} y usando como denominador \rule{1.5cm}{.3pt}.
+  \end{block}
+  \begin{columns}[T]
+    \column{.48\textwidth}\centering\concepto{Cada zona pesa igual}
+    \column{.48\textwidth}\centering\concepto{Cada viaje reportado pesa igual}
+  \end{columns}
+  \vfill
+  \centering Una tasa de pickups por hora observada describe registros y exposición temporal, no demanda total.
+\end{frame}
+
+% 10
+\begin{frame}{Tipos semánticos y preguntas válidas}
+  \footnotesize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.13\textwidth} p{.35\textwidth} X}
+    \toprule
+    Tipo & Operaciones conceptualmente válidas & Ejemplo del caso \\
+    \midrule
+    Nominal & igualdad, conteo, agrupación & ID de zona \\
+    Ordinal & igualdad y orden & categoría ordenada \\
+    Intervalo & diferencias & temperatura Celsius \\
+    Razón & diferencias y razones & conteo de pickups \\
+    Temporal & orden, intervalo, ciclo & hora local \\
+    Espacial & ubicación, vecindad, área & zona de origen \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.5em}
+  \begin{block}{Principio}
+    La semántica, no el tipo físico, gobierna el resumen y el gráfico.
+  \end{block}
+  Un ID numérico no tiene una media significativa; una hora codificada como entero sigue teniendo dependencia cíclica.
+\end{frame}
+
+% 11
+\begin{frame}{Distribuciones de frecuencia}
+  \small
+  Para una categoría o intervalo $j$:
+  \[
+    f_j=\sum_{i=1}^{n}\mathbb{1}(x_i\in j),\qquad
+    h_j=\frac{f_j}{n_{\mathrm{val}}},\qquad
+    H_j=\sum_{k\leq j}h_k
+  \]
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.2\textwidth} X}
+    \toprule
+    Medida & Lectura \\
+    \midrule
+    $f_j$ & frecuencia absoluta \\
+    $h_j$ / $100h_j$ & frecuencia relativa / porcentaje \\
+    $H_j$ & frecuencia acumulada, solo si existe orden \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \centering La distribución debe informar válidos, faltantes, exclusiones y denominador.
+\end{frame}
+
+% 12
+\begin{frame}{Cero, faltante y ausencia de fila}
+  \small
+  \centering
+  \begin{tikzpicture}[node distance=8mm,scale=.82,transform shape]
+    \node[decision] (m) {Marco completo\br zona-hora};
+    \node[datum,right=of m,yshift=13mm] (z) {Fila con valor $0$\br \footnotesize ausencia observada};
+    \node[datum,right=of m] (f) {Fila con celda vacía\br \footnotesize medición faltante};
+    \node[datum,right=of m,yshift=-13mm] (a) {Combinación inexistente\br \footnotesize ausencia de fila};
+    \draw[flow] (m)--(z); \draw[flow] (m)--(f); \draw[flow] (m)--(a);
+  \end{tikzpicture}
+  \vspace{.6em}
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.2\textwidth} X}
+    \toprule
+    Situación & Pregunta de control \\
+    \midrule
+    Cero & ¿se observó realmente ausencia del evento? \\
+    Faltante & ¿falló medición, unión o disponibilidad? \\
+    Sin fila & ¿el marco debía contener esa unidad? \\
+    \bottomrule
+  \end{tabularx}
+  \par\alert{NOAA faltante no equivale a precipitación cero.}
+\end{frame}
+
+% 13
+\begin{frame}{Media, mediana y moda}
+  \small
+  \[
+    \bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i
+  \]
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.16\textwidth} X X}
+    \toprule
+    Centro & Interpretación & Sensibilidad \\
+    \midrule
+    Media & punto de balance de magnitudes & alta ante extremos \\
+    Mediana & posición que divide datos ordenados & menor ante extremos \\
+    Moda & valor o categoría más frecuente & depende de resolución \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{block}{Lectura conjunta}
+    Para pickups por zona-hora, cada centro responde una pregunta diferente dentro de los viajes realizados/reportados. Ninguno describe por sí solo colas o cobertura.
+  \end{block}
+\end{frame}
+
+% 14
+\begin{frame}{Cuantiles y percentiles}
+  \small
+  \[
+    Q(p)=\inf\{x:F(x)\geq p\},\qquad 0<p<1
+  \]
+  \centering
+  \begin{tikzpicture}[x=1.25cm,y=1cm]
+    \draw[very thick,UAPNavy] (0,0)--(8,0);
+    \foreach \x/\lab in {2/$Q_1$,4/Mediana,6/$Q_3$,7.2/Percentil alto}{
+      \draw[very thick,UAPGold] (\x,-.18)--(\x,.23);
+      \node[above,font=\small] at (\x,.23) {\lab};
+    }
+    \fill[UAPTeal!15] (0,-.14) rectangle (2,.14);
+    \fill[UAPTeal!25] (2,-.14) rectangle (4,.14);
+    \fill[UAPTeal!35] (4,-.14) rectangle (6,.14);
+    \fill[UAPTeal!45] (6,-.14) rectangle (8,.14);
+  \end{tikzpicture}
+  \vspace{.5em}
+  \begin{itemize}
+    \item $Q_1=Q(0.25)$, mediana $=Q(0.50)$ y $Q_3=Q(0.75)$.
+    \item Un P90 describe una posición en la población y periodo declarados, no la probabilidad del próximo caso.
+    \item Las convenciones muestrales pueden interpolar de modo distinto.
+  \end{itemize}
+\end{frame}
+
+% 15
+\begin{frame}{Rango, varianza y desviación estándar}
+  \small
+  \[
+    R=x_{\max}-x_{\min}
+  \]
+  \[
+    \sigma^2=\frac{1}{N}\sum_{i=1}^{N}(x_i-\mu)^2,\qquad
+    s^2=\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2,\qquad s=\sqrt{s^2}
+  \]
+  \begin{itemize}
+    \item El rango usa solo extremos; la varianza queda en unidades al cuadrado.
+    \item La desviación estándar recupera la unidad original.
+    \item $N$ describe una población finita; $n-1$ corrige sesgo muestral bajo supuestos.
+  \end{itemize}
+  \begin{alertblock}{Condición}
+    La regla 68--95 requiere una forma aproximadamente normal; no es universal.
+  \end{alertblock}
+\end{frame}
+
+% 16
+\begin{frame}{IQR, MAD y robustez}
+  \small
+  \[
+    IQR=Q_3-Q_1,\qquad
+    MAD=\operatorname{mediana}_i\left|x_i-\operatorname{mediana}(x)\right|
+  \]
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.25\textwidth} X}
+    \toprule
+    Medida robusta & Qué resume \\
+    \midrule
+    IQR & extensión del 50\,\% central \\
+    MAD & distancia absoluta típica respecto de la mediana \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  Son menos sensibles a extremos que rango, varianza y desviación estándar.
+  \begin{alertblock}{Robustez $\neq$ representatividad}
+    Mediana e IQR no recuperan viajes no registrados ni corrigen faltantes sistemáticos.
+  \end{alertblock}
+\end{frame}
+
+% 17
+\begin{frame}{Asimetría, colas y multimodalidad}
+  \footnotesize
+  \centering
+  \begin{tikzpicture}[x=.62cm,y=.7cm]
+    \foreach \s/\name in {0/Simetría,5/Cola derecha,10/Cola izquierda,15/Dos modos}{
+      \draw[UAPGray] (\s,0)--(\s+3.8,0);
+      \node[below] at (\s+1.9,-.15) {\name};
+    }
+    \draw[very thick,UAPTeal] plot[smooth] coordinates {(0,0)(.7,.2)(1.3,1.2)(1.9,2)(2.5,1.2)(3.1,.2)(3.8,0)};
+    \draw[very thick,UAPTeal] plot[smooth] coordinates {(5,0)(5.5,.4)(6,1.8)(6.5,1.2)(7.2,.55)(8,.2)(8.8,0)};
+    \draw[very thick,UAPTeal] plot[smooth] coordinates {(10,0)(10.8,.2)(11.6,.55)(12.3,1.2)(12.8,1.8)(13.3,.4)(13.8,0)};
+    \draw[very thick,UAPTeal] plot[smooth] coordinates {(15,0)(15.5,.4)(16,1.6)(16.5,.35)(17.2,.45)(17.8,1.6)(18.8,0)};
+  \end{tikzpicture}
+  \vspace{.7em}
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.2\textwidth} X}
+    \toprule
+    Rasgo & Pregunta que abre \\
+    \midrule
+    Asimetría / cola & ¿qué lado concentra extremos, censura o mezcla? \\
+    Multimodalidad & ¿coexisten grupos, ciclos o resoluciones? \\
+    Acumulación & ¿hay redondeo, umbral o saturación? \\
+    \bottomrule
+  \end{tabularx}
+  \par Una segunda moda genera hipótesis; no prueba una causa.
+\end{frame}
+
+% 18
+\begin{frame}{Atípico no equivale a error}
+  \small
+  La regla de Tukey marca valores fuera de:
+  \[
+    [Q_1-1.5\,IQR,\;Q_3+1.5\,IQR]
+  \]
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.35\textwidth} X}
+    \toprule
+    Caso señalado & Acción responsable \\
+    \midrule
+    plausible y relevante & conservar y contextualizar \\
+    compatible pero influyente & evaluar sensibilidad \\
+    incompatible con unidad o dominio & revisar captura y transformación \\
+    significado desconocido & investigar antes de decidir \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \centering Una zona-hora extrema puede ser aeropuerto, evento o error de agregación. La distancia estadística no justifica eliminarla.
+\end{frame}
+
+% 19
+\begin{frame}{Perfil estadístico coherente}
+  \footnotesize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.2\textwidth} X >{\bfseries}p{.18\textwidth} X}
+    \toprule
+    Componente & Control mínimo & Componente & Control mínimo \\
+    \midrule
+    Contrato & población, unidad, periodo, estimando & Cobertura & válidos, faltantes, ceros, filas ausentes \\
+    Distribución & frecuencias y forma & Posición & centro y cuantiles \\
+    Dispersión & clásica y robusta & Extremos & plausibilidad e influencia \\
+    Sensibilidad & filtros, resolución, denominador & Conclusión & afirmación permitida y límite \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.8em}
+  \begin{block}{Coherencia interna}
+    Todas las piezas comparten reglas de inclusión o declaran sus diferencias. Un perfil no es una colección de cifras desconectadas.
+  \end{block}
+  \centering\alert{Cobertura y unidad gobiernan todo el perfil.}
+\end{frame}
+
+% 20
+\begin{frame}{Visualización como codificación}
+  \centering
+  \begin{tikzpicture}[node distance=4mm,scale=.77,transform shape]
+    \node[datum] (d) {Datos\br definidos};
+    \node[process,right=of d] (t) {Transformación};
+    \node[decision,right=of t] (m) {Marcas y\br canales};
+    \node[process,right=of m] (c) {Comparación};
+    \node[datum,right=of c] (i) {Interpretación};
+    \foreach \x/\y in {d/t,t/m,m/c,c/i}{
+      \draw[flow] (\x)--(\y); \draw[flow] (\y.south) to[bend left=38] (\x.south);
+    }
+  \end{tikzpicture}
+  \vspace{.8em}
+  \begin{columns}[T]
+    \column{.31\textwidth}
+      \begin{block}{Marcas}Puntos, líneas y áreas.\end{block}
+    \column{.31\textwidth}
+      \begin{block}{Canales}Posición, longitud, color, forma y tamaño.\end{block}
+    \column{.34\textwidth}
+      \begin{block}{Decisiones}Escala, agregación, orden, denominador y exclusiones.\end{block}
+  \end{columns}
+  \vfill
+  \centering Un gráfico decide qué comparación será fácil y qué quedará menos visible.
+\end{frame}
+
+% 21
+\begin{frame}{Posición, longitud, área y color}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth} p{.25\textwidth} X}
+    \toprule
+    Canal & Precisión comparativa & Uso apropiado \\
+    \midrule
+    Posición común & alta & diferencias y orden \\
+    Longitud & alta a media & magnitudes desde una base \\
+    Área & media a baja & tamaño aproximado \\
+    Color & media a baja & patrón, categoría o intensidad \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.6em}
+  \begin{itemize}
+    \item Paleta secuencial: magnitud; divergente: distancia a un centro significativo; cualitativa: categorías.
+    \item El faltante necesita apariencia propia.
+    \item El área debe ser proporcional al dato, no su radio.
+  \end{itemize}
+  \centering\alert{La codificación debe apoyar la tarea sin exagerar diferencias.}
+\end{frame}
+
+% 22
+\begin{frame}{Matriz de selección de gráficos}
+  \footnotesize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.25\textwidth} p{.32\textwidth} X}
+    \toprule
+    Objetivo & Vistas posibles & Control principal \\
+    \midrule
+    Comparar magnitudes & puntos, barras & base y orden \\
+    Mostrar distribución & histograma, caja, violín & resolución y tamaño \\
+    Relacionar variables & dispersión, tabla & unidad conjunta \\
+    Mostrar tiempo & línea, mapa día-hora & orden, huecos y frecuencia \\
+    Mostrar composición & barras apiladas & denominador y volumen \\
+    Mostrar espacio & mapa & medida, cobertura y proyección \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.7em}
+  \begin{block}{Criterio}
+    La pregunta y la tarea perceptiva determinan la vista, no el nombre de la variable. Una tabla es preferible si se necesitan valores exactos.
+  \end{block}
+\end{frame}
+
+% 23
+\begin{frame}{Histogramas, intervalos y densidad}
+  \footnotesize
+  \centering
+  \begin{tikzpicture}[x=.53cm,y=.42cm]
+    \foreach \o/\lab in {0/Anchos,7/Intermedios,14/Estrechos}{
+      \draw[UAPGray] (\o,0)--(\o+5.2,0);
+      \node[below] at (\o+2.6,-.25) {\lab};
+    }
+    \foreach \x/\h in {0/1,1.3/3,2.6/4.2,3.9/1.5}{\fill[UAPTeal!55] (\x,0) rectangle +(1.25,\h);}
+    \foreach \x/\h in {7/.7,7.8/1.4,8.6/3,9.4/4.4,10.2/3.5,11/1.8,11.8/.6}{\fill[UAPGold!65] (\x,0) rectangle +(.75,\h);}
+    \foreach \x/\h in {14/.3,14.45/.8,14.9/1.2,15.35/2,15.8/3.3,16.25/4.2,16.7/3.7,17.15/2.5,17.6/1.7,18.05/.9,18.5/.4}{\fill[UAPNavy!48] (\x,0) rectangle +(.4,\h);}
+    \draw[very thick,UAPTeal] plot[smooth] coordinates {(0,5.4)(2,5.8)(4,5.2)(6,5.7)(8,6.5)(10,5.4)(12,6)(14,5.5)(16,6.7)(19,5.4)};
+    \node[right,UAPTeal] at (19,5.4) {densidad estimada};
+  \end{tikzpicture}
+  \vspace{.4em}
+  \begin{itemize}
+    \item Anchura, origen y límites de bins alteran la apariencia.
+    \item Con intervalos desiguales, el \textbf{área} representa proporción.
+    \item La densidad depende del ancho de banda; grupos comparados requieren límites y escalas comunes.
+  \end{itemize}
+  \alert{No elegir la resolución que produzca la historia más llamativa.}
+\end{frame}
+
+% 24
+\begin{frame}{Caja y violín}
+  \small
+  \begin{columns}[T]
+    \column{.45\textwidth}
+      \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth} X}
+        \toprule
+        Vista & Aporta \\
+        \midrule
+        Caja & mediana, cuartiles, IQR, bigotes y puntos externos \\
+        Violín & forma y modos aproximados \\
+        \bottomrule
+      \end{tabularx}
+      \vspace{.6em}
+      Caja: depende de la convención de bigotes.\br
+      Violín: depende del suavizado y ancho de banda.
+    \column{.5\textwidth}
+      \centering
+      \begin{tikzpicture}[x=.85cm,y=.55cm]
+        \draw[UAPNavy,thick] (0,2)--(5,2);
+        \draw[UAPNavy,thick,fill=UAPLight] (1.5,1.3) rectangle (3.7,2.7);
+        \draw[UAPGold,very thick] (2.6,1.3)--(2.6,2.7);
+        \draw[UAPNavy,thick] (0,1.6)--(0,2.4) (5,1.6)--(5,2.4);
+        \draw[UAPTeal,very thick,fill=UAPTeal!13] plot[smooth cycle] coordinates {(0,-1)(1,.1)(2,.7)(3,.25)(4,.7)(5,-1)(4,-1.7)(3,-1.25)(2,-1.7)(1,-1.1)};
+        \node at (2.5,3.3) {Caja};
+        \node at (2.5,-2.25) {Violín};
+      \end{tikzpicture}
+  \end{columns}
+  \begin{block}{Comparación responsable}
+    Conservar periodo, unidad, reglas, escala y tamaño de cada grupo. Estas vistas describen diferencias; no las prueban ni convierten puntos externos en errores.
+  \end{block}
+\end{frame}
+
+% 25
+\begin{frame}{Barras, conteos, proporciones y tasas}
+  \small
+  \[
+    \text{proporción}=\frac{\text{casos de interés}}{\text{total definido}},\qquad
+    \text{tasa}=\frac{\text{eventos}}{\text{exposición}}
+  \]
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.2\textwidth} X}
+    \toprule
+    Cantidad & Pregunta \\
+    \midrule
+    Conteo & ¿cuántos eventos registrados? \\
+    Proporción & ¿qué parte del total declarado? \\
+    Tasa & ¿cuántos por unidad de exposición? \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{block}{Caso}
+    Pickups por zona son conteos; pickups por hora observada son una tasa descriptiva. Ninguno equivale a demanda total sin otro mecanismo y denominador.
+  \end{block}
+  \centering Las barras de magnitud suelen comenzar en cero.
+\end{frame}
+
+% 26
+\begin{frame}{Secuencia para estudiar relaciones}
+  \footnotesize
+  \centering
+  \begin{tikzpicture}[node distance=3.5mm,scale=.64,transform shape]
+    \node[datum] (a) {Comprender\br variables};
+    \node[process,right=of a] (b) {Revisar\br faltantes};
+    \node[decision,right=of b] (c) {Confirmar unidad\br conjunta};
+    \node[datum,right=of c] (d) {Visualizar};
+    \node[process,below=8mm of d] (e) {Comparar\br estratos};
+    \node[datum,left=of e] (f) {Cuantificar};
+    \node[decision,left=of f] (g) {Revisar\br influencia};
+    \node[process,left=of g] (h) {Registrar\br alternativas};
+    \foreach \x/\y in {a/b,b/c,c/d,d/e,e/f,f/g,g/h}{\draw[flow] (\x)--(\y);}
+    \draw[flow,dashed,bend left=25] (g) to (d);
+  \end{tikzpicture}
+  \vspace{.7em}
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \begin{block}{Candado 1}Forma, escala y pares válidos antes del coeficiente.\end{block}
+    \column{.48\textwidth}
+      \begin{block}{Candado 2}Estratos, dependencia y alternativas antes del hallazgo.\end{block}
+  \end{columns}
+  \vfill
+  Para relacionar NOAA con pickups, una vista horaria evita repetir una observación de estación entre zonas como si fueran observaciones independientes.
+\end{frame}
+
+% 27
+\begin{frame}{Tablas de contingencia}
+  \small
+  \begin{tabular}{lccc}
+    \toprule
+     & Categoría B1 & Categoría B2 & Total de fila \\
+    \midrule
+    Categoría A1 & $n_{11}$ & $n_{12}$ & $n_{1\cdot}$ \\
+    Categoría A2 & $n_{21}$ & $n_{22}$ & $n_{2\cdot}$ \\
+    Total de columna & $n_{\cdot1}$ & $n_{\cdot2}$ & $n$ \\
+    \bottomrule
+  \end{tabular}
+  \vspace{.8em}
+  \begin{itemize}
+    \item Cada celda contiene un conteo conjunto; los márgenes describen volumen.
+    \item Bajo independencia, el esperado conceptual es
+      \[
+        e_{ij}=\frac{n_{i\cdot}n_{\cdot j}}{n}.
+      \]
+    \item Los conteos no establecen comparabilidad: primero debe elegirse el condicionamiento.
+  \end{itemize}
+\end{frame}
+
+% 28
+\begin{frame}{Proporciones condicionadas}
+  \small
+  \[
+    P(B_j\mid A_i)\approx\frac{n_{ij}}{n_{i\cdot}},\qquad
+    P(A_i\mid B_j)\approx\frac{n_{ij}}{n_{\cdot j}}
+  \]
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth} p{.26\textwidth} X}
+    \toprule
+    Normalización & Suma 100\,\% dentro de & Pregunta \\
+    \midrule
+    Por fila & cada fila & ¿cómo se distribuye B entre unidades A? \\
+    Por columna & cada columna & ¿cómo se distribuye A entre unidades B? \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \begin{alertblock}{El sentido importa}
+    ``Proporción de zona-horas de volumen alto dentro de cada franja'' no equivale a su frase inversa.
+  \end{alertblock}
+  \centering Nombrar siempre \textbf{dentro de qué} se calcula y mostrar el tamaño del grupo.
+\end{frame}
+
+% 29
+\begin{frame}{Comparación numérica entre grupos}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.25\textwidth} X}
+    \toprule
+    Control común & Pregunta \\
+    \midrule
+    Unidad & ¿cada observación representa lo mismo? \\
+    Periodo y marco & ¿hubo oportunidades comparables? \\
+    Inclusión & ¿ceros y faltantes siguen la misma regla? \\
+    Cobertura y tamaño & ¿cuántas unidades válidas aporta cada grupo? \\
+    Distribución & ¿cómo cambian centro, dispersión, forma y colas? \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.7em}
+  \centering
+  \begin{tikzpicture}[x=1cm,y=.5cm]
+    \foreach \o/\g in {0/Grupo A,4.2/Grupo B,8.4/Grupo C}{
+      \draw[UAPGray] (\o,0)--(\o+3.2,0);
+      \draw[UAPTeal,very thick] (\o+.4,.3)--(\o+1.2,1.6)--(\o+2,1)--(\o+2.8,2.1);
+      \node[below] at (\o+1.6,-.2) {\g: cobertura y $n$};
+    }
+  \end{tikzpicture}
+  \par\alert{Segmentar aquí es comparar estratos reproducibles, no hacer clustering formal.}
+\end{frame}
+
+% 30
+\begin{frame}{Diagrama de dispersión}
+  \small
+  \begin{columns}[T]
+    \column{.35\textwidth}
+      Cada punto necesita una unidad explícita. Observar:
+      \begin{itemize}
+        \item rango y dirección;
+        \item curvatura y límites;
+        \item grupos y heterogeneidad;
+        \item sobreposición y densidad;
+        \item casos influyentes.
+      \end{itemize}
+    \column{.62\textwidth}
+      \centering
+      \begin{tikzpicture}[x=.47cm,y=.43cm]
+        \foreach \ox/\oy/\lab in {0/5/Lineal,7/5/Curva,0/0/Grupos,7/0/Influyente}{
+          \draw[->,UAPGray] (\ox,\oy)--(\ox+5.2,\oy);
+          \draw[->,UAPGray] (\ox,\oy)--(\ox,\oy+3.5);
+          \node[below] at (\ox+2.6,\oy) {\lab};
+        }
+        \foreach \x/\y in {.5/.4,1.2/.8,2/1.1,2.8/1.8,3.6/2.2,4.5/3}{\fill[UAPTeal] (\x,\y+5) circle (2pt);}
+        \foreach \x/\y in {.5/.3,1.2/.4,2/.8,2.8/1.5,3.6/2.5,4.5/3.1}{\fill[UAPGold] (\x+7,\y+5) circle (2pt);}
+        \foreach \x/\y in {.6/.5,1.1/.9,1.6/.6,3.4/2.3,4/2.7,4.6/2.4}{\fill[UAPNavy] (\x,\y) circle (2pt);}
+        \foreach \x/\y in {.5/.5,1.3/.8,2/1.2,2.8/1.5,3.5/1.8,4.6/3.2}{\fill[UAPTeal] (\x+7,\y) circle (2pt);}
+      \end{tikzpicture}
+  \end{columns}
+  \vfill
+  En el caso transversal, un punto podría ser una \textbf{hora} con pickups agregados y una observación NOAA, no una zona-hora con clima replicado.
+\end{frame}
+
+% 31
+\begin{frame}{Covarianza y correlación}
+  \footnotesize
+  \[
+    s_{xy}=\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y}),\qquad
+    r=\frac{s_{xy}}{s_xs_y},\quad -1\leq r\leq 1
+  \]
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.24\textwidth} X p{.25\textwidth}}
+    \toprule
+    Medida & Resume & Escala \\
+    \midrule
+    Covarianza & variación lineal conjunta & producto de unidades \\
+    Pearson & asociación lineal estandarizada & sin unidades \\
+    Spearman / Kendall & asociación de orden monotónica & rangos u orden \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.6em}
+  \begin{alertblock}{No sustituye la forma}
+    Correlación cero no implica independencia. Ningún coeficiente demuestra causalidad ni reemplaza la nube, la unidad y los estratos.
+  \end{alertblock}
+\end{frame}
+
+% 32
+\begin{frame}{Trampas de correlación}
+  \footnotesize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.28\textwidth} X}
+    \toprule
+    Trampa & Qué puede ocultar \\
+    \midrule
+    No linealidad & dependencia fuerte con $r$ cercano a cero \\
+    Punto influyente & coeficiente dominado por un caso \\
+    Rango restringido & relación atenuada por selección \\
+    Mezcla de grupos & patrón global distinto de patrones internos \\
+    Pseudorreplicación & tamaño aparente mayor que la información independiente \\
+    Multiplicidad & asociaciones casuales entre muchas búsquedas \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.7em}
+  \begin{block}{Caso NOAA}
+    Replicar una observación de estación en todas las zonas no crea nuevas observaciones meteorológicas.
+  \end{block}
+  \centering Elegir el coeficiente que mejor respalda una historia es una decisión exploratoria sesgada.
+\end{frame}
+
+% 33
+\begin{frame}{Asociación, causalidad, confusión y Simpson}
+  \footnotesize
+  \begin{columns}[T]
+    \column{.64\textwidth}
+      \begin{tabularx}{\textwidth}{>{\bfseries}p{.2\textwidth} X}
+        \toprule
+        Concepto & Afirmación permitida \\
+        \midrule
+        Asociación & la conjunta no factoriza como producto de marginales \\
+        Causalidad & una intervención cambiaría un resultado bajo diseño y supuestos \\
+        Confusión & una causa común previa puede distorsionar la asociación \\
+        Simpson & el patrón agregado cambia o se invierte dentro de estratos \\
+        \bottomrule
+      \end{tabularx}
+    \column{.32\textwidth}
+      \centering
+      \begin{tikzpicture}[node distance=9mm,scale=.75,transform shape]
+        \node[decision] (z) {$Z$};
+        \node[datum,below left=of z] (x) {$X$};
+        \node[datum,below right=of z] (y) {$Y$};
+        \draw[flow] (z)--(x); \draw[flow] (z)--(y);
+        \draw[flow,dashed] (x)--(y);
+      \end{tikzpicture}
+  \end{columns}
+  \vspace{.5em}
+  \begin{alertblock}{Lenguaje no autorizado}
+    ``La lluvia causa más demanda''. Sí puede estudiarse la coincidencia entre precipitación de estación y pickups reportados, considerando hora, día, oferta, cobertura y alternativas.
+  \end{alertblock}
+  \centering Asociarse con $X$ e $Y$ no basta para clasificar $Z$ como confusor.
+\end{frame}
+
+% 34
+\begin{frame}{Segmentación y estratificación}
+  \small
+  \begin{columns}[T]
+    \column{.48\textwidth}
+      \begin{block}{Segmentar}
+        Describir subconjuntos sustantivos.
+      \end{block}
+    \column{.48\textwidth}
+      \begin{block}{Estratificar}
+        Comparar una distribución o relación dentro de niveles de una tercera variable.
+      \end{block}
+  \end{columns}
+  \vspace{.4em}
+  \begin{tabularx}{\textwidth}{X X}
+    \toprule
+    \textbf{Estrato útil} & \textbf{Riesgo a controlar} \\
+    \midrule
+    relevante para el dominio & partición oportunista \\
+    definido de forma reproducible & regla modificada después de mirar \\
+    tamaño y cobertura visibles & celdas escasas \\
+    escalas comunes & exageración visual \\
+    \bottomrule
+  \end{tabularx}
+  \vfill
+  \centering Franja, borough o tipo de zona son estratos posibles. Estratificar revela heterogeneidad; no identifica causas ni implica clustering.
+\end{frame}
+
+% 35
+\begin{frame}{Exploración temporal}
+  \small
+  \begin{columns}[T]
+    \column{.4\textwidth}
+      Declarar:
+      \begin{itemize}
+        \item evento temporal y zona horaria;
+        \item intervalo y regularidad;
+        \item huecos y cobertura;
+        \item ciclos y calendario;
+        \item cambios de definición o captura.
+      \end{itemize}
+    \column{.57\textwidth}
+      \centering
+      \begin{tikzpicture}[x=.68cm,y=.65cm]
+        \draw[->,UAPGray] (0,0)--(8,0);
+        \draw[->,UAPGray] (0,0)--(0,4);
+        \draw[UAPTeal,very thick] plot coordinates {(0,.5)(1,1.2)(2,.8)(3,2.4)};
+        \draw[UAPTeal,very thick] plot coordinates {(5,1.7)(6,2.1)(7,3)(8,2.5)};
+        \foreach \x/\y in {0/.5,1/1.2,2/.8,3/2.4,5/1.7,6/2.1,7/3,8/2.5}{\fill[UAPGold] (\x,\y) circle (2.3pt);}
+        \draw[UAPNavy,dashed,thick] (6.5,0)--(6.5,3.8);
+        \node[above] at (4,0) {hueco};
+        \node[rotate=90,above] at (6.5,2.1) {cambio de definición};
+      \end{tikzpicture}
+  \end{columns}
+  \begin{alertblock}{Límites}
+    Una serie TLC describe viajes reportados; NOAA describe una estación. Temporal no significa pronóstico y precedencia no demuestra causa.
+  \end{alertblock}
+\end{frame}
+
+% 36
+\begin{frame}{Exploración espacial}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.24\textwidth} p{.3\textwidth} X}
+    \toprule
+    Vista espacial & Uso & Control \\
+    \midrule
+    Coropleta & tasa o proporción por área & denominador y cortes \\
+    Símbolos o puntos & localización y magnitud & sobreposición y privacidad \\
+    Mapa de cobertura & presencia, ausencia y calidad & cero distinto de sin dato \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.6em}
+  \centering
+  \begin{tikzpicture}[scale=.55,transform shape]
+    \foreach \o/\lab in {0/Conteo,6/Tasa,12/Cobertura}{
+      \draw[very thick,UAPNavy] (\o,0)--(\o+2,1)--(\o+4,.5)--(\o+3,3)--(\o+1,3.5)--cycle;
+      \draw[UAPGray] (\o+2,1)--(\o+1,3.5) (\o+2,1)--(\o+3,3) (\o+1.5,2.2)--(\o+3.5,1.8);
+      \node[below] at (\o+2,-.2) {\lab};
+    }
+    \fill[UAPGold!60] (1.1,1.5) circle (5pt);
+    \fill[UAPTeal!55] (8.8,2.1) circle (8pt);
+    \fill[UAPGray!55] (14.8,1.8) circle (7pt);
+  \end{tikzpicture}
+  \vspace{.3em}
+  \begin{alertblock}{Interpretación}
+    El mapa TLC localiza pickups realizados/reportados, no demanda total. Una estación NOAA no se vuelve clima de cada zona. Un mapa describe dónde aparece una medida; no explica por qué.
+  \end{alertblock}
+\end{frame}
+
+% 37
+\begin{frame}{Exploración multivariada y riesgo exploratorio}
+  \small
+  Matrices de pares, mapas de calor y facetas pueden revelar redundancia, grupos y casos extraños en combinación.
+  \vspace{.4em}
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.26\textwidth} X}
+    \toprule
+    Decisión & Control necesario \\
+    \midrule
+    Elegir variables & justificación sustantiva \\
+    Estandarizar & escala común no implica igual importancia \\
+    Filtrar y facetar & registrar el universo de decisiones \\
+    Seleccionar patrón & conservar resultados discordantes y alternativas \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.5em}
+  \centering
+  \begin{tikzpicture}[node distance=12mm,scale=.82,transform shape]
+    \node[datum] (h) {Hipótesis generada};
+    \node[decision,right=of h] (f) {Evaluación futura};
+    \draw[flow,dashed] (h)--node[above,font=\small]{frontera} (f);
+  \end{tikzpicture}
+  \par Cuantas más variables, filtros y cortes se prueben, mayor transparencia se necesita ante hallazgos casuales.
+\end{frame}
+
+% 38
+\begin{frame}{Anatomía de un hallazgo defendible}
+  \footnotesize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.18\textwidth} X}
+    \toprule
+    Campo & Contenido \\
+    \midrule
+    Contrato & pregunta, población, unidad y periodo \\
+    Observación & patrón y magnitud obtenidos de evidencia \\
+    Soporte & tabla o figura trazable \\
+    Cobertura & válidos, faltantes, exclusiones y denominador \\
+    Interpretación & lenguaje proporcional al diseño \\
+    Defensa & alternativa, sensibilidad, límite y siguiente control \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.5em}
+  \begin{block}{Plantilla sin resultado}
+    ``En [periodo y unidades], los pickups TLC realizados/reportados muestran [patrón por completar], bajo [cobertura]. Coincide con [variable], pero puede reflejar [alternativas]. NOAA representa una estación, no clima zonal''.
+  \end{block}
+  \centering Usar ``se observa'' o ``se asocia'', no ``produce'' o ``causa''.
+\end{frame}
+
+% 39
+\begin{frame}{Contrato de cinco hallazgos y continuidad}
+  \footnotesize
+  El \textbf{futuro notebook}, aún no creado ni incluido, materializará cinco hallazgos complementarios:
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.32\textwidth} X}
+    \toprule
+    Hallazgo requerido & Pregunta que deberá resolver \\
+    \midrule
+    1. Distribución univariada & ¿cómo se distribuye una variable bajo cobertura declarada? \\
+    2. Comparación de grupos & ¿qué cambia entre estratos comparables? \\
+    3. Relación entre variables & ¿qué asociación aparece y qué alternativas existen? \\
+    4. Patrón temporal & ¿qué orden, ciclos, huecos o cambios se observan, sin pronosticar? \\
+    5. Patrón espacial o multivariado & ¿qué heterogeneidad aparece con medida y denominador explícitos? \\
+    \bottomrule
+  \end{tabularx}
+  \vspace{.5em}
+  \begin{block}{Contrato reproducible}
+    Cada hallazgo incluirá contrato, evidencia, cobertura, ceros/faltantes, extremos, sensibilidad, límite y próximo paso. No hay resultados predeterminados.
+  \end{block}
+\end{frame}
+
+% 40
+\begin{frame}{Síntesis y lecturas}
+  \footnotesize
+  \begin{enumerate}
+    \item Población no es archivo; estimando, peso y denominador fijan la pregunta.
+    \item Cero, faltante y ausencia de fila son estados diferentes.
+    \item Distribución, forma y cobertura preceden a cualquier resumen.
+    \item Robustez no corrige sesgo; atípico no equivale a error.
+    \item Un gráfico es una codificación y un coeficiente no reemplaza la forma.
+    \item Asociación no implica causalidad; el diagnóstico genera hipótesis.
+    \item Estratos, tiempo y espacio describen estructura, no explicación automática.
+    \item Todo hallazgo necesita alcance, alternativas, sensibilidad y próxima comprobación.
+  \end{enumerate}
+  \begin{block}{Lectura principal}
+    Capítulo 4, \textit{Estadística descriptiva, exploración y visualización}, del libro \textit{Ciencia de Datos e Inteligencia Artificial}. Como continuidad, revisar los capítulos 2 y 3.
+  \end{block}
+  \centering\alert{Explorar responsablemente es describir con precisión, comparar con honestidad y mantener visibles los límites.}
+\end{frame}
+
+\end{document}
