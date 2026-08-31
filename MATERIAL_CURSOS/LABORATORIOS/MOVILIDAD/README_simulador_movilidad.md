@@ -197,6 +197,34 @@ print(resultado.head())
 `simular_viajes` devuelve un `pandas.DataFrame` y no escribe archivos por sí
 misma.
 
+## Entorno para agentes
+
+El módulo
+[`simulador_entorno_agente.py`](simulador_entorno_agente.py) transforma los
+viajes en una secuencia de percepciones para una empresa ficticia X. El entorno
+simula una participación aleatoria de otras empresas y separa la información
+visible hasta `h` del resultado futuro usado para evaluar la recomendación.
+
+```bash
+python MATERIAL_CURSOS/LABORATORIOS/MOVILIDAD/simulador_entorno_agente.py \
+  --zona 161 \
+  --hora 8 \
+  --taxis-x 20 \
+  --horas-historia 3 \
+  --semilla 42 \
+  --salida-dir escenario_agente
+```
+
+El comando genera:
+
+- `percepciones.csv`, que puede ser leído por el agente;
+- `resultado_h_mas_1.csv`, reservado para evaluación posterior.
+
+La actividad asociada está definida en
+[`consigna_agentes_movilidad.md`](consigna_agentes_movilidad.md) y cuenta con
+la plantilla inicial
+[`plantilla_agentes_movilidad.py`](plantilla_agentes_movilidad.py).
+
 ## Interpretación y limitaciones
 
 - La tasa Poisson supone que el promedio histórico es representativo de la
@@ -210,3 +238,5 @@ misma.
   a cero.
 - El modelo no incorpora tránsito, clima, duración, disponibilidad de taxis ni
   cambios estacionales fuera del mes seleccionado.
+- La división entre una empresa X y otras empresas en el entorno para agentes
+  es sintética y no describe participaciones reales de mercado.
