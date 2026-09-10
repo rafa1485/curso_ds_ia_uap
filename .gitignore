@@ -9,3 +9,5 @@ __pycache__/
 *.log
 *.nav
 *.vrb
+/MATERIAL_CURSOS/Clases/Data_Science/Semana_04/Notas_Tasas_base_Bayes_y_alertas.txt
+/MATERIAL_CURSOS/Clases/Data_Science/Semana_04/Notas_Umbral_priorizacion_y_cierre.txt
