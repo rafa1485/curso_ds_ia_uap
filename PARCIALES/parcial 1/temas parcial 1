@@ -1,0 +1,286 @@
+Conceptos para preguntas multiple choice
+
+
+1.1.2. Definición y objetivos de la Inteligencia Artificial
+
+La Inteligencia Artificial estudia la construcción de sistemas capaces de realizar tareas que asociamos con capacidades inteligentes: percibir, representar estados, razonar, aprender, planificar, comunicarse y actuar. La expresión “inteligente” no implica que el sistema posea conciencia, comprensión humana general o intenciones propias. En un sentido técnico, significa que el sistema transforma información en comportamiento dirigido a un objetivo bajo determinadas condiciones.
+
+Una forma clásica de describir un sistema inteligente es mediante el concepto de agente. Un agente recibe una secuencia de percepciones y selecciona acciones
+
+
+El agente actúa en un entorno. El entorno puede ser físico, como una red de agua o un vehículo, o informacional, como un sistema de reclamos. Las acciones producen consecuencias que pueden medirse mediante una función de desempeño UU. Un agente racional intenta seleccionar acciones con buen desempeño esperado, dadas sus percepciones, su conocimiento y sus recursos.
+
+
+
+
+1.2. Enfoques y fundamentos de la Inteligencia Artificial
+
+Una misma aplicación puede considerarse inteligente según criterios diferentes. La clasificación clásica distingue sistemas que actúan como seres humanos, sistemas que piensan como seres humanos, sistemas que piensan racionalmente y sistemas que actúan racionalmente.
+
+
+
+1.2.5. Test de Turing
+
+El test de Turing propone evaluar si un interlocutor humano puede distinguir, mediante una conversación, entre una persona y una máquina. Su importancia histórica está en desplazar la discusión desde una definición abstracta de inteligencia hacia una prueba de comportamiento.
+
+El test tiene límites. Una conversación no evalúa necesariamente percepción física, planificación prolongada, comprensión causal o desempeño en situaciones nuevas. Además, un sistema puede utilizar estrategias de evasión, imitación o generación de respuestas plausibles. Superar una prueba particular no demuestra inteligencia general ni confiabilidad en dominios sensibles.
+
+
+1.3.2. Nacimiento formal de la Inteligencia Artificial
+
+Durante la década de 1950 se consolidó la idea de estudiar inteligencia mediante programas. La conferencia de Dartmouth de 1956 suele considerarse un hito nominal para el campo. Los primeros proyectos exploraron demostración de teoremas, juegos, resolución de problemas y manipulación simbólica.
+
+La expectativa inicial era que muchas tareas inteligentes pudieran expresarse como búsqueda en espacios de estados y manipulación de símbolos. La computadora recibiría una representación del problema, aplicaría reglas y encontraría una solución. Este enfoque fue exitoso en mundos acotados, donde las reglas y estados eran relativamente claros.
+
+Pronto aparecieron dificultades: la cantidad de estados crecía rápidamente, el lenguaje natural era ambiguo, el conocimiento del mundo era enorme y la percepción contenía ruido. La diferencia entre resolver un rompecabezas formal y actuar en un entorno abierto obligó a incorporar heurísticas, conocimiento de dominio, probabilidades y aprendizaje.
+1.3.3. Sistemas expertos y representación simbólica
+
+Los sistemas expertos separaron una base de conocimiento de un motor de inferencia. La base podía contener reglas como “si se observa A y B, considerar C”; el motor aplicaba esas reglas a hechos disponibles. Este diseño permitía explicar una conclusión mediante una cadena de reglas, una característica valiosa en dominios profesionales.
+
+La representación simbólica ofrece conceptos legibles: entidades, relaciones, categorías, causas y restricciones. También permite incorporar conocimiento que no sería fácil aprender de pocos ejemplos. Sus dificultades son el costo de adquirir y mantener reglas, la ambigüedad de las excepciones y la fragilidad ante situaciones no contempladas.
+
+Un sistema experto no es automáticamente objetivo. Las reglas reflejan decisiones de quienes las diseñan, datos históricos y políticas institucionales. Si la base de conocimiento omite una población o utiliza una definición inadecuada, el razonamiento será coherente con premisas problemáticas.
+
+La representación simbólica y el aprendizaje estadístico pueden combinarse. Un sistema puede usar un modelo aprendido para percibir una imagen y reglas explícitas para controlar una decisión. Esta combinación conserva conocimiento verificable sin exigir que toda la tarea se resuelva con reglas.
+1.3.4. Invierno de la IA y resurgimiento estadístico
+
+Los inviernos de la IA fueron periodos de reducción de financiamiento y entusiasmo. Las causas incluyeron promesas desproporcionadas, resultados difíciles de generalizar, limitaciones de cómputo, falta de datos y sistemas demasiado frágiles fuera de entornos controlados.
+
+La experiencia mostró que una demostración en un problema pequeño no equivalía a inteligencia general. También mostró que una tarea podía ser difícil por razones de representación y no solo por falta de potencia. En reconocimiento visual, por ejemplo, especificar manualmente todas las formas posibles era poco viable; en lenguaje, las reglas no podían cubrir todas las expresiones.
+
+El resurgimiento estadístico dio mayor importancia a modelos que estiman regularidades a partir de datos. La disponibilidad de bases más grandes, mejores sensores, almacenamiento barato, redes de comunicación y procesadores especializados permitió entrenar modelos más complejos. Los avances no eliminaron los problemas de sesgo, cambio de distribución y evaluación; simplemente desplazaron el centro de gravedad hacia los datos y el aprendizaje.
+
+
+
+
+6.1.1. Concepto de agente
+
+Un agente es una entidad que percibe un entorno mediante sensores y actúa sobre él mediante actuadores. La definición es deliberadamente amplia: incluye un termostato, un robot, una persona, un sistema de recomendación o un servicio que asigna cuadrillas. Lo decisivo no es que tenga forma física ni que aprenda, sino que exista un ciclo entre percepción y acción.
+
+Se denomina entorno a aquello que queda fuera de la frontera del agente y que resulta relevante para su tarea. Esa frontera es una decisión de modelado. En un sistema de movilidad, puede considerarse agente a cada vehículo, al coordinador de toda la flota o al conjunto vehículo-conductor. Cada elección modifica sensores, acciones y objetivos. Si el conductor queda dentro del agente, sus decisiones forman parte del mecanismo interno; si queda fuera, son eventos del entorno que deben observarse o anticiparse.
+
+
+6.1.2. Percepciones, sensores, acciones y actuadores
+
+Una percepción es el contenido informativo recibido por el agente en un instante. La secuencia de percepciones p1:t=(p1,…,pt)p1:t​=(p1​,…,pt​) reúne toda su experiencia hasta tt. Una observación puntual puede ser ambigua, mientras que la historia permite inferir tendencias: una presión baja aislada puede deberse a ruido; una caída persistente acompañada por aumento de caudal sugiere fuga.
+
+Los sensores son mecanismos de adquisición. Pueden ser físicos, como manómetros y cámaras, o lógicos, como una interfaz de consulta, una cola de mensajes o un formulario. Sensor y variable observada no son sinónimos: un sensor posee rango, resolución, frecuencia, latencia, disponibilidad y error. Dos instrumentos que informan «presión» pueden ofrecer evidencias de calidad muy diferente.
+
+Una acción es una decisión abstracta disponible para el agente; un actuador es el mecanismo que intenta ejecutarla. «Cerrar válvula V3» es una acción; el dispositivo motorizado y el canal de control son actuadores. La orden no garantiza el efecto: puede haber demora, rechazo o falla mecánica. Por eso se distingue entre acción emitida atat​ y transición efectiva del entorno.
+
+
+
+
+6.2.1. Descripción PEAS
+
+PEAS organiza la especificación en cuatro componentes: medida de desempeño (P, performance), entorno (E), actuadores (A) y sensores (S). El orden comienza por desempeño para impedir que las capacidades tecnológicas definan por accidente el propósito.
+Componente 	Contenido 	Preguntas de control
+Desempeño 	Criterios de éxito, costos y restricciones 	¿Qué consecuencia se premia? ¿Para quién? ¿En qué horizonte?
+Entorno 	Objetos, procesos, actores y condiciones externas 	¿Qué puede cambiar sin control del agente?
+Actuadores 	Canales por los que el agente interviene 	¿Qué acciones son realmente ejecutables y reversibles?
+Sensores 	Fuentes de percepción y su calidad 	¿Qué se observa, con qué demora, error y cobertura?
+
+
+6.2.2. Entornos observables y parcialmente observables
+
+Un entorno es completamente observable si la percepción contiene toda la información relevante para elegir racionalmente. Es parcialmente observable si sensores incompletos o ruidosos ocultan aspectos relevantes. La propiedad depende de la tarea y la representación, no de conocer cada detalle del universo.
+
+
+Errores frecuentes. Equiparar gran cantidad de datos con observabilidad completa; confundir variable no observada con inexistente; o usar información futura durante la evaluación. La observabilidad debe analizarse en el instante real de decisión y con sensores realmente disponibles.
+
+
+6.2.3. Entornos deterministas y estocásticos
+
+Un entorno es determinista si el estado siguiente queda fijado por estado actual y acción.
+
+Es estocástico si existen varios resultados con probabilidades. La incertidumbre puede provenir de variabilidad física, actores externos o una representación que omite variables.
+
+Conviene separar incertidumbre aleatoria, asociada a variación irreducible del modelo, de incertidumbre epistémica, asociada a conocimiento insuficiente. Más datos pueden reducir la segunda, no necesariamente la primera.
+
+6.2.4. Entornos episódicos y secuenciales
+
+En un entorno episódico, la experiencia se divide en episodios independientes: la acción de uno no afecta decisiones futuras. Clasificar imágenes independientes se aproxima a este caso si cada predicción no modifica datos ni usuarios. En un entorno secuencial, la acción actual cambia estados, información disponible u oportunidades posteriores.
+
+6.2.5. Entornos estáticos y dinámicos
+
+Un entorno es estático si no cambia mientras el agente delibera. Es dinámico si evoluciona durante ese intervalo. En un entorno semidinámico, el estado externo permanece, pero la medida de desempeño cambia con el tiempo, como en una prueba cronometrada.
+
+La clasificación depende de la relación entre escalas temporales. Un problema puede considerarse estático si calcular toma milisegundos y el entorno cambia cada hora; la misma técnica deja de ser adecuada si deliberar requiere veinte minutos. 
+
+6.2.7. Entornos monoagente y multiagente
+
+En un entorno monoagente, el desempeño puede analizarse sin modelar decisiones de otras entidades como agentes. En uno multiagente, otros actores seleccionan acciones que afectan resultados. Pueden cooperar, competir o combinar ambas relaciones.
+
+Una roca que bloquea una ruta pertenece al entorno, pero no es agente: no persigue una finalidad. Otro conductor sí puede serlo porque adapta su conducta. En movilidad, vehículos cooperan al respetar reglas y compiten por espacio. En mercados, participantes responden estratégicamente a precios. La política óptima depende entonces de expectativas sobre los demás.
+
+
+
+6.3. Arquitecturas de agentes
+
+Una arquitectura de agente organiza la transformación de percepciones en acciones. Las categorías siguientes no son productos excluyentes: un sistema real puede combinar reacción rápida, modelo interno, planificación, utilidad y aprendizaje. La elección depende del entorno, las garantías necesarias y el costo de construir y mantener cada componente.
+
+6.3.1. Agentes reactivos simples
+
+Un agente reactivo simple selecciona una acción a partir de la percepción actual mediante reglas condición-acción.
+
+
+6.3.2. Agentes reactivos basados en modelos
+
+Un agente reactivo basado en modelos mantiene un estado interno que resume aspectos no observados directamente. Actualiza ese estado con percepción, acción anterior y conocimiento de cómo evoluciona el entorno.
+
+El modelo posee al menos dos partes: un modelo de transición, que anticipa efectos de acciones y cambios externos, y un modelo de observación, que relaciona estados con percepciones. El estado interno puede ser simbólico («válvula probablemente cerrada»), numérico o probabilístico.
+
+6.3.3. Agentes orientados a objetivos
+
+Un agente orientado a objetivos selecciona acciones considerando estados deseados. Además de estimar el estado actual, pregunta qué secuencia puede alcanzar una condición objetivo G.
+
+6.3.4. Agentes basados en utilidad
+
+Un agente basado en utilidad asigna valor a consecuencias y elige entre alternativas que alcanzan objetivos con diferente calidad. Una función U(s)U(s) representa preferencia sobre estados; bajo incertidumbre se maximiza utilidad esperada.
+
+Capítulo 7. Búsqueda y resolución algorítmica de problemas
+
+Buscar es convertir una pregunta del tipo «¿qué secuencia de decisiones conduce desde esta situación hasta una situación aceptable?» en un procedimiento sistemático. Un planificador de recorridos, un rompecabezas, una asignación de turnos y una secuencia de inspecciones parecen problemas distintos; sin embargo, todos pueden describirse mediante estados, acciones, objetivos y costos. La representación establece qué soluciones existen. La estrategia de búsqueda establece cuáles se examinan primero y qué recursos se consumen para encontrarlas.
+
+7.1. Espacios de estados y procesos de búsqueda
+
+Un problema de búsqueda puede representarse formalmente como
+P=(S,A,T,s0,G,c),
+P=(S,A,T,s0​,G,c),
+
+donde SS es el conjunto de estados; A(s)A(s), las acciones aplicables en ss; T(s,a)T(s,a), el estado resultante; s0s0​, el estado inicial; G(s)G(s), un predicado que reconoce objetivos; y c(s,a,s′)c(s,a,s′), el costo de pasar de ss a s′s′. Una solución es una secuencia de acciones aplicables que lleva desde s0s0​ hasta algún estado que satisface GG. Su costo es la suma de los costos de sus transiciones.
+
+Esta definición no obliga a enumerar SS. En problemas reales, el espacio suele describirse de manera implícita mediante una función sucesora. La búsqueda genera solo la parte necesaria. Antes de elegir un algoritmo, por tanto, hay que decidir qué información integra un estado, qué acciones son legales y cuándo dos descripciones representan la misma situación.
+
+
+7.1.1. Árboles y grafos
+
+Un grafo es un par G=(V,E)G=(V,E), con un conjunto de vértices VV y un conjunto de aristas EE. En un grafo dirigido, cada arista es un par ordenado (u,v)(u,v): poder avanzar de uu a vv no implica poder volver de vv a uu. En un grafo no dirigido, una arista expresa una relación simétrica. Si a cada arista se le asocia un valor w(u,v)w(u,v), se obtiene un grafo ponderado. El peso puede representar distancia, tiempo, dinero, riesgo o una combinación cuyo significado debe declararse.
+
+Un árbol es un grafo conectado y sin ciclos. Si se elige una raíz, cada nodo salvo la raíz tiene un único padre y existe un único camino simple desde la raíz hasta cualquier nodo. El árbol es útil para visualizar el proceso de búsqueda, pero el dominio subyacente puede ser un grafo. Esta distinción evita una confusión frecuente:
+
+    el grafo de estados contiene una vez cada estado y todas las transiciones legales;
+    el árbol de búsqueda contiene las distintas maneras en que el algoritmo llega a estados, por lo que un mismo estado puede aparecer en varios nodos.
+
+
+7.1.3. Frontera y conjunto explorado
+
+La frontera reúne nodos generados pendientes de expansión. La política para extraer un nodo define la estrategia: una cola FIFO produce anchura; una pila LIFO, profundidad; una cola de prioridad por gg, costo uniforme; y una cola por g+hg+h, A*. El conjunto explorado registra estados ya expandidos para evitar trabajo redundante y ciclos.
+
+7.1.4. Búsqueda en árbol y búsqueda en grafo
+
+La búsqueda en árbol no recuerda estados previamente alcanzados. Cada sucesor crea un nodo nuevo, aunque su estado haya aparecido antes. Requiere menos mecanismos de control y puede ser adecuada cuando el espacio es realmente un árbol o cuando cada secuencia conduce a un estado único. En grafos con rutas convergentes desperdicia trabajo; con ciclos puede no terminar.
+
+La búsqueda en grafo incorpora detección de repetidos. Su ventaja es reducir expansiones; su costo es almacenar claves de estados y decidir qué hacer cuando aparece una ruta mejor. Esa decisión depende de la estrategia:
+
+    con anchura y costos unitarios, la primera profundidad a la que se descubre un estado es mínima;
+    con costo uniforme, debe prevalecer el menor costo acumulado;
+    con A* y heurística consistente, un estado retirado con prioridad mínima ya tiene su costo óptimo;
+    con una heurística admisible pero inconsistente, puede ser necesario reabrir un estado explorado si se encuentra un gg menor.
+
+
+7.1.5. Ciclos y estados repetidos
+
+Un ciclo es un camino no vacío que comienza y termina en el mismo estado.
+
+
+
+
+7.2. Búsqueda no informada
+
+Una estrategia no informada emplea la definición del problema y el costo recorrido, pero no una estimación específica de la cercanía al objetivo. 
+
+
+7.2.1. Búsqueda en anchura
+
+La búsqueda en anchura (BFS) expande primero todos los nodos de profundidad 0, luego los de profundidad 1 y así sucesivamente. Su frontera es una cola FIFO.
+
+
+7.2.2. Búsqueda en profundidad
+
+La búsqueda en profundidad (DFS) expande el nodo más profundo disponible. Puede implementarse con una pila LIFO o mediante recursión conceptual. Explora una rama hasta terminarla y luego retrocede.
+
+7.2.5. Búsqueda de costo uniforme
+
+La búsqueda de costo uniforme (UCS) extrae de una cola de prioridad el nodo con menor g(n)g(n). Es una generalización de BFS: si cada paso cuesta una unidad, el costo coincide con la profundidad. Con costos distintos, UCS explora contornos de costo acumulado creciente.
+
+7.3. Búsqueda informada y heurísticas
+
+La búsqueda informada utiliza conocimiento adicional para ordenar la exploración. Una buena heurística dirige hacia regiones prometedoras.
+
+7.3.1. Funciones heurísticas
+
+Una heurística es una función h:S→Rh:S→R que estima el costo mínimo restante desde un estado hasta un objetivo. Se adopta h(g)=0h(g)=0 para estados objetivo. El costo verdadero restante se denota h∗(n)h∗(n). Una heurística no modifica el costo real gg; aporta una señal para priorizar.
+
+
+7.3.2. Búsqueda voraz
+
+La búsqueda voraz por el mejor primero ordena la frontera solo por h(n)h(n). Elige el estado que parece más cercano al objetivo e ignora cuánto costó alcanzarlo. Puede avanzar con pocas expansiones cuando la estimación orienta bien, pero puede aceptar un desvío inicial muy caro o quedar atraída por una región engañosa.
+
+
+7.3.3. Algoritmo A*
+
+A* combina costo recorrido y costo estimado.
+
+Interpreta ff como una estimación del costo total de una solución que pasa por nn. Extrae de la frontera el nodo con menor ff. Su pseudocódigo es el de costo uniforme reemplazando la prioridad gg por g+hg+h, pero conserva mejor_g para decidir si una ruta nueva mejora el estado.
+
+7.3.4. Heurísticas admisibles
+
+Una heurística es admisible si nunca sobreestima el costo óptimo restante.
+
+
+
+
+Fuentes de incertidumbre
+Del lado de la observación 	Del lado del mundo y del modelo
+observabilidad parcial 	resultados estocásticos
+ruido de sensores 	estados omitidos
+información faltante o ambigua 	cambio del entorno
+datos insuficientes o mal cubiertos 	
+
+
+
+Dos tipos fundamentales
+Aleatoria 	Epistémica
+variabilidad que permanece aun conociendo el modelo 	falta de conocimiento potencialmente reducible
+resultado de un dado o de un sensor ruidoso 	pocos datos o parámetros imprecisos
+respuesta: reservas, redundancia, robustez 	respuesta: más datos pertinentes, mejores mediciones
+
+
+
+Otras distinciones útiles
+Tipo 	Pregunta que responde y ejemplo
+Observacional 	¿la medición coincide con el estado? el sensor reporta alerta aunque el camino esté libre
+Estructural 	¿el modelo incluye lo relevante? un robot que ignora que el piso puede estar húmedo
+Distribucional (cambio de distribución) 	¿el futuro se parece al pasado? condiciones de hoy distintas de las históricas
+Vaguedad 	¿la categoría tiene límites nítidos? "cerca", "alto", "riesgoso"
+
+
+Problemáticas asociadas (I)
+
+La incertidumbre no resuelta produce errores de razonamiento:
+
+    confundir "no sé" con "no existe": la ausencia de dato no prueba ausencia del fenómeno;
+    invertir la condición: P(alerta∣bloqueo)≠P(bloqueo∣alerta)P(alerta∣bloqueo)=P(bloqueo∣alerta);
+    ignorar la tasa base: una señal poco común puede seguir indicando un estado poco probable;
+    contar dos veces evidencia dependiente: dos sensores con una causa común no aportan información independiente.
+
+Cada error convierte un número correcto en una conclusión equivocada.
+Problemáticas asociadas (II)
+
+    falsa precisión: asignar un número sin respaldo ni análisis de sensibilidad;
+    confundir probabilidad con importancia: un evento raro puede ser gravísimo;
+    ocultar incertidumbre del modelo: presentar una creencia como si fuera un hecho;
+    actuar fuera de distribución: confiar en datos históricos ante condiciones nuevas;
+    explorar sin control: aprender por prueba y error en un entorno donde equivocarse daña.
+
+El riesgo no está en usar probabilidades, sino en presentarlas como certezas que no son.
+¿Qué podemos hacer?
+Reducir y representar 	Decidir y controlar
+obtener información pertinente 	comparar acciones por costo o utilidad esperada
+modelar estados posibles y sus probabilidades 	hacer análisis de sensibilidad
+mantener conjuntos de estados consistentes 	elegir políticas robustas ante escenarios
+Actualizar 	Limitar el daño
+incorporar evidencia con Bayes 	abstenerse o pedir intervención humana
+combinar observaciones sin doble conteo 	aprender por interacción solo si es seguro
+

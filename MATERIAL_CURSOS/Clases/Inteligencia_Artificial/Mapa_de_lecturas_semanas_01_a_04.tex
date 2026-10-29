@@ -1,0 +1,273 @@
+% Compilar dos veces desde este directorio con:
+% pdflatex -interaction=nonstopmode -halt-on-error Mapa_de_lecturas_semanas_01_a_04.tex
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage[a4paper,margin=1.45cm,headheight=20pt]{geometry}
+\usepackage{array,booktabs,longtable,ragged2e}
+\usepackage[table]{xcolor}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=UAPTeal,
+  urlcolor=UAPTeal,
+  pdftitle={Mapa de lecturas para las semanas 1 a 4 de Inteligencia Artificial},
+  pdfsubject={Correspondencia entre presentaciones y capitulos del libro},
+  pdfauthor={Curso de Inteligencia Artificial}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small\color{UAPGray}Inteligencia Artificial}
+\rhead{\small\color{UAPGray}Mapa de lecturas · Semanas 1--4}
+\cfoot{\small\color{UAPGray}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{UAPTeal}\leaders\hrule height \headrulewidth\hfill}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[itemize]{leftmargin=1.3em,itemsep=1pt,topsep=2pt}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.14}
+
+\newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcommand{\capitulo}[1]{\textbf{\color{UAPTeal}#1}}
+\newcommand{\principal}{\textbf{Principal}}
+\newcommand{\apoyo}{\textbf{Apoyo}}
+
+\newcommand{\encabezadotabla}{%
+  \rowcolor{UAPNavy}
+  \color{white}\textbf{Parte de la presentación} &
+  \color{white}\textbf{Lectura del libro} &
+  \color{white}\textbf{Cómo ayuda a comprenderla} &
+  \color{white}\textbf{Nivel} \\
+  \endhead
+}
+
+\begin{document}
+
+\begin{center}
+  {\color{UAPNavy}\LARGE\bfseries Mapa de lecturas del libro}\par
+  \vspace{2pt}
+  {\color{UAPTeal}\Large Semanas 1 a 4 de Inteligencia Artificial}\par
+  \vspace{5pt}
+  {\color{UAPGray}\small Correspondencia temática entre las presentaciones de clase y los capítulos del libro}
+\end{center}
+
+\vspace{4pt}
+\noindent\colorbox{UAPLight}{%
+  \parbox{\dimexpr\textwidth-2\fboxsep-4pt\relax}{
+    \textbf{Objetivo.} Orientar la lectura previa, simultánea o posterior a cada clase. La tabla no reemplaza las presentaciones: señala qué secciones del libro desarrollan sus conceptos, formalizaciones, ejemplos y criterios de evaluación.
+  }
+}\par
+
+\section*{Resultado general del análisis}
+
+\begin{longtable}{P{1.45cm}P{4.55cm}P{8.25cm}}
+\toprule
+\rowcolor{UAPNavy}
+\color{white}\textbf{Semana} & \color{white}\textbf{Capítulos centrales} & \color{white}\textbf{Función dentro de la clase} \\
+\midrule
+1 & Capítulos 1 y 6 & El capítulo 1 aporta definiciones, enfoques e historia de la IA. El capítulo 6 desarrolla agente, racionalidad, PEAS y propiedades del entorno. \\
+\rowcolor{UAPLight}
+2 & Capítulos 6 y 7 & El capítulo 6 explica cómo formular el problema; el capítulo 7 explica cómo representarlo como grafo y recorrerlo con estrategias no informadas. \\
+3 & Capítulo 7 & La sección 7.3 desarrolla heurísticas, búsqueda voraz, A*, sus garantías y la comparación experimental. \\
+\rowcolor{UAPLight}
+4 & Capítulos 5 y 8 & El capítulo 5 permite representar y actualizar creencias; el capítulo 8 permite comparar acciones mediante costo o utilidad esperada. \\
+\bottomrule
+\end{longtable}
+
+\section*{Ruta mínima recomendada}
+
+Para acompañar las cuatro presentaciones con la menor cantidad de lectura posible:
+
+\begin{enumerate}[leftmargin=1.6em,itemsep=2pt]
+  \item Semana 1: 1.1.2; 1.2; 1.3; 6.1 y 6.2.
+  \item Semana 2: 6.4; 7.1 y 7.2.
+  \item Semana 3: 7.3 completa.
+  \item Semana 4, hasta la diapositiva 26: 5.1.4--5.1.6; 5.2.4 y 5.2.7; 5.3.1--5.3.4; 5.4.1--5.4.2 y 5.4.5; 8.1.1--8.1.3.
+\end{enumerate}
+
+\newpage
+\section*{Semana 1 · Fundamentos de IA, agentes y racionalidad}
+
+\textbf{Presentación analizada:} \texttt{Semana\_01/Clase\_01\_Fundamentos\_de\_IA\_agentes\_y\_racionalidad.md}
+
+\begin{longtable}{P{3.35cm}P{4.05cm}P{6.25cm}P{2.15cm}}
+\toprule
+\encabezadotabla
+\midrule
+Definición de IA y capacidades de un sistema inteligente & \capitulo{Cap. 1, 1.1.2} Definición y objetivos de la IA & Delimita percepción, razonamiento, aprendizaje, planificación y acción sin equiparar inteligencia con conciencia o autonomía total. & \principal \\
+\rowcolor{UAPLight}
+IA, aprendizaje automático y Ciencia de Datos & \capitulo{Cap. 1, 1.1.1--1.1.4} & Distingue los campos y explica sus relaciones con estadística, optimización e ingeniería de software. Permite entender por qué puede haber IA sin aprendizaje y análisis predictivo sin agente. & \principal \\
+Cuatro enfoques clásicos de la IA & \capitulo{Cap. 1, 1.2.1--1.2.4} & Desarrolla las diferencias entre actuar o pensar como humanos y actuar o pensar racionalmente. & \principal \\
+\rowcolor{UAPLight}
+Test de Turing y modelado cognitivo & \capitulo{Cap. 1, 1.2.5} & Aporta el contexto de la evaluación conductual y explica por qué imitación, cognición y comprensión no son equivalentes. & \principal \\
+Pensamiento racional, incertidumbre y acción racional & \capitulo{Cap. 1, 1.2.3--1.2.4}; \capitulo{Cap. 6, 6.1.4--6.1.6} & Vincula inferencia lógica, desempeño esperado, racionalidad limitada y diferencia entre agente racional y omnisciente. & \principal \\
+\rowcolor{UAPLight}
+Fundamentos filosóficos, matemáticos y computacionales & \capitulo{Cap. 1, 1.2.6} & Explica el aporte de lógica, probabilidad, teoría de decisión, optimización y computación a la arquitectura presentada en clase. & \apoyo \\
+Evolución histórica, sistemas expertos, inviernos y resurgimiento estadístico & \capitulo{Cap. 1, 1.3.1--1.3.5} & Ordena los hitos históricos y relaciona expectativas con disponibilidad de datos, cómputo, métodos simbólicos y aprendizaje profundo. & \principal \\
+\rowcolor{UAPLight}
+Aprendizaje profundo e IA generativa & \capitulo{Cap. 1, 1.1.3 y 1.3.5} & Brinda una introducción suficiente para interpretar estos temas como etapas de la evolución, sin convertirlos en sinónimos de toda la IA. & \apoyo \\
+Anatomía de un sistema inteligente & \capitulo{Cap. 6, 6.1.1--6.1.3} & Profundiza el ciclo percepción--acción, la función de agente, el programa, la memoria interna y los límites de la implementación. & \principal \\
+\rowcolor{UAPLight}
+Concepto de agente, entorno, sensores y actuadores & \capitulo{Cap. 6, 6.1.1--6.1.3} & Precisa la frontera entre agente y entorno y diferencia percepción, sensor, acción, actuador y efecto real. & \principal \\
+Racionalidad, desempeño, autonomía y abstención & \capitulo{Cap. 6, 6.1.4--6.1.6} & Ayuda a construir medidas de desempeño completas, comprender la racionalidad limitada y evitar confundir un buen resultado aislado con una buena decisión. & \principal \\
+\rowcolor{UAPLight}
+PEAS: especificación de la tarea & \capitulo{Cap. 6, 6.2.1} Descripción PEAS & Explica qué debe declararse como desempeño, entorno, actuadores y sensores antes de elegir una arquitectura. & \principal \\
+Propiedades del ambiente & \capitulo{Cap. 6, 6.2.2--6.2.7} & Desarrolla observabilidad, determinismo, secuencialidad, dinamismo, discretización y cantidad de agentes, junto con sus implicancias. & \principal \\
+\rowcolor{UAPLight}
+Caso y actividad de movilidad urbana & \capitulo{Cap. 6, 6.2.8} Caracterización PEAS de movilidad & Ofrece un ejemplo directamente alineado con la actividad: métricas, entorno, sensores, actuadores y justificación de propiedades. & \principal \\
+Riesgos de optimizar una métrica incompleta & \capitulo{Cap. 6, 6.1.4--6.1.5} & Amplía la selección de métricas, restricciones de seguridad, efectos distributivos y necesidad de supervisión. & \apoyo \\
+\bottomrule
+\end{longtable}
+
+\textbf{Conclusión de la semana.} El capítulo 1 responde qué es la IA y cómo evolucionó; el capítulo 6 responde cómo describir operativamente un agente y su tarea.
+
+\section*{Semana 2 · Representación y búsqueda en espacios de estados}
+
+\textbf{Presentación analizada:} \texttt{Semana\_02/Clase\_02\_Representacion\_y\_busqueda\_en\_espacios\_de\_estados.md}
+
+\begin{longtable}{P{3.35cm}P{4.05cm}P{6.25cm}P{2.15cm}}
+\toprule
+\encabezadotabla
+\midrule
+Paso de PEAS a un problema computable & \capitulo{Cap. 6, 6.4}; \capitulo{Cap. 7, 7.1} & Muestra cómo pasar de la tarea del agente a una formulación con estados, acciones, transición, estado inicial, objetivo y costo. & \principal \\
+\rowcolor{UAPLight}
+Formulación $P=(S,A,T,s_0,G,c)$ & \capitulo{Cap. 7, inicio de 7.1} & Presenta la misma formulación formal y define solución y costo de una secuencia de acciones. & \principal \\
+Diseño y suficiencia del estado & \capitulo{Cap. 6, 6.4.1 y 6.4.5} & Ayuda a decidir qué variables conservar, qué detalles omitir y cuándo una representación pierde información necesaria para predecir el futuro. & \principal \\
+\rowcolor{UAPLight}
+Estado del mundo, percepción, estado interno y nodo & \capitulo{Cap. 6, 6.1.1--6.1.3}; \capitulo{Cap. 7, 7.1.2} & Separa lo que existe, lo que se observa, la estimación interna y el registro creado por el algoritmo. & \principal \\
+Acciones, precondiciones y modelo de transición & \capitulo{Cap. 6, 6.4.2} & Desarrolla acciones legales, efectos, invariantes y transición determinista o incierta. & \principal \\
+\rowcolor{UAPLight}
+Estado inicial, prueba de objetivo, costos y restricciones & \capitulo{Cap. 6, 6.4.3--6.4.4} & Distingue resultado deseado, método, costo, restricción dura y utilidad. Evita tratar una acción ilegal como una opción meramente cara. & \principal \\
+Longitud frente a costo del camino & \capitulo{Cap. 7, 7.1.2} & Explica por qué minimizar pasos y minimizar peso acumulado son objetivos diferentes. & \principal \\
+\rowcolor{UAPLight}
+Grafos dirigidos y ponderados; árbol de búsqueda & \capitulo{Cap. 7, 7.1.1} & Define vértices, aristas, dirección y pesos, y diferencia el grafo del dominio del árbol generado por la búsqueda. & \principal \\
+Nodo, camino y reconstrucción de la solución & \capitulo{Cap. 7, 7.1.2} & Detalla los campos del nodo, el costo acumulado y el uso de punteros al padre para recuperar el plan. & \principal \\
+\rowcolor{UAPLight}
+Frontera y conjunto explorado & \capitulo{Cap. 7, 7.1.3--7.1.4} & Relaciona FIFO, LIFO y colas de prioridad con el orden de expansión; explica búsqueda en árbol y en grafo. & \principal \\
+Ciclos, convergencias y mejores costos & \capitulo{Cap. 7, 7.1.5} & Compara control de ancestros, estados descubiertos y reapertura cuando aparece un camino más barato. & \principal \\
+\rowcolor{UAPLight}
+Tiempo y memoria de búsqueda & \capitulo{Cap. 7, 7.1.6} & Introduce $b$, $d$, $m$, $C^*$ y $\varepsilon$, y explica el crecimiento exponencial y el costo de la frontera. & \principal \\
+Búsqueda en anchura y profundidad & \capitulo{Cap. 7, 7.2.1--7.2.2} & Desarrolla operación, completitud, optimalidad, memoria, ciclos y dependencia del orden de sucesores. & \principal \\
+\rowcolor{UAPLight}
+Profundidad limitada y profundización iterativa & \capitulo{Cap. 7, 7.2.3--7.2.4} & Explica corte, elección del límite y combinación de profundidad mínima con memoria reducida. & \principal \\
+Búsqueda de costo uniforme & \capitulo{Cap. 7, 7.2.5} & Detalla prioridad por $g$, conservación del mejor costo, prueba del objetivo al extraer y condiciones de optimalidad. & \principal \\
+\rowcolor{UAPLight}
+Comparación de garantías & \capitulo{Cap. 7, 7.2.6--7.2.7} & Sistematiza completitud, optimalidad, tiempo, espacio y supuestos de cada estrategia. & \principal \\
+Actividad con red vial y movilidad & \capitulo{Cap. 7, 7.1.7 y 7.2.8} & Proporciona ejemplos guiados para formular un grafo, ejecutar estrategias y explicar diferencias entre camino, costo y orden de expansión. & \apoyo \\
+\bottomrule
+\end{longtable}
+
+\textbf{Conclusión de la semana.} La sección 6.4 enseña a construir una representación adecuada; las secciones 7.1 y 7.2 permiten buscar sobre ella y justificar las garantías obtenidas.
+
+\section*{Semana 3 · Búsqueda informada y heurísticas}
+
+\textbf{Presentación analizada:} \texttt{Semana\_03/Clase\_03\_Busqueda\_informada\_y\_heuristicas.md}
+
+\begin{longtable}{P{3.35cm}P{4.05cm}P{6.25cm}P{2.15cm}}
+\toprule
+\encabezadotabla
+\midrule
+Continuidad desde BFS, DFS y UCS & \capitulo{Cap. 7, 7.1.3 y 7.2} & Recupera la frontera, el mejor costo y las garantías de las estrategias no informadas necesarias para comparar prioridades. & \apoyo \\
+\rowcolor{UAPLight}
+Esquema general de búsqueda con prioridad & \capitulo{Cap. 7, 7.1.3--7.1.4} & Explica extracción, entradas obsoletas, relajación de transiciones, repetidos y reapertura. & \principal \\
+Diferencia entre búsqueda no informada e informada & \capitulo{Cap. 7, 7.2 y comienzo de 7.3} & Permite entender que $g$ resume costo recorrido y que $h$ agrega conocimiento sobre el futuro sin modificar el problema. & \principal \\
+\rowcolor{UAPLight}
+Costo uniforme como línea base & \capitulo{Cap. 7, 7.2.5} & Fundamenta las reglas de implementación que A* conserva: mejor $g$, objetivo al extraer y descarte de entradas obsoletas. & \principal \\
+Función heurística; $g$, $h$ y $f$ & \capitulo{Cap. 7, 7.3.1} & Define la estimación del costo restante, las unidades compatibles y los extremos de heurística nula y perfecta. & \principal \\
+\rowcolor{UAPLight}
+Búsqueda voraz & \capitulo{Cap. 7, 7.3.2} & Explica prioridad por $h$, rapidez potencial y falta de optimalidad por ignorar el costo ya recorrido. & \principal \\
+Algoritmo A* y pseudocódigo & \capitulo{Cap. 7, 7.3.3} & Desarrolla $f=g+h$, estructura del nodo, cola de prioridad, actualización de costos y reconstrucción del camino. & \principal \\
+\rowcolor{UAPLight}
+Condiciones para la optimalidad de A* & \capitulo{Cap. 7, 7.3.3--7.3.5} & Reúne supuestos sobre costos, prueba del objetivo, tratamiento de repetidos y propiedades de la heurística. & \principal \\
+Admisibilidad & \capitulo{Cap. 7, 7.3.4} & Formaliza $0\le h(n)\le h^*(n)$ y aporta la intuición de por qué una cota inferior preserva la solución óptima. & \principal \\
+\rowcolor{UAPLight}
+Consistencia y reapertura & \capitulo{Cap. 7, 7.3.5} & Desarrolla la desigualdad triangular, la monotonía de $f$ y la necesidad de reabrir estados cuando la heurística es admisible pero inconsistente. & \principal \\
+Diseño de heurísticas & \capitulo{Cap. 7, 7.3.6} & Presenta relajación, abstracción, geometría, descomposición, patrones y combinación de cotas admisibles. & \principal \\
+\rowcolor{UAPLight}
+Evaluación reproducible de heurísticas & \capitulo{Cap. 7, 7.3.6--7.3.7} & Propone medir costo, nodos generados y expandidos, frontera máxima, reaperturas, tiempo y costo de calcular $h$. & \principal \\
+Ejemplo guiado de rutas con A* & \capitulo{Cap. 7, 7.3.7} & Permite contrastar paso a paso UCS y A* sobre la misma instancia y auditar admisibilidad y consistencia. & \apoyo \\
+\rowcolor{UAPLight}
+Trabajo práctico sobre búsqueda voraz y A* & \capitulo{Cap. 7, actividad MOV-02} & Ofrece una aplicación sobre red de movilidad y una estructura para comparar algoritmos y heurísticas con evidencia. & \apoyo \\
+\bottomrule
+\end{longtable}
+
+\textbf{Conclusión de la semana.} La sección 7.3 cubre de forma directa toda la presentación. Las secciones 7.1.3 y 7.2.5 son el repaso mínimo para comprender correctamente la implementación de A*.
+
+\section*{Semana 4 · Incertidumbre en agentes inteligentes}
+
+\textbf{Presentación analizada:} \texttt{Semana\_04/Clase\_04\_Incertidumbre\_en\_agentes\_inteligentes.md}
+
+\begin{longtable}{P{3.35cm}P{4.05cm}P{6.25cm}P{2.15cm}}
+\toprule
+\encabezadotabla
+\midrule
+Mundo, observación, creencia, acción y consecuencia & \capitulo{Cap. 6, 6.1.1--6.1.3}; \capitulo{Cap. 5, 5.3} & El capítulo 6 separa estado y percepción; el capítulo 5 explica cómo la evidencia transforma una creencia previa en posterior. & \principal \\
+\rowcolor{UAPLight}
+Fuentes y tipos de incertidumbre & \capitulo{Cap. 5, 5.4.1--5.4.2} & Distingue variabilidad aleatoria de falta de conocimiento reducible y relaciona ambas con medición, datos, parámetros y estructura. & \principal \\
+Observabilidad parcial y resultados estocásticos & \capitulo{Cap. 6, 6.2.2--6.2.3} & Conecta las fuentes de incertidumbre con la caracterización del entorno estudiada en la semana 1. & \apoyo \\
+\rowcolor{UAPLight}
+Errores de interpretación y actuación fuera de distribución & \capitulo{Cap. 5, 5.4.5} & Profundiza inversión del condicional, negligencia de tasa base, falsa precisión y diferencia entre probabilidad y causalidad. & \principal \\
+Estado real, percepción y creencia & \capitulo{Cap. 6, 6.1.1--6.1.3}; \capitulo{Cap. 5, 5.3.1--5.3.3} & Ayuda a separar el fenómeno, la lectura del sensor y la distribución que resume lo conocido por el agente. & \principal \\
+\rowcolor{UAPLight}
+Reglas de producto y probabilidad condicional & \capitulo{Cap. 5, 5.1.4--5.1.5} & Fundamenta la construcción de cada celda de la tabla conjunta y la diferencia entre $P(A\mid B)$ y $P(B\mid A)$. & \principal \\
+Distribución conjunta y marginalización & \capitulo{Cap. 5, 5.2.7} & Explica tablas conjuntas, sumas marginales, condicionamiento y normalización. & \principal \\
+\rowcolor{UAPLight}
+Independencia de observaciones & \capitulo{Cap. 5, 5.1.6} & Precisa cuándo se puede multiplicar evidencia y por qué sensores dependientes pueden producir confianza excesiva. & \principal \\
+Previa, verosimilitud, posterior y evidencia & \capitulo{Cap. 5, 5.3.1--5.3.4} & Desarrolla cada componente del teorema de Bayes y su interpretación dentro de un modelo de observación. & \principal \\
+\rowcolor{UAPLight}
+Efecto de la tasa base y posteriores del ejemplo & \capitulo{Cap. 5, 5.3.1--5.3.4 y 5.4.5} & Explica cómo la prevalencia modifica la probabilidad posterior y por qué la sensibilidad del sensor no debe confundirse con la probabilidad del estado después de observar. & \principal \\
+Esperanza y costo esperado & \capitulo{Cap. 5, 5.2.4}; \capitulo{Cap. 8, 8.1.1--8.1.3} & El capítulo 5 introduce esperanza; el capítulo 8 organiza acciones, estados y consecuencias y deriva la decisión por costo o utilidad esperada. & \principal \\
+\rowcolor{UAPLight}
+Matriz de costos y errores asimétricos & \capitulo{Cap. 8, 8.1.1--8.1.3} & Explica por qué no basta elegir el estado más probable y cómo valorar de manera diferente cada combinación de acción y estado. & \principal \\
+Decisión sin haber observado & \capitulo{Cap. 8, 8.1.3} & Permite usar la creencia previa para calcular el costo esperado de cada acción antes de recibir evidencia y seleccionar la alternativa de menor costo. & \principal \\
+\bottomrule
+\end{longtable}
+
+\textbf{Conclusión de la semana hasta la diapositiva 26.} El capítulo 5 responde cómo representar y actualizar incertidumbre. Las secciones 8.1.1--8.1.3 permiten comparar acciones mediante sus consecuencias y su costo o utilidad esperada.
+
+\newpage
+\section*{Lista final de capítulos}
+
+\begin{longtable}{P{1.2cm}P{6.1cm}P{4.1cm}P{4.3cm}}
+\toprule
+\rowcolor{UAPNavy}
+\color{white}\textbf{Cap.} & \color{white}\textbf{Título} & \color{white}\textbf{Semanas} & \color{white}\textbf{Prioridad} \\
+\midrule
+1 & Ciencia de Datos e Inteligencia Artificial: conceptos, historia y aplicaciones & 1 & Central para definiciones, enfoques e historia. \\
+\rowcolor{UAPLight}
+5 & Probabilidad, incertidumbre e inferencia bayesiana & 4; apoyo conceptual en 1 & Central para probabilidad, Bayes y tipos de incertidumbre. \\
+6 & Agentes inteligentes y representación de problemas & 1 y 2; apoyo en 4 & Central para agentes, PEAS, entornos y formulación. \\
+\rowcolor{UAPLight}
+7 & Búsqueda y resolución algorítmica de problemas & 2 y 3 & Central para búsqueda no informada, heurísticas y A*. \\
+8 & Decisiones secuenciales y aprendizaje por refuerzo & 4 & Secciones 8.1.1--8.1.3 para consecuencias y costo o utilidad esperada. \\
+\bottomrule
+\end{longtable}
+
+\section*{Criterio de uso}
+
+\begin{itemize}
+  \item \principal: lectura necesaria para desarrollar o justificar directamente una parte de la presentación.
+  \item \apoyo: lectura que aporta profundidad, ejemplos o conexiones con semanas anteriores.
+\end{itemize}
+
+\vfill
+\begin{center}
+  \small\color{UAPGray}
+  Elaborado a partir de las presentaciones Markdown de las semanas 1, 2, 3 y 4 y de los capítulos disponibles en \texttt{MATERIAL\_CURSOS/Libro}.
+\end{center}
+
+\end{document}
