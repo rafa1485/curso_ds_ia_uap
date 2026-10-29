@@ -31,7 +31,6 @@ BANCO = [
 (28,3,"Clase 3 – Covarianza y correlación","El coeficiente de correlación de Pearson mide:","La asociación lineal estandarizada, entre −1 y 1.","La asociación de orden monotónica, basada en rangos.","La variación lineal conjunta, en producto de unidades."),
 (29,3,"Clase 3 – Covarianza y correlación","Una correlación de Pearson cercana a cero:","Es compatible con una dependencia fuerte de tipo curvo.","Demuestra que las variables son independientes.","Indica un error de medición."),
 (30,3,"Clase 3 – Asociación, causalidad y Simpson","La paradoja de Simpson ocurre cuando:","El patrón agregado cambia o se invierte dentro de los estratos.","Un punto influyente domina el coeficiente de correlación.","Dos variables presentan correlación cercana a cero."),
-(31,3,"Clase 3 – Posición, longitud, área y color","Una paleta de colores divergente se usa para representar:","La distancia a un centro significativo.","Categorías carentes de orden.","Una magnitud creciente desde un mínimo."),
 (32,3,"Clase 3 – Histogramas","La apariencia de un histograma depende de:","El ancho, el origen y los límites de los intervalos (bins).","El orden en que se registraron las observaciones.","El nombre asignado a la variable."),
 (33,3,"Clase 3 – Trampas de correlación","Replicar una observación de una estación meteorológica en todas las zonas:","Aumenta el tamaño aparente, pero mantiene la misma información independiente.","Crea nuevas observaciones meteorológicas independientes.","Mejora la representatividad espacial del clima."),
 (34,3,"Clase 3 – Proporciones condicionadas","En una tabla de contingencia normalizada por fila, las proporciones suman 100 %:","Dentro de cada fila.","Dentro de cada columna.","Sobre el total de la tabla."),
@@ -52,7 +51,6 @@ BANCO = [
 (49,4,"Clase 4 – Probabilidad marginal y complemento","La probabilidad del complemento de un evento D se obtiene como:","1 − P(D).","P(D) / 2.","P(D) · P(D)."),
 (50,4,"Clase 4 – Probabilidad conjunta","P(A ∩ B) representa la probabilidad de que:","Ocurran ambos eventos.","Ocurra A dado que ocurrió B.","Ocurra al menos uno de los dos eventos."),
 (51,4,"Clase 4 – Probabilidad condicional","Al calcular P(A | B):","El universo se restringe a los casos donde ocurrió B.","El denominador es el total de casos observados.","Se multiplica P(A) por P(B)."),
-(52,4,"Clase 4 – Independencia y asociación","Dos eventos A y B son independientes cuando:","P(A | B) = P(A).","P(A ∩ B) = 0.","P(A ∩ B) = P(A) + P(B)."),
 (53,4,"Cap. 5 – 5.1.6 Independencia","Dos eventos mutuamente excluyentes, ambos con probabilidad positiva:","Son dependientes, porque si ocurre uno el otro es imposible.","Son independientes.","Tienen probabilidad conjunta igual al producto de sus marginales."),
 (54,4,"Clase 4 – Invertir la condición","Las probabilidades P(alerta | detección) y P(detección | alerta):","Usan denominadores distintos y, en general, difieren.","Son siempre iguales.","Suman siempre 1."),
 (55,4,"Clase 4 – Invertir la condición","Una alerta muy sensible ante un evento raro puede:","Producir muchas falsas alarmas.","Eliminar los falsos positivos.","Garantizar que cada alerta sea una detección real."),
@@ -84,7 +82,6 @@ BANCO = [
 (84,5,"Clase 5 – Entrenamiento, validación y prueba","El conjunto de validación se usa para:","Elegir variables, configuración y umbral.","Ajustar los parámetros del modelo.","Medir una única vez el procedimiento congelado."),
 (85,5,"Clase 5 – Entrenamiento, validación y prueba","El conjunto de prueba se usa para:","Medir una única vez el procedimiento congelado.","Elegir los hiperparámetros.","Ajustar las transformaciones de los datos."),
 (86,5,"Clase 5 – Entrenamiento, validación y prueba","Consultar repetidamente el conjunto de prueba y modificar el procedimiento según el resultado:","Convierte la prueba en validación.","Mejora la estimación de generalización.","Equivale a aplicar validación cruzada."),
-(87,5,"Clase 5 – Qué partición reproduce el uso real","Si el modelo deberá predecir sitios completamente nuevos, la partición recomendada es:","Por grupos.","Aleatoria.","Estratificada por clase."),
 (88,5,"Clase 5 – Qué partición reproduce el uso real","Si el modelo deberá predecir un periodo futuro, la partición recomendada es:","Temporal.","Aleatoria.","Estratificada por clase."),
 (89,5,"Clase 5 – Partición aleatoria y estratificada","La partición estratificada:","Conserva aproximadamente la proporción de clases.","Mantiene juntos los registros de un mismo grupo.","Ordena los datos según el tiempo."),
 (90,5,"Clase 5 – Fuga de información","Existe fuga de información cuando el ajuste o la evaluación:","Utilizan información que estaría indisponible al producir una predicción real.","Obtienen bajo desempeño en entrenamiento.","Se comparan contra un baseline simple."),
@@ -94,8 +91,8 @@ BANCO = [
 (94,5,"Clase 5 – Baseline","Un baseline es:","Una referencia simple y reproducible, disponible con la misma información que el modelo.","El mejor modelo obtenido en validación.","El modelo final que se despliega."),
 (95,5,"Clase 5 – Baselines por tipo de tarea","Un baseline posible para una serie temporal es:","Repetir el último valor o el del mismo periodo anterior.","Predecir la clase mayoritaria.","Asignar todas las observaciones a un único grupo."),
 (96,5,"Clase 5 – Accuracy engañosa","Con 20 excedencias en 100 mediciones, un baseline que siempre predice «normal» obtiene:","Accuracy alta y recall nulo.","Accuracy baja y recall alto.","Accuracy y recall altos."),
-(97,5,"Clase 5 – Métricas de clasificación","La precisión responde a la pregunta:","De las alertas emitidas, ¿cuántas eran correctas?","De los eventos reales, ¿cuántos se detectaron?","Del total de casos, ¿qué fracción fue acertada?"),
-(98,5,"Clase 5 – Métricas de clasificación","El recall responde a la pregunta:","De los eventos reales, ¿cuántos se detectaron?","De las alertas emitidas, ¿cuántas eran correctas?","Del total de casos, ¿qué fracción fue acertada?"),
+(97,5,"Clase 5 – Métricas de clasificación","En clasificación, la métrica precisión (precision) responde a la pregunta:","De las alertas emitidas, ¿cuántas eran correctas?","De los eventos reales, ¿cuántos se detectaron?","Del total de casos, ¿qué fracción fue acertada?"),
+(98,5,"Clase 5 – Métricas de clasificación","En clasificación, la métrica recall (sensibilidad) responde a la pregunta:","De los eventos reales, ¿cuántos se detectaron?","De las alertas emitidas, ¿cuántas eran correctas?","Del total de casos, ¿qué fracción fue acertada?"),
 (99,5,"Clase 5 – Matriz de confusión","En la matriz de confusión, un falso negativo es:","Un positivo omitido.","Una falsa alarma.","Un acierto sobre la clase negativa."),
 (100,5,"Clase 5 – Métrica, prevalencia y costo","La métrica F1:","Equilibra precisión y recall.","Incorpora los verdaderos negativos.","Equivale a la accuracy."),
 (101,5,"Clase 5 – Métrica, prevalencia y costo","Si omitir una excedencia es más costoso que realizar una inspección innecesaria, merece especial atención:","El recall.","La precisión.","La accuracy."),
@@ -108,13 +105,15 @@ BANCO = [
 (108,5,"Clase 5 – Curvas de pérdida","En las curvas de pérdida, el sobreajuste se reconoce cuando:","La pérdida de entrenamiento sigue bajando, la de validación deja de mejorar y la separación aumenta.","Ambas pérdidas, de entrenamiento y de validación, son altas.","La pérdida de validación alcanza su mínimo."),
 (109,5,"Clase 5 – Curvas de pérdida","En las curvas de pérdida, el subajuste se reconoce cuando:","Ambas pérdidas, de entrenamiento y de validación, son altas.","La pérdida de entrenamiento baja y la de validación aumenta.","La pérdida de validación alcanza su mínimo."),
 (110,5,"Clase 5 – Baseline","Superar un baseline débil:","Resulta insuficiente para demostrar utilidad.","Demuestra la utilidad del modelo.","Garantiza la generalización del modelo."),
+(111,5,"Clase 5 – Qué partición reproduce el uso real","Si el modelo se usará para predecir otra fila independiente de la misma población, la partición recomendada es:","Aleatoria o estratificada.","Temporal dentro de cada grupo.","Por grupos."),
+(112,5,"Clase 5 – Partición por grupos","Si la evaluación debe medir la transferencia del modelo hacia sitios distintos de los usados en el entrenamiento, la partición recomendada es:","Por grupos.","Temporal dentro de cada grupo.","Aleatoria o estratificada."),
 ]
 
 # Pares (Grupo A, Grupo B) por tema y dificultad equivalente
 PARES = [
  (2,3),(4,5),(6,8),            # Semana 1
  (14,15),(16,17),(13,12),      # Semana 2
- (24,25),(28,29),(31,32),(22,27),  # Semana 3
- (36,37),(45,46),(43,61),(51,54),(52,53),(57,59),(65,66),(39,40),  # Semana 4
- (79,80),(84,85),(87,88),(91,93),(94,95),(97,98),(108,109),        # Semana 5
+ (24,25),(28,29),(23,32),(22,27),  # Semana 3
+ (36,37),(45,46),(43,61),(51,54),(64,53),(57,59),(65,66),(39,40),  # Semana 4
+ (79,80),(84,85),(111,112),(91,93),(94,95),(97,98),(108,109),        # Semana 5
 ]
