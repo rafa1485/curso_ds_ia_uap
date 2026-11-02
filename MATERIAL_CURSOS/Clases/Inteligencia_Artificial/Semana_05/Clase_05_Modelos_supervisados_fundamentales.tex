@@ -1,0 +1,520 @@
+% Compilar dos veces con pdflatex desde este directorio.
+\documentclass[aspectratio=169,10pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
+
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+\definecolor{UAPRed}{HTML}{A94343}
+
+\tikzset{
+  flow/.style={-{Stealth[length=2.2mm]},thick,draw=UAPNavy},
+  datum/.style={draw=UAPGold,fill=UAPGold!16,rounded corners=2pt,align=center,minimum height=8mm,text=UAPNavy},
+  process/.style={draw=UAPTeal,fill=UAPTeal!12,rounded corners=3pt,very thick,align=center,minimum height=10mm,text=UAPNavy},
+  decision/.style={draw=UAPNavy,fill=UAPNavy!9,rounded corners=3pt,very thick,align=center,minimum height=10mm,text=UAPNavy},
+  warning/.style={draw=UAPRed,fill=UAPRed!7,rounded corners=3pt,align=left}
+}
+
+\usetheme{Boadilla}
+\usecolortheme{default}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alertblock title}{fg=white,bg=UAPRed}
+\setbeamercolor{alertblock body}{fg=UAPNavy,bg=UAPRed!7}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{%
+  \leavevmode\hbox{%
+    \begin{beamercolorbox}[wd=.78\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}%
+      \color{white}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}%
+      \color{UAPGray}\hfill Semana 5 \enspace | \enspace \insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}}}
+
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\newcommand{\pregunta}[1]{\begin{block}{Pregunta clave}#1\end{block}}
+\newcommand{\br}{\\}
+\title[IA · Clase 5]{Modelos supervisados fundamentales}
+\subtitle{De funciones aprendidas a decisiones}
+\author{Curso de Inteligencia Artificial}
+\institute{Semana 5 · Clase 5}
+\date{}
+
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+    \vfill
+    {\Huge\bfseries\inserttitle\par}\vspace{.45em}
+    {\color{UAPGold}\Large\insertsubtitle\par}\vspace{1.2em}
+    \begin{tikzpicture}[node distance=5mm,scale=.78,transform shape]
+      \node[datum] (e) {Ejemplos};
+      \node[process,right=of e] (f) {Función};
+      \node[datum,right=of f] (p) {Predicción};
+      \node[decision,right=of p] (a) {Decisión};
+      \draw[flow] (e)--(f); \draw[flow] (f)--(p); \draw[flow] (p)--(a);
+    \end{tikzpicture}\par
+    \vfill {\color{UAPGold}\large\insertauthor\par}{\color{white}\insertinstitute\par}
+  \end{beamercolorbox}
+\end{frame}
+
+% 2
+\begin{frame}{Propósito de la clase}
+  Comprender qué aprende un modelo supervisado y cómo su salida puede informar la acción de un agente.
+  \begin{block}{Al finalizar, podremos}
+    \begin{itemize}
+      \item formular regresión y clasificación;
+      \item explicar el ajuste lineal y la probabilidad logística;
+      \item distinguir probabilidad, clase y acción;
+      \item explicar cómo aprende un árbol;
+      \item comparar modelos lineales, árboles y ensambles.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% 3
+\begin{frame}{Punto de partida}
+  \small
+  Ya estudiamos un agente que decide con una creencia conocida:
+  \begin{center}\concepto{evidencia $\rightarrow$ probabilidad $\rightarrow$ costo esperado $\rightarrow$ acción}\end{center}
+  Ahora la probabilidad o el valor esperado se estima desde ejemplos:
+  \begin{center}\concepto{$(x_i,y_i)$ $\rightarrow$ modelo ajustado $\rightarrow$ predicción nueva}\end{center}
+  \pregunta{¿Qué relación aprende cada familia de modelos?}
+\end{frame}
+
+% 4
+\begin{frame}{Caso conductor: movilidad}
+  \small
+  Treinta minutos antes de una salida, un agente debe anticipar el estado de un trayecto.
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.25\textwidth}X}\toprule
+  Elemento & Ejemplo\\\midrule
+  Entradas $x$ & duración planificada, congestión, lluvia y franja horaria\\
+  Objetivo continuo & minutos de demora\\
+  Objetivo binario & demora mayor que 10 minutos: sí/no\\
+  Acción posterior & mantener, reasignar o solicitar revisión\\\bottomrule
+  \end{tabularx}
+  \begin{block}{Idea}El mismo dominio admite modelos distintos según la salida necesaria.\end{block}
+\end{frame}
+
+% 5
+\begin{frame}{Aprendizaje supervisado}
+  \small
+  Disponemos de ejemplos con entrada y respuesta observada:
+  \[\mathcal D=\{(x_1,y_1),\ldots,(x_n,y_n)\}.\]
+  El algoritmo selecciona una función dentro de una familia:
+  \[\widehat f=\arg\min_{f\in\mathcal F}\frac{1}{n}\sum_{i=1}^{n}L(y_i,f(x_i)).\]
+  \begin{itemize}
+    \item $\mathcal F$: funciones que el modelo puede representar.
+    \item $L$: penalización por una predicción incorrecta.
+    \item Aprender significa ajustar una función, no almacenar respuestas.
+  \end{itemize}
+\end{frame}
+
+% 6
+\begin{frame}{Tarea, modelo y decisión}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.20\textwidth}X}\toprule
+  Nivel & Pregunta\\\midrule
+  Tarea & ¿Qué salida necesitamos estimar?\\
+  Modelo & ¿Qué familia de funciones utilizaremos?\\
+  Ajuste & ¿Qué criterio determina sus parámetros?\\
+  Decisión & ¿Cómo convertimos la salida en una acción?\\\bottomrule
+  \end{tabularx}
+  \begin{alertblock}{Distinción central}Un modelo predice; la regla de decisión incorpora costos, capacidad y restricciones.\end{alertblock}
+\end{frame}
+
+% 7
+\begin{frame}{Regresión o clasificación}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}p{.15\textwidth}p{.25\textwidth}X}\toprule
+  Tarea & $y$ & Salida & Movilidad\\\midrule
+  Regresión & real & $\widehat y$ & demora: 14,2 min\\
+  Clasificación binaria & 0 o 1 & $\widehat p=P(Y=1\mid x)$ & probabilidad de demora crítica\\\bottomrule
+  \end{tabularx}
+  \begin{block}{Control}El puntaje probabilístico contiene más información que una clase rígida obtenida con un umbral.\end{block}
+\end{frame}
+
+% 8
+\begin{frame}{Regresión lineal: hipótesis}
+  \small
+  La media del objetivo se aproxima mediante una función afín:
+  \[\widehat y=\beta_0+\beta_1x_1+\cdots+\beta_px_p.\]
+  \begin{itemize}
+    \item $\beta_0$: valor de referencia.
+    \item $\beta_j$: cambio asociado con una unidad de $x_j$, manteniendo las demás entradas fijas.
+    \item “Lineal” se refiere a los parámetros; pueden incluirse transformaciones e interacciones.
+  \end{itemize}
+\end{frame}
+
+% 9
+\begin{frame}{Ejemplo de una recta}
+  \small
+  Horas de operación: $x=(2,4,6,8,10)$.
+
+  Consumo en MWh: $y=(18,25,29,36,42)$.
+  \[\widehat y=12{,}3+2{,}95x.\]
+  Para siete horas:
+  \[\widehat y=12{,}3+2{,}95(7)=32{,}95\text{ MWh}.\]
+  \begin{block}{Lectura}La recta resume una tendencia dentro del rango observado.\end{block}
+\end{frame}
+
+% 10
+\begin{frame}{¿Qué significa ajustar la recta?}
+  \small
+  El residuo del caso $i$ es $e_i=y_i-\widehat y_i$.
+
+  Mínimos cuadrados elige los parámetros que minimizan:
+  \[S(\beta)=\sum_{i=1}^{n}(y_i-\widehat y_i)^2.\]
+  \begin{itemize}
+    \item Los errores grandes pesan más porque se elevan al cuadrado.
+    \item La pérdida define qué ajuste considera preferible el modelo.
+    \item Ajustar no garantiza desempeño fuera de los ejemplos usados.
+  \end{itemize}
+\end{frame}
+
+% 11
+\begin{frame}{La solución en regresión simple}
+  \small
+  \[\widehat\beta_1=
+  \frac{\sum_i(x_i-\bar x)(y_i-\bar y)}{\sum_i(x_i-\bar x)^2},
+  \qquad \widehat\beta_0=\bar y-\widehat\beta_1\bar x.\]
+  La pendiente es covarianza dividida por varianza de $x$.
+  \begin{block}{Lectura del ejemplo}$2{,}95$ MWh adicionales por cada hora de operación dentro del rango estudiado.\end{block}
+\end{frame}
+
+% 12
+\begin{frame}{Interpretar sin exagerar}
+  \small
+  Un coeficiente describe una asociación condicionada al modelo. No demuestra por sí solo que:
+  \begin{itemize}
+    \item modificar $x_j$ causará el cambio predicho;
+    \item la relación continuará fuera del rango observado;
+    \item las entradas omitidas son irrelevantes;
+    \item el mismo coeficiente vale en otra población o período.
+  \end{itemize}
+  \begin{alertblock}{Límite}Asociación predictiva no equivale a efecto causal.\end{alertblock}
+\end{frame}
+
+% 13
+\begin{frame}{Residuos: qué no explicó el modelo}
+  \small
+  Revisar residuos permite detectar límites de la forma elegida:
+  \begin{itemize}
+    \item curvatura: falta una relación no lineal;
+    \item dispersión creciente: cambia la variabilidad;
+    \item grupos separados: falta una diferencia relevante;
+    \item observaciones extremas: pueden dominar el ajuste;
+    \item patrón temporal: los errores no son independientes.
+  \end{itemize}
+  \begin{block}{Idea}Un error sistemático no se corrige agregando decimales.\end{block}
+\end{frame}
+
+% 14
+\begin{frame}{Regresión lineal en movilidad}
+  \footnotesize
+  \[\widehat{\text{demora}}=-4+0{,}18\,\text{duración}+6{,}2\,\text{congestión}+3{,}1\,\text{lluvia}.\]
+  Para duración 40 min, congestión 0,7 y lluvia 1:
+  \[\widehat{\text{demora}}=-4+0{,}18(40)+6{,}2(0{,}7)+3{,}1=10{,}64.\]
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.30\textwidth}X}\toprule
+  Término & Lectura condicionada\\\midrule
+  $0{,}18\,\text{duración}$ & 0,18 minutos por minuto planificado\\
+  $6{,}2\,\text{congestión}$ & diferencia asociada con la escala de congestión\\
+  $3{,}1\,\text{lluvia}$ & diferencia lluvia frente a no lluvia\\\bottomrule
+  \end{tabularx}
+\end{frame}
+
+% 15
+\begin{frame}{¿Por qué no usar una recta para probabilidades?}
+  \small
+  Si $Y\in\{0,1\}$, una recta puede producir valores menores que 0 o mayores que 1.
+  \begin{block}{Necesitamos}
+    \begin{enumerate}
+      \item un puntaje que combine las entradas;
+      \item una transformación que lo lleve al intervalo $[0,1]$.
+    \end{enumerate}
+  \end{block}
+  La regresión logística utiliza un puntaje lineal y una función sigmoide.
+\end{frame}
+
+% 16
+\begin{frame}{Regresión logística}
+  \small
+  Primero calcula un puntaje:
+  \[\eta=\beta_0+\beta_1x_1+\cdots+\beta_px_p.\]
+  Luego lo transforma:
+  \[\widehat p=\sigma(\eta)=\frac{1}{1+e^{-\eta}}.\]
+  \begin{itemize}
+    \item $\eta$ puede tomar cualquier valor real.
+    \item $\widehat p$ siempre pertenece a $(0,1)$.
+    \item $\sigma(0)=0{,}5$ y $\sigma(-\eta)=1-\sigma(\eta)$.
+  \end{itemize}
+\end{frame}
+
+% 17
+\begin{frame}{Puntaje, probabilidad, clase y acción}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}p{.15\textwidth}X}\toprule
+  Objeto & Ejemplo & Función\\\midrule
+  Puntaje $\eta$ & 0,8 & evidencia combinada\\
+  Probabilidad $\widehat p$ & 0,69 & riesgo estimado\\
+  Clase & crítica & salida de un umbral\\
+  Acción & reasignar & decisión con costos y restricciones\\\bottomrule
+  \end{tabularx}
+  \begin{alertblock}{Control}Confundir estos objetos oculta dónde se produce el error.\end{alertblock}
+\end{frame}
+
+% 18
+\begin{frame}{Ejemplo numérico de la sigmoide}
+  \small
+  Supongamos $\eta=-3+0{,}8x$.
+  Para $x=4$:
+  \[\eta=0{,}2,\qquad \widehat p=\frac{1}{1+e^{-0{,}2}}\approx0{,}55.\]
+  Para $x=5$:
+  \[\eta=1,\qquad \widehat p\approx0{,}731.\]
+  \begin{block}{Resultado}El incremento de probabilidad no es constante: depende del punto de partida.\end{block}
+\end{frame}
+
+% 19
+\begin{frame}{Odds y coeficientes}
+  \small
+  La regresión logística es lineal en los log-odds:
+  \[\log\frac{p}{1-p}=\beta_0+\sum_j\beta_jx_j.\]
+  Si $x_j$ aumenta una unidad, los odds se multiplican por $e^{\beta_j}$, manteniendo las demás entradas fijas.
+  \begin{block}{Ejemplo}Si $\beta_j=0{,}40$, $e^{0{,}40}\approx1{,}49$: los odds aumentan 49\%, no la probabilidad en 49 puntos.\end{block}
+\end{frame}
+
+% 20
+\begin{frame}{¿Cómo se ajusta la logística?}
+  \small
+  Para cada caso, $Y_i\sim\operatorname{Bernoulli}(p_i)$.
+
+  El ajuste minimiza la log-loss:
+  \[-\ell(\beta)=-\sum_i[y_i\log p_i+(1-y_i)\log(1-p_i)].\]
+  \begin{itemize}
+    \item Una probabilidad alta asignada a la clase equivocada recibe una penalización grande.
+    \item El ajuste es iterativo: no existe la fórmula cerrada de mínimos cuadrados.
+    \item La regularización puede limitar coeficientes inestables.
+  \end{itemize}
+\end{frame}
+
+% 21
+\begin{frame}{Probabilidad no significa certeza}
+  \small
+  Una salida $\widehat p=0{,}8$ significa 80\% de probabilidad bajo los datos y supuestos del modelo. No significa que:
+  \begin{itemize}
+    \item el evento ocurrirá;
+    \item el modelo acierta 80\% en cualquier población;
+    \item la probabilidad está bien calibrada;
+    \item deba ejecutarse automáticamente una acción.
+  \end{itemize}
+  \begin{block}{Control}La calidad probabilística se comprueba con casos no usados para ajustar.\end{block}
+\end{frame}
+
+% 22
+\begin{frame}{De probabilidad a acción}
+  \small
+  Con costo de falso negativo $C_{FN}$ y falso positivo $C_{FP}$, se actúa cuando:
+  \[\widehat p>\frac{C_{FP}}{C_{FP}+C_{FN}}.\]
+  Para $C_{FP}=8$ y $C_{FN}=40$:
+  \[t=\frac{8}{48}\approx0{,}167.\]
+  \begin{alertblock}{Conclusión}El umbral 0,5 no es universal: depende de consecuencias, capacidad y restricciones.\end{alertblock}
+\end{frame}
+
+% 23
+\begin{frame}{Caso conductor: probabilidad de demora}
+  \small
+  \[\eta=-3+0{,}04\,\text{duración}+2{,}2\,\text{congestión}+0{,}8\,\text{lluvia}.\]
+  Para duración 40, congestión 0,7 y lluvia 1:
+  \[\eta=-3+1{,}6+1{,}54+0{,}8=0{,}94,\]
+  \[\widehat p=\sigma(0{,}94)\approx0{,}719.\]
+  \begin{block}{Paso posterior}La regla de decisión determina si ese riesgo justifica intervenir.\end{block}
+\end{frame}
+
+% 24
+\begin{frame}{Límite compartido de los modelos lineales}
+  \small
+  Regresión lineal y logística combinan entradas mediante una suma ponderada.
+  \begin{columns}[T]
+    \column{.48\textwidth}\begin{block}{Fortalezas}\begin{itemize}\item interpretación;\item cálculo eficiente;\item estabilidad con pocos datos.\end{itemize}\end{block}
+    \column{.48\textwidth}\begin{alertblock}{Límite}\begin{itemize}\item frontera lineal;\item curvaturas explícitas;\item interacciones explícitas.\end{itemize}\end{alertblock}
+  \end{columns}
+\end{frame}
+
+% 25
+\begin{frame}[fragile]{Árbol de decisión}
+  \small Un árbol aprende una secuencia de preguntas:
+\begin{verbatim}
+¿congestión > 0,65?
+|-- sí: ¿llueve?
+|   |-- sí  -> riesgo alto
+|   `-- no  -> riesgo medio
+`-- no      -> riesgo bajo
+\end{verbatim}
+  Cada hoja contiene una predicción basada en los ejemplos que llegan a ella.
+\end{frame}
+
+% 26
+\begin{frame}{¿Cómo elige una división?}
+  \small
+  El árbol prueba atributos y umbrales y elige la división que más reduce la impureza.
+
+  Para clasificación binaria:
+  \[G=1-p^2-(1-p)^2=2p(1-p).\]
+  \begin{itemize}
+    \item $G=0$ en un nodo puro.
+    \item $G=0{,}5$ con clases equilibradas.
+    \item Se compara el padre con la suma ponderada de las hijas.
+  \end{itemize}
+\end{frame}
+
+% 27
+\begin{frame}{Capacidad e inestabilidad del árbol}
+  \small
+  Un árbol profundo puede:
+  \begin{itemize}
+    \item representar relaciones no lineales e interacciones;
+    \item aislar pocos ejemplos y memorizar ruido;
+    \item cambiar ante pequeñas variaciones de los datos;
+    \item producir probabilidades extremas en hojas pequeñas.
+  \end{itemize}
+  \begin{block}{Control}Profundidad, tamaño mínimo de hoja y poda regulan la complejidad.\end{block}
+\end{frame}
+
+% 28
+\begin{frame}{Por qué combinar árboles}
+  \footnotesize
+  Los ensambles aprovechan que modelos distintos cometen errores diferentes.
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}p{.38\textwidth}X}\toprule
+  Método & Mecanismo & Efecto\\\midrule
+  Bagging & árboles sobre remuestras & reducir varianza\\
+  Random Forest & remuestras y atributos aleatorios & aumentar diversidad\\
+  Boosting & correcciones secuenciales & reducir error progresivamente\\\bottomrule
+  \end{tabularx}
+  \begin{alertblock}{Límite}Más modelos no reparan etiquetas incorrectas, información indebida o cambios de población.\end{alertblock}
+\end{frame}
+
+% 29
+\begin{frame}{Random Forest}
+  \small
+  Un bosque aleatorio:
+  \begin{enumerate}
+    \item obtiene varias remuestras de los ejemplos;
+    \item crece un árbol en cada remuestra;
+    \item considera solo algunos atributos en cada división;
+    \item promedia probabilidades o predicciones.
+  \end{enumerate}
+  \begin{block}{Intuición}El promedio estabiliza; la aleatoriedad evita que todos los árboles repitan las mismas primeras divisiones.\end{block}
+\end{frame}
+
+% 30
+\begin{frame}{Boosting}
+  \small
+  Boosting construye un modelo aditivo:
+  \[F_M(x)=F_0(x)+\sum_{m=1}^{M}\nu h_m(x).\]
+  Cada árbol nuevo intenta corregir parte del error actual.
+  \begin{itemize}
+    \item $\nu$: tasa de aprendizaje.
+    \item Árboles pequeños: correcciones acotadas.
+    \item Muchas iteraciones: mayor capacidad y necesidad de control.
+  \end{itemize}
+  \begin{alertblock}{Diferencia}No es votación independiente: el aprendizaje es secuencial.\end{alertblock}
+\end{frame}
+
+% 31
+\begin{frame}{Comparación de familias}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.19\textwidth}p{.25\textwidth}p{.22\textwidth}X}\toprule
+  Aspecto & Lineal / logística & Árbol & Ensamble\\\midrule
+  Relación & suma ponderada & reglas por regiones & combinación de regiones\\
+  Interacciones & explícitas & automáticas & automáticas\\
+  Interpretación & coeficientes & reglas si es pequeño & más difícil\\
+  Extrapolación & posible, con riesgo & pobre & pobre\\
+  Estabilidad & generalmente alta & baja & mayor que un árbol\\\bottomrule
+  \end{tabularx}
+  \begin{block}{Resultado}Ninguna familia domina en todos los problemas.\end{block}
+\end{frame}
+
+% 32
+\begin{frame}{Cómo elegir un punto de partida}
+  \small
+  \begin{itemize}
+    \item Salida numérica y relación aproximadamente suave: \concepto{regresión lineal}.
+    \item Probabilidad binaria interpretable: \concepto{regresión logística}.
+    \item Reglas no lineales e interacciones: \concepto{árbol controlado}.
+    \item Datos tabulares con prioridad predictiva: \concepto{Random Forest o boosting}.
+  \end{itemize}
+  \begin{block}{Comparación justa}Mantener la misma tarea, información disponible y criterio de uso.\end{block}
+\end{frame}
+
+% 33
+\begin{frame}{Actividad guiada}
+  \footnotesize Para el caso de movilidad:
+  \begin{enumerate}
+    \item indicar si corresponde regresión o clasificación para dos decisiones;
+    \item interpretar un coeficiente lineal y uno logístico;
+    \item calcular una probabilidad con la sigmoide;
+    \item seleccionar una acción con costos dados;
+    \item proponer la primera pregunta de un árbol;
+    \item explicar qué se gana y qué se pierde con un ensamble.
+  \end{enumerate}
+  \begin{block}{Tiempo}25 minutos de trabajo + 10 minutos de contraste.\end{block}
+\end{frame}
+
+% 34
+\begin{frame}{Criterios de revisión}
+  \small Una explicación es adecuada si:
+  \begin{itemize}
+    \item distingue salida del modelo y acción del agente;
+    \item identifica la función y la pérdida;
+    \item interpreta unidades y condicionamientos;
+    \item no presenta asociación como causalidad;
+    \item reconoce complejidad y extrapolación;
+    \item relaciona la elección del modelo con la tarea.
+  \end{itemize}
+\end{frame}
+
+% 35
+\begin{frame}{Síntesis}
+  \footnotesize
+  \begin{itemize}
+    \item Un modelo supervisado selecciona una función desde ejemplos etiquetados.
+    \item La regresión lineal minimiza errores cuadrados y predice números.
+    \item La regresión logística transforma un puntaje en probabilidad.
+    \item La probabilidad se convierte en acción mediante costos y restricciones.
+    \item Un árbol aprende regiones mediante divisiones sucesivas.
+    \item Random Forest estabiliza; boosting corrige secuencialmente.
+    \item Comprender el mecanismo permite reconocer posibles fallos.
+  \end{itemize}
+\end{frame}
+
+% 36
+\begin{frame}{Lecturas}
+  \small
+  \begin{block}{Lectura principal}
+    \begin{itemize}
+      \item Capítulo 11, 11.1.1--11.1.5: regresión lineal.
+      \item Capítulo 11, 11.4.1--11.4.5: regresión logística.
+      \item Capítulo 12, 12.1.1--12.1.5: árboles.
+    \end{itemize}
+  \end{block}
+  \begin{block}{Para ampliar}
+    Capítulo 12, 12.3.1--12.3.5: ensambles, Random Forest y boosting.
+  \end{block}
+\end{frame}
+
+\end{document}
