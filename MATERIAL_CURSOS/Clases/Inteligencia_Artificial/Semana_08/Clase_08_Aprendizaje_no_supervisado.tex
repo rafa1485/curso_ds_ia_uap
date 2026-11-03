@@ -1,0 +1,552 @@
+% Compilar dos veces con pdflatex desde este directorio.
+\documentclass[aspectratio=169,10pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
+
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+\definecolor{UAPRed}{HTML}{A94343}
+
+\tikzset{
+  flow/.style={-{Stealth[length=2.2mm]},thick,draw=UAPNavy},
+  datum/.style={draw=UAPGold,fill=UAPGold!16,rounded corners=2pt,align=center,minimum height=8mm,text=UAPNavy},
+  process/.style={draw=UAPTeal,fill=UAPTeal!12,rounded corners=3pt,very thick,align=center,minimum height=10mm,text=UAPNavy},
+  decision/.style={draw=UAPNavy,fill=UAPNavy!9,rounded corners=3pt,very thick,align=center,minimum height=10mm,text=UAPNavy},
+  warning/.style={draw=UAPRed,fill=UAPRed!7,rounded corners=3pt,align=left}
+}
+
+\usetheme{Boadilla}
+\usecolortheme{default}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alertblock title}{fg=white,bg=UAPRed}
+\setbeamercolor{alertblock body}{fg=UAPNavy,bg=UAPRed!7}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{%
+  \leavevmode\hbox{%
+    \begin{beamercolorbox}[wd=.78\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}%
+      \color{white}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}%
+      \color{UAPGray}\hfill Semana 8 \enspace | \enspace \insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}}}
+
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\newcommand{\pregunta}[1]{\begin{block}{Pregunta clave}#1\end{block}}
+\title[IA · Clase 8]{Aprendizaje no supervisado}
+\subtitle{De la semejanza a segmentos e hipótesis}
+\author{Curso de Inteligencia Artificial}
+\institute{Semana 8 · Clase 8}
+\date{}
+
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+    \vfill
+    {\Huge\bfseries\inserttitle\par}\vspace{.45em}
+    {\color{UAPGold}\Large\insertsubtitle\par}\vspace{1.2em}
+    \begin{tikzpicture}[node distance=5mm,scale=.78,transform shape]
+      \node[datum] (r) {Representación};
+      \node[process,right=of r] (s) {Semejanza};
+      \node[datum,right=of s] (e) {Estructura};
+      \node[decision,right=of e] (i) {Interpretación};
+      \draw[flow] (r)--(s); \draw[flow] (s)--(e); \draw[flow] (e)--(i);
+    \end{tikzpicture}\par
+    \vfill {\color{UAPGold}\large\insertauthor\par}{\color{white}\insertinstitute\par}
+  \end{beamercolorbox}
+\end{frame}
+
+% 2
+\begin{frame}{Propósito de la clase}
+  Comprender cómo los métodos no supervisados organizan observaciones sin una etiqueta objetivo y cómo evaluar si esa organización es útil.
+  \begin{block}{Al finalizar, podremos}
+    \begin{itemize}
+      \item formular una pregunta no supervisada;
+      \item justificar una distancia y una representación;
+      \item explicar K-means, jerárquico, DBSCAN y SOM;
+      \item usar PCA para resumir y visualizar datos;
+      \item interpretar segmentos sin convertirlos en categorías esenciales.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% 3
+\begin{frame}{Punto de partida}
+  \small
+  En aprendizaje supervisado disponíamos de pares con respuesta observada:
+  \begin{center}\concepto{$(x_i,y_i)$ $\rightarrow$ modelo ajustado $\rightarrow$ predicción}\end{center}
+  Ahora solo observamos perfiles:
+  \begin{center}\concepto{$x_1,\ldots,x_n$ $\rightarrow$ representación $\rightarrow$ estructura candidata}\end{center}
+  \pregunta{¿Qué significa que dos observaciones sean semejantes para nuestro problema?}
+\end{frame}
+
+% 4
+\begin{frame}{Caso conductor: movilidad}
+  \small
+  Una ciudad quiere resumir perfiles de zonas para planificar observación y servicio.
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.27\textwidth}X}\toprule
+  Elemento & Ejemplo\\\midrule
+  Unidad & zona de movilidad durante una semana\\
+  Formación & proporciones por franja, duración típica, variabilidad y congestión\\
+  Sin etiqueta & no existe un tipo verdadero de zona\\
+  Uso posterior & describir perfiles, revisar cobertura, proponer acciones exploratorias\\\bottomrule
+  \end{tabularx}
+  \begin{block}{Idea}Un grupo resume una estructura bajo decisiones explícitas; no descubre una categoría natural.\end{block}
+\end{frame}
+
+% 5
+\begin{frame}{¿Qué cambia sin etiquetas?}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.26\textwidth}XX}\toprule
+   & Supervisado & No supervisado\\\midrule
+  Información & objetivo $y$ observado & sin respuesta correcta conocida\\
+  Calidad & error frente a $y$ & cohesión, separación, estabilidad y utilidad\\
+  Resultado & predicción para casos nuevos & segmentos, prototipos o vecindades\\
+  Revisión & validación con etiquetas & evidencia interna, externa y contextual\\\bottomrule
+  \end{tabularx}
+  \begin{alertblock}{Consecuencia}Muchas particiones pueden ser válidas matemáticamente. Ninguna métrica única decide cuál sirve mejor.\end{alertblock}
+\end{frame}
+
+% 6
+\begin{frame}{Cuatro objetivos posibles}
+  \small
+  \begin{itemize}
+    \item \concepto{Descubrimiento de grupos:} semejanza interna y diferencia entre segmentos.
+    \item \concepto{Representación:} resumir con prototipos, componentes o mapas.
+    \item \concepto{Estructura local:} identificar vecindades, regiones densas y puntos aislados.
+    \item \concepto{Generación de hipótesis:} proponer preguntas para contrastar después.
+  \end{itemize}
+  \begin{alertblock}{Control}Elegir un algoritmo sin declarar el objetivo confunde una figura atractiva con un resultado útil.\end{alertblock}
+\end{frame}
+
+% 7
+\begin{frame}{Formular antes de agrupar}
+  \small
+  Antes del ajuste debemos responder:
+  \begin{enumerate}
+    \item ¿Cuál es la unidad de análisis?
+    \item ¿Qué periodo y población cubren los datos?
+    \item ¿Qué diferencias importan para el dominio?
+    \item ¿Se admite ruido sin asignar a un grupo?
+    \item ¿Cómo se usará y revisará el resultado?
+  \end{enumerate}
+  \begin{block}{Idea}La distancia es una hipótesis de dominio expresada matemáticamente.\end{block}
+\end{frame}
+
+% 8
+\begin{frame}{Distancia euclídea}
+  \small
+  Para perfiles numéricos $\mathbf{x}$ y $\mathbf{z}$:
+  \[d_2(\mathbf{x},\mathbf{z})=\sqrt{\sum_{j=1}^{p}(x_j-z_j)^2}.\]
+  Para $A=(2,3)$ y $B=(5,7)$:
+  \[d_2(A,B)=\sqrt{3^2+4^2}=5.\]
+  \begin{itemize}
+    \item Las diferencias grandes pesan más al elevarse al cuadrado.
+    \item Es coherente con K-means y centroides definidos por medias.
+    \item Supone variables cuantitativas y escalas comparables.
+  \end{itemize}
+\end{frame}
+
+% 9
+\begin{frame}{Distancia Manhattan}
+  \small
+  La distancia Manhattan suma diferencias absolutas:
+  \[d_1(\mathbf{x},\mathbf{z})=\sum_{j=1}^{p}|x_j-z_j|.\]
+  Para los mismos perfiles:
+  \[d_1(A,B)=|2-5|+|3-7|=7.\]
+  \begin{block}{Lectura}No elimina la necesidad de escalar variables, pero reduce el peso relativo de diferencias extremas frente a $d_2$.\end{block}
+\end{frame}
+
+% 10
+\begin{frame}{La métrica puede cambiar el vecino}
+  \small
+  Para $O=(0,0)$, $P=(3,0)$ y $Q=(2,2)$:
+  \begin{tabularx}{\textwidth}{>{\bfseries}Xccc}\toprule
+  Métrica & $d(O,P)$ & $d(O,Q)$ & Vecino más cercano\\\midrule
+  Euclídea & $3$ & $\sqrt{8}\approx2{,}83$ & $Q$\\
+  Manhattan & $3$ & $4$ & $P$\\\bottomrule
+  \end{tabularx}
+  \begin{alertblock}{Conclusión}No hay una métrica universalmente correcta: cada una expresa una noción distinta de diferencia.\end{alertblock}
+\end{frame}
+
+% 11
+\begin{frame}{Similitud coseno: forma y nivel}
+  \small
+  La similitud coseno compara orientación:
+  \[s_{\cos}(\mathbf{x},\mathbf{z})=\frac{\mathbf{x}^{\mathsf T}\mathbf{z}}{\|\mathbf{x}\|_2\|\mathbf{z}\|_2}.\]
+  Los perfiles $A=(2,4,2)$ y $B=(20,40,20)$ tienen coseno $1$: misma composición relativa, distinta magnitud.
+  \begin{block}{Decisión}Usar proporciones para la forma y conservar el volumen como una variable adicional si importa operacionalmente.\end{block}
+\end{frame}
+
+% 12
+\begin{frame}{Escalar también es decidir}
+  \small
+  Una duración entre 0 y 120 puede dominar a una proporción entre 0 y 1. Dos opciones frecuentes:
+  \[z_{ij}=\frac{x_{ij}-\bar x_j}{s_j},\qquad r_{ij}=\frac{x_{ij}-\operatorname{mediana}(X_j)}{Q_{0.75}(X_j)-Q_{0.25}(X_j)}.\]
+  \begin{itemize}
+    \item $z$: centra y asigna varianza unitaria.
+    \item $r$: alternativa robusta basada en mediana y rango intercuartílico.
+    \item Los logaritmos pueden comprimir colas derechas.
+  \end{itemize}
+\end{frame}
+
+% 13
+\begin{frame}{Ponderar bloques de variables}
+  \small
+  Una distancia ponderada explicita prioridades:
+  \[d_w(\mathbf{x},\mathbf{z})=\sqrt{\sum_{j=1}^{p}w_j(x_j-z_j)^2},\qquad w_j\geq0.\]
+  En movilidad, doce proporciones horarias pueden dominar por cantidad de columnas a dos variables de diversidad, incluso estandarizadas.
+  \begin{block}{Criterio}Ponderar por confiabilidad, relevancia operativa o equilibrio entre bloques; no para producir grupos más vistosos.\end{block}
+\end{frame}
+
+% 14
+\begin{frame}{Datos mixtos y variables reservadas}
+  \small
+  \begin{itemize}
+    \item K-means requiere variables numéricas y una media interpretable.
+    \item Las categorías necesitan una codificación y una disimilitud coherentes.
+    \item Las variables de \concepto{formación} determinan los grupos.
+    \item Las variables de \concepto{caracterización} se reservan para comprenderlos después.
+  \end{itemize}
+  \begin{alertblock}{Control}Separar ambos conjuntos evita introducir previamente la conclusión que se busca describir.\end{alertblock}
+\end{frame}
+
+% 15
+\begin{frame}{K-means: idea y objetivo}
+  \small
+  K-means divide observaciones numéricas en $K$ grupos $C_1,\ldots,C_K$ minimizando:
+  \[J=\sum_{k=1}^{K}\sum_{\mathbf{x}_i\in C_k}\|\mathbf{x}_i-\boldsymbol{\mu}_k\|_2^2,\qquad \boldsymbol{\mu}_k=\frac{1}{|C_k|}\sum_{\mathbf{x}_i\in C_k}\mathbf{x}_i.\]
+  \begin{block}{Lectura}El centroide es un perfil promedio; no tiene por qué coincidir con una zona real.\end{block}
+\end{frame}
+
+% 16
+\begin{frame}{K-means: dos pasos alternados}
+  \small
+  \begin{enumerate}
+    \item Inicializar $K$ centroides.
+    \item Asignar cada observación al centroide más cercano.
+    \item Recalcular cada centroide como media de su grupo.
+    \item Repetir hasta que no cambien asignaciones o la mejora sea pequeña.
+  \end{enumerate}
+  \begin{itemize}
+    \item Cada paso no aumenta $J$.
+    \item Converge a una solución local, no garantiza el óptimo global.
+    \item Un grupo vacío requiere una regla documentada.
+  \end{itemize}
+\end{frame}
+
+% 17
+\begin{frame}{Qué estructura busca K-means}
+  \small
+  Funciona mejor con grupos:
+  \begin{columns}[T]
+    \column{.48\textwidth}
+    \begin{block}{Adecuados}\begin{itemize}\item compactos;\item aproximadamente esféricos;\item de dispersión y tamaño semejantes.\end{itemize}\end{block}
+    \column{.48\textwidth}
+    \begin{alertblock}{Problemáticos}\begin{itemize}\item alargados;\item densidades muy distintas;\item observaciones que deberían quedar sin grupo.\end{itemize}\end{alertblock}
+  \end{columns}
+  \begin{block}{Límite}Su eficiencia no corrige una geometría inadecuada.\end{block}
+\end{frame}
+
+% 18
+\begin{frame}{Inicialización, reinicios y estabilidad}
+  \small
+  \begin{itemize}
+    \item Distintas semillas pueden producir soluciones diferentes.
+    \item K-means++ favorece centros iniciales separados.
+    \item Varios reinicios reducen el riesgo de una mala solución local.
+    \item Comparar solo la menor inercia puede ocultar asignaciones muy distintas.
+  \end{itemize}
+  \begin{block}{Control}Además de cambiar semillas, repetir con submuestras, periodos y transformaciones plausibles.\end{block}
+\end{frame}
+
+% 19
+\begin{frame}{Elegir el número de grupos}
+  \small
+  La inercia disminuye siempre al aumentar $K$. El codo busca rendimientos decrecientes, pero puede no ser claro.
+  \begin{enumerate}
+    \item Definir un rango de $K$ útil para el problema.
+    \item Ejecutar varios reinicios por cada $K$.
+    \item Comparar inercia, silhouette, Davies--Bouldin y tamaños.
+    \item Revisar estabilidad y perfiles.
+    \item Elegir la solución más simple que sea estable y accionable.
+  \end{enumerate}
+\end{frame}
+
+% 20
+\begin{frame}{Clustering jerárquico}
+  \small
+  Construye relaciones anidadas entre observaciones.
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}XX}\toprule
+  Estrategia & Inicio & Operación\\\midrule
+  Aglomerativa & una observación por grupo & fusiona los grupos más próximos\\
+  Divisiva & todas las observaciones juntas & divide grupos sucesivamente\\\bottomrule
+  \end{tabularx}
+  \begin{block}{Resultado}El dendrograma permite examinar varios niveles de granularidad sin fijar $K$ al inicio.\end{block}
+\end{frame}
+
+% 21
+\begin{frame}{Reglas de enlace}
+  \small
+  La distancia entre grupos $A$ y $B$ depende de la regla elegida:
+  \[D_{\text{simple}}(A,B)=\min_{i\in A,\,l\in B}d(i,l),\qquad D_{\text{completo}}(A,B)=\max_{i\in A,\,l\in B}d(i,l).\]
+  \[D_{\text{promedio}}(A,B)=\frac{1}{|A||B|}\sum_{i\in A}\sum_{l\in B}d(i,l).\]
+  \begin{itemize}
+    \item Simple: descubre cadenas, pero puede unir regiones por puntos puente.
+    \item Completo: favorece grupos compactos; es sensible a extremos.
+    \item Promedio: usa toda la información entre pares.
+    \item Ward: minimiza aumento de dispersión y requiere geometría euclídea coherente.
+  \end{itemize}
+\end{frame}
+
+% 22
+\begin{frame}{Leer un dendrograma}
+  \small
+  \begin{itemize}
+    \item Cada hoja es una observación o grupo inicial.
+    \item La altura de unión indica la disimilitud de enlace.
+    \item Un corte horizontal induce una partición.
+  \end{itemize}
+  \begin{alertblock}{Tres errores frecuentes}
+  Leer la posición horizontal como distancia; elegir un corte solo por cantidad deseada; tratar ramas como categorías reales sin perfiles ni estabilidad.
+  \end{alertblock}
+  \begin{block}{Idea}El dendrograma explora granularidades; no cuenta grupos automáticamente.\end{block}
+\end{frame}
+
+% 23
+\begin{frame}{Densidad y vecindades}
+  \small
+  Una vecindad de radio $\varepsilon$ alrededor de $\mathbf{x}$ es:
+  \[N_{\varepsilon}(\mathbf{x})=\{\mathbf{z}:d(\mathbf{x},\mathbf{z})\leq\varepsilon\}.\]
+  El tamaño $|N_{\varepsilon}(\mathbf{x})|$ aproxima densidad local.
+  \begin{itemize}
+    \item Los métodos por densidad encuentran regiones conectadas y densas.
+    \item Pueden describir formas no convexas.
+    \item Pueden dejar casos sin grupo.
+  \end{itemize}
+\end{frame}
+
+% 24
+\begin{frame}{DBSCAN: núcleo, frontera y ruido}
+  \small
+  DBSCAN usa radio $\varepsilon$ y \texttt{minPts}:
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}X}\toprule
+  Tipo & Condición\\\midrule
+  Núcleo & su vecindad contiene al menos \texttt{minPts} casos\\
+  Frontera & no es núcleo, pero está cerca de uno\\
+  Ruido & no cumple ninguna de las condiciones anteriores\\\bottomrule
+  \end{tabularx}
+  \begin{block}{Mecanismo}Expande grupos mediante cadenas de puntos núcleo conectados por densidad.\end{block}
+\end{frame}
+
+% 25
+\begin{frame}{DBSCAN frente a K-means}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.25\textwidth}XX}\toprule
+   & K-means & DBSCAN\\\midrule
+  Parámetros & $K$ & $\varepsilon$ y \texttt{minPts}\\
+  Asignación & todos los casos & puede dejar ruido\\
+  Geometría & grupos convexos & formas arbitrarias\\
+  Resumen & centroide promedio & regiones densas conectadas\\\bottomrule
+  \end{tabularx}
+  \begin{alertblock}{Precaución}Ruido es aislamiento geométrico bajo una configuración; no equivale a error, fraude ni evento irrelevante.\end{alertblock}
+\end{frame}
+
+% 26
+\begin{frame}{Sensibilidad de DBSCAN}
+  \small
+  \begin{itemize}
+    \item \texttt{minPts} pequeño acepta cadenas frágiles; uno grande convierte más casos en ruido.
+    \item La distancia al vecino $k$ puede sugerir un rango para $\varepsilon$, no decidirlo por sí sola.
+    \item El escalado cambia el significado efectivo de $\varepsilon$.
+  \end{itemize}
+  \begin{block}{Control}Explorar una rejilla de parámetros y buscar mesetas donde cantidad, tamaño y composición de grupos cambien poco.\end{block}
+\end{frame}
+
+% 27
+\begin{frame}{Mapas autoorganizados (SOM)}
+  \small
+  Un SOM es una rejilla de prototipos. Cada nodo $m$ tiene pesos $\mathbf{w}_m$.
+  Para una observación $\mathbf{x}$, la unidad de mejor coincidencia es:
+  \[c=\arg\min_m\|\mathbf{x}-\mathbf{w}_m\|_2.\]
+  Durante el ajuste se acercan a $\mathbf{x}$ la unidad ganadora y sus vecinas de rejilla:
+  \[\mathbf{w}_m(t+1)=\mathbf{w}_m(t)+\alpha(t)h_{cm}(t)[\mathbf{x}(t)-\mathbf{w}_m(t)].\]
+\end{frame}
+
+% 28
+\begin{frame}{Qué muestra un SOM}
+  \small
+  \begin{itemize}
+    \item \concepto{Mapa de componentes:} valor de una variable en cada prototipo.
+    \item \concepto{Matriz U:} distancia entre prototipos vecinos; sugiere fronteras o continuidad.
+    \item \concepto{Mapa de conteos:} cantidad de observaciones por nodo.
+  \end{itemize}
+  \begin{block}{Límite}Un SOM preserva vecindades de forma aproximada; no produce grupos automáticamente. Agrupar prototipos es una etapa adicional.\end{block}
+\end{frame}
+
+% 29
+\begin{frame}{Reducir dimensión: por qué}
+  \small
+  Con muchas variables, las distancias tienden a parecerse y las vecindades pierden contraste.
+  \[Z=g(X),\qquad q<p.\]
+  \begin{itemize}
+    \item Puede comprimir, disminuir ruido o facilitar visualización.
+    \item Puede ocultar señales raras o distorsionar proximidades.
+    \item No debe justificarse solo porque produce una figura más clara.
+  \end{itemize}
+  \begin{alertblock}{Control}No agrupar solo una proyección 2D sin revisar la estructura en el espacio de formación.\end{alertblock}
+\end{frame}
+
+% 30
+\begin{frame}{PCA: componentes principales}
+  \small
+  PCA construye nuevas coordenadas lineales que resumen variación de $X$.
+  \begin{enumerate}
+    \item Centrar las variables.
+    \item Decidir si estandarizar según las unidades.
+    \item Buscar direcciones ortogonales de máxima varianza.
+    \item Proyectar cada observación en esas direcciones.
+  \end{enumerate}
+  \begin{block}{Lectura}La primera componente explica la mayor varianza disponible; las siguientes explican varianza restante y son ortogonales a las anteriores.\end{block}
+\end{frame}
+
+% 31
+\begin{frame}{Varianza explicada e interpretación}
+  \small
+  Si $\lambda_j$ es la varianza de la componente $j$:
+  \[\text{varianza explicada}_j=\frac{\lambda_j}{\sum_r\lambda_r}.\]
+  \begin{itemize}
+    \item Una componente combina variables originales mediante cargas.
+    \item Alta varianza no implica utilidad para todas las decisiones.
+    \item PCA optimiza reconstrucción lineal, no clasificación, causalidad ni calidad de grupos.
+  \end{itemize}
+  \begin{block}{Resultado}Elegir $q$ combina pérdida aceptable, estabilidad e interpretación.\end{block}
+\end{frame}
+
+% 32
+\begin{frame}{Inercia: compactación de K-means}
+  \small
+  La inercia es la función objetivo:
+  \[W_K=\sum_{k=1}^{K}\sum_{i\in C_k}\|\mathbf{x}_i-\boldsymbol{\mu}_k\|_2^2.\]
+  \begin{itemize}
+    \item Menor valor: menor dispersión bajo esa representación.
+    \item Solo compara soluciones sobre los mismos datos y preprocesamiento.
+    \item Siempre disminuye al crecer $K$; no basta para elegirlo.
+  \end{itemize}
+\end{frame}
+
+% 33
+\begin{frame}{Silhouette: cohesión y separación}
+  \small
+  Para $i$, $a(i)$ es distancia media a su grupo y $b(i)$ la menor distancia media a otro grupo:
+  \[s(i)=\frac{b(i)-a(i)}{\max\{a(i),b(i)\}}.\]
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.28\textwidth}X}\toprule
+  Valor & Lectura\\\midrule
+  cercano a 1 & buena cohesión y separación\\
+  cercano a 0 & punto de frontera\\
+  negativo & más cercano, en promedio, a otro grupo\\\bottomrule
+  \end{tabularx}
+  \begin{block}{Control}Revisar la distribución por grupo, no solo su promedio.\end{block}
+\end{frame}
+
+% 34
+\begin{frame}{Davies--Bouldin: grupos rivales}
+  \small
+  Compara dispersión interna y distancia entre centroides:
+  \[DB=\frac{1}{K}\sum_{k=1}^{K}\max_{l\neq k}\frac{S_k+S_l}{M_{kl}}.\]
+  Valores menores indican grupos compactos respecto de su rival más cercano.
+  \begin{alertblock}{Límite}Supone grupos descritos por centroides; puede valorar mal formas arbitrarias y resultados de DBSCAN.\end{alertblock}
+\end{frame}
+
+% 35
+\begin{frame}{Caracterizar sin esencializar}
+  \small
+  Una ficha de segmento debe indicar:
+  \begin{itemize}
+    \item tamaño, perfiles centrales y dispersión;
+    \item variables que lo distinguen y casos fronterizos;
+    \item estabilidad ante muestras, periodos y decisiones de representación;
+    \item qué casos no representa;
+    \item para qué pregunta o acción exploratoria podría servir.
+  \end{itemize}
+  \begin{block}{Lenguaje}Usar nombres descriptivos, como ``actividad nocturna alta y variabilidad baja'', en lugar de etiquetas valorativas.\end{block}
+\end{frame}
+
+% 36
+\begin{frame}{Anomalías y sobreinterpretación}
+  \small
+  Una observación atípica puede ser global, contextual o colectiva. Primero se revisan integridad, cobertura, unidades y periodo.
+  \begin{alertblock}{No debemos concluir que}
+    \begin{itemize}
+      \item un cluster es una clase natural;
+      \item una separación visual prueba causalidad;
+      \item ruido de DBSCAN es error;
+      \item una métrica alta vuelve estable o útil la segmentación.
+    \end{itemize}
+  \end{alertblock}
+  \begin{block}{Control}Triangular métricas internas, estabilidad, evidencia externa y utilidad contextual.\end{block}
+\end{frame}
+
+% 37
+\begin{frame}{Del segmento a la decisión}
+  \small
+  En movilidad, los segmentos pueden guiar preguntas como:
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.42\textwidth}X}\toprule
+  Hallazgo descriptivo & Pregunta posterior\\\midrule
+  patrón nocturno concentrado & ¿la cobertura de observación es suficiente?\\
+  zona frontera entre segmentos & ¿cambia por periodo o por medición?\\
+  perfil aislado & ¿es un evento raro, una falla o una zona subobservada?\\\bottomrule
+  \end{tabularx}
+  \begin{block}{Idea}El grupo informa una investigación o una regla revisable; no reemplaza el juicio ni demuestra por qué ocurre el patrón.\end{block}
+\end{frame}
+
+% 38
+\begin{frame}{Síntesis}
+  \small
+  \begin{itemize}
+    \item El aprendizaje no supervisado organiza perfiles sin una respuesta conocida.
+    \item Representación, distancia y escalado definen qué estructura puede aparecer.
+    \item K-means, jerárquico, DBSCAN y SOM responden a geometrías diferentes.
+    \item PCA resume variación, pero no certifica utilidad ni conserva toda la estructura.
+    \item La evaluación combina compactación, separación, estabilidad, evidencia externa y propósito.
+    \item Un segmento es una descripción condicionada por método y datos, no una identidad fija.
+  \end{itemize}
+\end{frame}
+
+% 39
+\begin{frame}{Lecturas}
+  \small
+  \begin{block}{Lectura principal}
+    \begin{itemize}
+      \item Capítulo 13, §§13.1--13.4: distancias, clustering, DBSCAN, SOM y evaluación.
+    \end{itemize}
+  \end{block}
+  \begin{block}{Para ampliar}
+    \begin{itemize}
+      \item Capítulo 10, §10.3: reducción de dimensionalidad, PCA y visualización.
+    \end{itemize}
+  \end{block}
+  \begin{block}{Actividad sugerida}
+    \begin{itemize}
+      \item Capítulo 13, actividad EMO [MOV-03]: segmentar zonas por patrón de movilidad.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\end{document}
