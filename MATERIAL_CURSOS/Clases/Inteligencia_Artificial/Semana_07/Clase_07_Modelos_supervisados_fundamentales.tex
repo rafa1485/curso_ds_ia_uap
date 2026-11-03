@@ -42,16 +42,16 @@
       \color{white}\insertshorttitle
     \end{beamercolorbox}%
     \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}%
-      \color{UAPGray}\hfill Semana 5 \enspace | \enspace \insertframenumber/\inserttotalframenumber
+      \color{UAPGray}\hfill Semana 7 \enspace | \enspace \insertframenumber/\inserttotalframenumber
     \end{beamercolorbox}}}
 
 \newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
 \newcommand{\pregunta}[1]{\begin{block}{Pregunta clave}#1\end{block}}
 \newcommand{\br}{\\}
-\title[IA · Clase 5]{Modelos supervisados fundamentales}
+\title[IA · Clase 7]{Modelos supervisados fundamentales}
 \subtitle{De funciones aprendidas a decisiones}
 \author{Curso de Inteligencia Artificial}
-\institute{Semana 5 · Clase 5}
+\institute{Semana 7 · Clase 7}
 \date{}
 
 \begin{document}
@@ -328,10 +328,17 @@
 % 22
 \begin{frame}{De probabilidad a acción}
   \small
-  Con costo de falso negativo $C_{FN}$ y falso positivo $C_{FP}$, se actúa cuando:
-  \[\widehat p>\frac{C_{FP}}{C_{FP}+C_{FN}}.\]
-  Para $C_{FP}=8$ y $C_{FN}=40$:
-  \[t=\frac{8}{48}\approx0{,}167.\]
+  Decidir si actuar tiene dos errores posibles:
+  \begin{itemize}
+    \item actuar y que el evento no ocurra (falso positivo): costo $C_{FP}$;
+    \item no actuar y que el evento ocurra (falso negativo): costo $C_{FN}$.
+  \end{itemize}
+  Se actúa cuando actuar es más barato que no actuar en valor esperado:
+  \[(1-\widehat p)\,C_{FP}<\widehat p\,C_{FN}
+  \qquad\Longleftrightarrow\qquad
+  \widehat p>\frac{C_{FP}}{C_{FP}+C_{FN}}.\]
+  Con $C_{FP}=8$ y $C_{FN}=40$: $t=\frac{8}{48}\approx0{,}167$.
+  \begin{block}{Lectura}Si un falso negativo cuesta más que un falso positivo ($40>8$), conviene actuar incluso con probabilidades bajas: el umbral desciende por debajo de $0{,}5$.\end{block}
   \begin{alertblock}{Conclusión}El umbral 0,5 no es universal: depende de consecuencias, capacidad y restricciones.\end{alertblock}
 \end{frame}
 
@@ -371,15 +378,15 @@
 % 26
 \begin{frame}{¿Cómo elige una división?}
   \small
-  El árbol prueba atributos y umbrales y elige la división que más reduce la impureza.
-
-  Para clasificación binaria:
-  \[G=1-p^2-(1-p)^2=2p(1-p).\]
+  El árbol prueba atributos y umbrales y mide la impureza de cada nodo con el índice de Gini:
+  \[G=1-p^2-(1-p)^2=2p(1-p),\]
+  donde $p$ es la proporción de una de las clases en el nodo.
   \begin{itemize}
-    \item $G=0$ en un nodo puro.
-    \item $G=0{,}5$ con clases equilibradas.
-    \item Se compara el padre con la suma ponderada de las hijas.
+    \item $G=0$: nodo puro (una sola clase).
+    \item $G=0{,}5$: clases equilibradas (máxima mezcla).
   \end{itemize}
+  Se elige la división que más reduce la impureza, comparando la del padre con la suma ponderada de la de las hijas.
+  \begin{block}{Lectura}$G$ es la probabilidad de que dos ejemplos tomados al azar del nodo tengan etiquetas distintas. Un padre $50/50$ ($G=0{,}5$) dividido en hijas $80/20$ y $20/80$ ($G=0{,}32$) deja la impureza ponderada en $0{,}32$, menor que la del padre.\end{block}
 \end{frame}
 
 % 27
@@ -462,47 +469,6 @@
 \end{frame}
 
 % 33
-\begin{frame}{Actividad guiada}
-  \footnotesize Para el caso de movilidad:
-  \begin{enumerate}
-    \item indicar si corresponde regresión o clasificación para dos decisiones;
-    \item interpretar un coeficiente lineal y uno logístico;
-    \item calcular una probabilidad con la sigmoide;
-    \item seleccionar una acción con costos dados;
-    \item proponer la primera pregunta de un árbol;
-    \item explicar qué se gana y qué se pierde con un ensamble.
-  \end{enumerate}
-  \begin{block}{Tiempo}25 minutos de trabajo + 10 minutos de contraste.\end{block}
-\end{frame}
-
-% 34
-\begin{frame}{Criterios de revisión}
-  \small Una explicación es adecuada si:
-  \begin{itemize}
-    \item distingue salida del modelo y acción del agente;
-    \item identifica la función y la pérdida;
-    \item interpreta unidades y condicionamientos;
-    \item no presenta asociación como causalidad;
-    \item reconoce complejidad y extrapolación;
-    \item relaciona la elección del modelo con la tarea.
-  \end{itemize}
-\end{frame}
-
-% 35
-\begin{frame}{Síntesis}
-  \footnotesize
-  \begin{itemize}
-    \item Un modelo supervisado selecciona una función desde ejemplos etiquetados.
-    \item La regresión lineal minimiza errores cuadrados y predice números.
-    \item La regresión logística transforma un puntaje en probabilidad.
-    \item La probabilidad se convierte en acción mediante costos y restricciones.
-    \item Un árbol aprende regiones mediante divisiones sucesivas.
-    \item Random Forest estabiliza; boosting corrige secuencialmente.
-    \item Comprender el mecanismo permite reconocer posibles fallos.
-  \end{itemize}
-\end{frame}
-
-% 36
 \begin{frame}{Lecturas}
   \small
   \begin{block}{Lectura principal}

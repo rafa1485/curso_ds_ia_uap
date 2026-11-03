@@ -3,8 +3,8 @@ title: "Modelos supervisados fundamentales"
 subtitle: "De funciones aprendidas a decisiones"
 author: "Curso de Inteligencia Artificial"
 course: "Inteligencia Artificial"
-week: 5
-class: 5
+week: 7
+class: 7
 lang: es
 ---
 
@@ -12,7 +12,7 @@ lang: es
 
 ## De funciones aprendidas a decisiones
 
-**Semana 5 · Clase 5**
+**Semana 7 · Clase 7**
 
 **Recorrido conceptual:** `ejemplos → función → predicción → decisión`
 
@@ -341,9 +341,16 @@ La calidad probabilística se comprueba con casos no usados para ajustar.
 
 # De probabilidad a acción
 
-Si un falso negativo cuesta $C_{FN}$ y un falso positivo $C_{FP}$, se actúa cuando:
+Decidir si actuar tiene dos errores posibles:
+
+- actuar y que el evento no ocurra (falso positivo): costo $C_{FP}$;
+- no actuar y que el evento ocurra (falso negativo): costo $C_{FN}$.
+
+Se actúa cuando el costo esperado de actuar es menor que el de no actuar:
 
 $$
+(1-\widehat p)\,C_{FP}<\widehat p\,C_{FN}
+\qquad\Longleftrightarrow\qquad
 \widehat p>\frac{C_{FP}}{C_{FP}+C_{FN}}.
 $$
 
@@ -352,6 +359,8 @@ Con $C_{FP}=8$ y $C_{FN}=40$:
 $$
 t=\frac{8}{48}\approx0{,}167.
 $$
+
+Si un falso negativo cuesta más que un falso positivo ($40>8$), conviene actuar incluso con probabilidades bajas: el umbral desciende por debajo de $0{,}5$.
 
 El umbral 0,5 no es universal: depende de consecuencias, capacidad y restricciones.
 
@@ -411,17 +420,20 @@ Cada hoja contiene una predicción basada en los ejemplos que llegan a ella.
 
 # ¿Cómo elige una división?
 
-El árbol prueba atributos y umbrales y elige la división que más reduce la impureza.
-
-Para clasificación binaria, el índice de Gini es:
+El árbol prueba atributos y umbrales y mide la impureza de cada nodo con el índice de Gini:
 
 $$
-G=1-p^2-(1-p)^2=2p(1-p).
+G=1-p^2-(1-p)^2=2p(1-p),
 $$
 
-- $G=0$ en un nodo puro.
-- $G=0{,}5$ cuando las clases están equilibradas.
-- La división compara la impureza del padre con la suma ponderada de las hijas.
+donde $p$ es la proporción de una de las clases en el nodo.
+
+- $G=0$: nodo puro (una sola clase).
+- $G=0{,}5$: clases equilibradas (máxima mezcla).
+
+Se elige la división que más reduce la impureza, comparando la del padre con la suma ponderada de la de las hijas.
+
+**Lectura:** $G$ es la probabilidad de que dos ejemplos tomados al azar del nodo tengan etiquetas distintas. Un padre $50/50$ ($G=0{,}5$) dividido en hijas $80/20$ y $20/80$ ($G=0{,}32$) deja la impureza ponderada en $0{,}32$, menor que la del padre.
 
 ---
 
@@ -505,48 +517,6 @@ Ninguna familia domina en todos los problemas.
 - Datos tabulares con prioridad predictiva: Random Forest o boosting.
 
 La comparación debe mantener la misma tarea, información disponible y criterio de uso.
-
----
-
-# Actividad guiada
-
-Para el caso de movilidad:
-
-1. indicar si corresponde regresión o clasificación para dos decisiones distintas;
-2. interpretar un coeficiente lineal y uno logístico;
-3. calcular una probabilidad con la sigmoide;
-4. seleccionar una acción con costos dados;
-5. proponer la primera pregunta de un árbol;
-6. explicar qué ganaría y qué perdería al usar un ensamble.
-
-**Tiempo:** 25 minutos + 10 minutos de contraste.
-
----
-
-# Criterios de revisión
-
-Una explicación es adecuada si:
-
-- distingue salida del modelo y acción del agente;
-- identifica la función y la pérdida utilizada;
-- interpreta unidades y condicionamientos;
-- no presenta asociación como causalidad;
-- reconoce el efecto de complejidad y extrapolación;
-- relaciona la elección del modelo con la tarea.
-
----
-
-# Síntesis
-
-- Un modelo supervisado selecciona una función a partir de ejemplos etiquetados.
-- La regresión lineal minimiza errores cuadrados y predice valores numéricos.
-- La regresión logística transforma un puntaje en una probabilidad.
-- Una probabilidad se convierte en acción mediante costos y restricciones.
-- Un árbol aprende regiones mediante divisiones sucesivas.
-- Random Forest estabiliza; boosting corrige de forma secuencial.
-- Comprender el mecanismo ayuda a reconocer cuándo una predicción puede fallar.
-
----
 
 # Lecturas
 
