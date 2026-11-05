@@ -1,0 +1,304 @@
+% Compilar dos veces con pdflatex desde este directorio.
+\documentclass[aspectratio=169,10pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+\definecolor{UAPRed}{HTML}{A94343}
+\tikzset{flow/.style={-{Stealth[length=2.2mm]},thick,draw=UAPNavy},datum/.style={draw=UAPGold,fill=UAPGold!16,rounded corners=2pt,align=center,minimum height=8mm,text=UAPNavy},process/.style={draw=UAPTeal,fill=UAPTeal!12,rounded corners=3pt,very thick,align=center,minimum height=10mm,text=UAPNavy},decision/.style={draw=UAPNavy,fill=UAPNavy!9,rounded corners=3pt,very thick,align=center,minimum height=10mm,text=UAPNavy}}
+\usetheme{Boadilla}
+\usecolortheme{default}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alertblock title}{fg=white,bg=UAPRed}
+\setbeamercolor{alertblock body}{fg=UAPNavy,bg=UAPRed!7}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{\leavevmode\hbox{\begin{beamercolorbox}[wd=.78\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}\color{white}\insertshorttitle\end{beamercolorbox}\begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}\color{UAPGray}\hfill Semana 6 \enspace | \enspace \insertframenumber/\inserttotalframenumber\end{beamercolorbox}}}
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\title[Data Science · Clase 6]{Ingeniería de atributos y clustering}
+\subtitle{De la representación de datos a segmentos interpretables}
+\author{Curso de Data Science}
+\institute{Semana 6 · Clase 6}
+\date{}
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+\begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+\vfill {\Huge\bfseries\inserttitle\par}\vspace{.45em}{\color{UAPGold}\Large\insertsubtitle\par}\vspace{1.1em}
+\begin{tikzpicture}[node distance=4.5mm,scale=.72,transform shape]
+\node[datum](d){Datos brutos};\node[process,right=of d](a){Atributos};\node[datum,right=of a](s){Semejanza};\node[process,right=of s](g){Grupos};\node[decision,right=of g](i){Interpretación};\draw[flow](d)--(a);\draw[flow](a)--(s);\draw[flow](s)--(g);\draw[flow](g)--(i);
+\end{tikzpicture}\par\vfill {\color{UAPGold}\large\insertauthor\par}{\color{white}\insertinstitute\par}
+\end{beamercolorbox}
+\end{frame}
+
+% 2
+\begin{frame}{Propósito de la clase}
+Construir representaciones útiles para analizar datos y formar grupos sin una etiqueta objetivo conocida.
+\begin{block}{Al finalizar, podremos}\begin{itemize}
+\item transformar atributos numéricos, categóricos, temporales y espaciales;\item distinguir selección y reducción dimensional;\item explicar K-means, jerárquico y DBSCAN;\item calcular métricas de agrupamiento;\item describir grupos con prudencia.
+\end{itemize}\end{block}
+\end{frame}
+
+% 3
+\begin{frame}{Punto de partida}
+\small La Semana 05 estableció cómo formular una tarea y evaluar procedimientos. Ahora el foco es anterior al modelo:
+\[\text{datos brutos}\rightarrow\text{representación}\rightarrow\text{estructura analizable}.\]
+\begin{block}{Idea}Las decisiones de representación determinan qué diferencias, semejanzas y patrones pueden aparecer.\end{block}
+\end{frame}
+
+% 4
+\begin{frame}{Caso conductor: Palmer Penguins}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.28\textwidth}X}\toprule Elemento & Decisión\\\midrule
+Unidad & un pingüino registrado\\ Formación & cuatro medidas morfológicas\\ Variables reservadas & \texttt{species}, \texttt{island}, \texttt{sex}\\ Pregunta & ¿qué perfiles aparecen sin usar especie?\\ Uso posterior & describir patrones y contrastarlos con información externa\\\bottomrule\end{tabularx}
+\end{frame}
+
+% 5
+\begin{frame}{Atributos: representación con propósito}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.25\textwidth}XX}\toprule Dato & Representación & Supuesto\\\midrule
+masa corporal & valor, logaritmo o nivel & importa escala absoluta o relativa\\ isla & categoría indicadora & no existe orden entre islas\\ fecha & año, estación o ciclo & hay estructura temporal relevante\\ ubicación & zona, distancia o conectividad & la cercanía está bien definida\\\bottomrule\end{tabularx}
+\begin{block}{Criterio}Una representación útil conserva significado y responde a la pregunta de análisis.\end{block}
+\end{frame}
+
+% 6
+\begin{frame}{Outliers: error, evento o población distinta}\small
+Un valor extremo puede ser error de captura, medición válida inusual, señal de otra población o resultado de una transformación incorrecta.
+\begin{alertblock}{Criterio}Antes de recortar, revisar fuente, unidad, cobertura y contexto. Eliminar extremos sin investigar puede borrar justamente el patrón relevante.\end{alertblock}
+\end{frame}
+
+% 7
+\begin{frame}{Transformaciones numéricas}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.24\textwidth}XX}\toprule Operación & Uso & Riesgo\\\midrule
+estandarizar & relacionar escalas & asumir comparabilidad sin justificación\\ logaritmo & comprimir colas & usar ceros o negativos\\ razón & normalizar exposición & denominador pequeño o nulo\\ recorte & limitar influencia extrema & ocultar eventos reales\\\bottomrule\end{tabularx}
+\begin{block}{Ejemplo}Masa en gramos y aleta en milímetros requieren una decisión de escala antes de usar distancias.\end{block}
+\end{frame}
+
+% 9
+\begin{frame}{Categorías, discretización y binarización}\small
+\begin{itemize}\item Las categorías nominales no poseen orden ni distancia intrínsecos.\item La codificación indicadora crea una columna binaria por nivel.\item Discretizar convierte una escala continua en intervalos.\item Binarizar expresa una condición, por ejemplo $\text{masa}>4500$ g.\end{itemize}
+\begin{block}{Control}La codificación debe preservar significado y declarar cómo trata niveles nuevos.\end{block}
+\end{frame}
+
+% 10
+\begin{frame}{Tiempo, espacio e interacciones}\small
+Para una posición temporal $t$ dentro de un periodo $P$:
+\[x_{\sin}=\sin(2\pi t/P),\qquad x_{\cos}=\cos(2\pi t/P).\]
+Las interacciones expresan que el efecto de una variable depende de otra. Las distancias espaciales deben representar el mecanismo relevante: kilómetros, conectividad y tiempo de viaje no son equivalentes.
+\end{frame}
+
+% 11
+\begin{frame}{Selección y reducción no son lo mismo}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.34\textwidth}X}\toprule Operación & Resultado\\\midrule Selección & conserva un subconjunto de columnas originales\\ Reducción dimensional & construye coordenadas combinando columnas\\\bottomrule\end{tabularx}
+\begin{block}{Ejemplo}La selección conserva una medida corporal directa; PCA puede resumir medidas correlacionadas en componentes menos interpretables.\end{block}
+\end{frame}
+
+% 12
+\begin{frame}{Familias de selección de atributos}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}XX}\toprule Familia & Estrategia & Límite\\\midrule Filtro & puntuar antes del modelo & puede ignorar interacciones\\ Envolvente & comparar subconjuntos & costo y sobreajuste de búsqueda\\ Embebida & seleccionar durante el ajuste & depende de modelo y escala\\\bottomrule\end{tabularx}
+\begin{alertblock}{Precaución}Relevancia no equivale a causalidad; atributos correlacionados pueden sustituirse entre muestras.\end{alertblock}
+\end{frame}
+
+% 13
+\begin{frame}{Reducir dimensión: por qué}\small
+\[Z=g(X),\qquad q<p.\]
+\begin{itemize}\item Puede comprimir, disminuir ruido o facilitar visualización.\item En alta dimensión, las distancias entre vecinos pierden contraste.\item Variables irrelevantes degradan la noción de semejanza.\end{itemize}
+\end{frame}
+
+% 14
+\begin{frame}{PCA: componentes principales}\small
+PCA busca direcciones ortogonales de máxima varianza:
+\begin{enumerate}\item centrar variables;\item decidir si las unidades justifican estandarizar;\item proyectar observaciones en componentes ordenadas por varianza.\end{enumerate}
+\begin{block}{Lectura}Las cargas indican contribución de variables; las puntuaciones ubican observaciones en la nueva representación.\end{block}
+\end{frame}
+
+% 15
+\begin{frame}{Varianza explicada y límites de PCA}\small
+\[\operatorname{PVE}_j=\frac{\lambda_j}{\sum_r\lambda_r}.\]
+\begin{itemize}\item Alta varianza explicada no garantiza relevancia para una tarea.\item Una señal rara puede quedar en componentes de baja varianza.\item Un plano PCA explora; no prueba grupos separados.\end{itemize}
+\end{frame}
+
+% 16
+\begin{frame}{Aprendizaje no supervisado}\small
+No hay etiqueta que indique la respuesta correcta. El análisis busca resumir perfiles, explorar estructura local, detectar casos para revisión y generar hipótesis.
+\begin{block}{Pregunta central}¿Qué significa semejanza para las variables y el uso previsto?\end{block}
+\end{frame}
+
+% 17
+\begin{frame}{Distancia euclídea}\small
+\[d_2(\mathbf{x},\mathbf{z})=\sqrt{\sum_{j=1}^{p}(x_j-z_j)^2}.\]
+Es coherente con K-means y centroides definidos por medias. Las diferencias grandes pesan más y las escalas deben ser comparables.
+\end{frame}
+
+% 18
+\begin{frame}{Manhattan y coseno}\small
+\[d_1(\mathbf{x},\mathbf{z})=\sum_{j=1}^{p}|x_j-z_j|.\]
+\[s_{\cos}(\mathbf{x},\mathbf{z})=\frac{\mathbf{x}^{\mathsf T}\mathbf{z}}{\|\mathbf{x}\|_2\|\mathbf{z}\|_2}.\]
+Manhattan reduce el peso relativo de extremos. El coseno compara forma relativa y puede ignorar magnitud.
+\end{frame}
+
+% 19
+\begin{frame}{Escalado y ponderación}\small
+\[z_{ij}=\frac{x_{ij}-\bar{x}_j}{s_j},\qquad d_w(\mathbf{x},\mathbf{z})=\sqrt{\sum_{j=1}^{p}w_j(x_j-z_j)^2}.\]
+\begin{block}{Criterio}Ponderar debe responder a confiabilidad o significado, no a producir grupos visualmente atractivos.\end{block}
+\end{frame}
+
+% 20
+\begin{frame}{K-means: objetivo}\small
+\[J=\sum_{k=1}^{K}\sum_{\mathbf{x}_i\in C_k}\|\mathbf{x}_i-\boldsymbol{\mu}_k\|_2^2.\]
+El centroide $\boldsymbol{\mu}_k$ es la media del grupo: un perfil promedio, no necesariamente una observación real.
+\end{frame}
+
+% 21
+\begin{frame}{K-means: procedimiento}\small
+\begin{enumerate}\item Inicializar $K$ centroides.\item Asignar cada observación al centroide más cercano.\item Recalcular cada centroide como media del grupo.\item Repetir hasta estabilizar asignaciones u objetivo.\end{enumerate}
+\begin{block}{Control}K-means++ y varios reinicios reducen el riesgo de resultados locales deficientes.\end{block}
+\end{frame}
+
+% 22
+\begin{frame}{Cuándo sirve K-means}\small
+\begin{columns}[T]\column{.48\textwidth}\begin{block}{Adecuado}\begin{itemize}\item grupos compactos;\item dispersión semejante;\item variables numéricas escaladas.\end{itemize}\end{block}\column{.48\textwidth}\begin{alertblock}{Problemático}\begin{itemize}\item grupos curvos;\item densidades diferentes;\item casos que deberían quedar aislados.\end{itemize}\end{alertblock}\end{columns}
+\begin{block}{Límite}K-means siempre asigna cada observación a un grupo.\end{block}
+\end{frame}
+
+% 23
+\begin{frame}{Elegir K}\small
+\[W_K=\sum_{k=1}^{K}\sum_{i\in C_k}\|\mathbf{x}_i-\boldsymbol{\mu}_k\|_2^2.\]
+La inercia disminuye siempre al crecer $K$. El codo busca rendimientos decrecientes, pero no determina una respuesta única.
+\begin{block}{Decisión}Combinar inercia, métricas, tamaños, estabilidad, simplicidad y utilidad de perfiles.\end{block}
+\end{frame}
+
+% 24
+\begin{frame}{Clustering jerárquico}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}XX}\toprule Estrategia & Inicio & Operación\\\midrule Aglomerativa & una observación por grupo & fusiona grupos cercanos\\ Divisiva & un conjunto & divide grupos sucesivamente\\\bottomrule\end{tabularx}
+\begin{block}{Resultado}El dendrograma permite examinar varias granularidades; una fusión aglomerativa temprana no se deshace.\end{block}
+\end{frame}
+
+% 25
+\begin{frame}{Enlaces y dendrogramas}\small
+\begin{itemize}\item \concepto{Simple:} par más cercano; puede encadenar regiones mediante puntos puente.\item \concepto{Completo:} par más lejano; favorece compactación, es sensible a extremos.\item \concepto{Promedio:} resume todas las distancias entre pares.\item \concepto{Ward:} minimiza aumento de dispersión con geometría euclídea coherente.\end{itemize}
+El orden horizontal de hojas no representa otra distancia. El corte se justifica con perfiles, estabilidad y propósito.
+\end{frame}
+
+% 26
+\begin{frame}{Alternativas de enlace: una lectura visual}
+  \small
+  \centering
+  \begin{columns}[T]
+    \column{.48\textwidth}
+    \centering\textbf{Enlace simple}\par\vspace{.2em}
+    \begin{tikzpicture}[scale=.72]
+      \foreach \x/\y in {0/.25,.25/-.2,.5/.1} \fill[UAPTeal] (\x,\y) circle (2.3pt);
+      \foreach \x/\y in {2/.15,2.3/-.2,2.55/.25} \fill[UAPGold] (\x,\y) circle (2.3pt);
+      \draw[UAPNavy,very thick] (.5,.1)--(2,.15);
+      \node[font=\scriptsize,align=center] at (1.28,-.65) {par más cercano};
+    \end{tikzpicture}\par\vspace{.6em}
+    \centering\textbf{Enlace promedio}\par\vspace{.2em}
+    \begin{tikzpicture}[scale=.72]
+      \foreach \x/\y in {0/.25,.25/-.2,.5/.1} \fill[UAPTeal] (\x,\y) circle (2.3pt);
+      \foreach \x/\y in {2/.15,2.3/-.2,2.55/.25} \fill[UAPGold] (\x,\y) circle (2.3pt);
+      \foreach \a in {(0,.25),(0.25,-.2),(0.5,.1)} \foreach \b in {(2,.15),(2.3,-.2),(2.55,.25)} \draw[UAPGray!60,dashed] \a--\b;
+      \node[font=\scriptsize,align=center] at (1.28,-.65) {todas las distancias};
+    \end{tikzpicture}
+    \column{.48\textwidth}
+    \centering\textbf{Enlace completo}\par\vspace{.2em}
+    \begin{tikzpicture}[scale=.72]
+      \foreach \x/\y in {0/.25,.25/-.2,.5/.1} \fill[UAPTeal] (\x,\y) circle (2.3pt);
+      \foreach \x/\y in {2/.15,2.3/-.2,2.55/.25} \fill[UAPGold] (\x,\y) circle (2.3pt);
+      \draw[UAPRed,very thick] (.25,-.2)--(2.55,.25);
+      \node[font=\scriptsize,align=center] at (1.28,-.65) {par más lejano};
+    \end{tikzpicture}\par\vspace{.6em}
+    \centering\textbf{Enlace de Ward}\par\vspace{.2em}
+    \begin{tikzpicture}[scale=.72]
+      \foreach \x/\y in {0/.25,.25/-.2,.5/.1} \fill[UAPTeal] (\x,\y) circle (2.3pt);
+      \foreach \x/\y in {2/.15,2.3/-.2,2.55/.25} \fill[UAPGold] (\x,\y) circle (2.3pt);
+      \draw[UAPNavy,very thick] (.25,.05)--(2.28,.07);
+      \node[UAPTeal,font=\large] at (.25,.05) {$+$};
+      \node[UAPGold!80!black,font=\large] at (2.28,.07) {$+$};
+      \node[font=\scriptsize,align=center] at (1.28,-.65) {centroides y dispersión};
+    \end{tikzpicture}
+  \end{columns}
+  \vspace{.25em}
+  \begin{block}{Lectura}La misma matriz de datos puede producir jerarquías distintas porque cada enlace define distancia entre grupos de otra manera.\end{block}
+\end{frame}
+
+% 27
+\begin{frame}{DBSCAN: densidad y ruido}\small
+DBSCAN usa radio $\varepsilon$ y \texttt{min\_samples}.
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}X}\toprule Tipo & Condición\\\midrule núcleo & suficientes vecinos en radio $\varepsilon$\\ frontera & cerca de un núcleo, pero no es núcleo\\ ruido & fuera de regiones densas bajo esa configuración\\\bottomrule\end{tabularx}
+Puede encontrar formas arbitrarias y no requiere fijar $K$.
+\end{frame}
+
+% 27
+\begin{frame}{Sensibilidad de DBSCAN}\small
+\begin{itemize}\item Radio grande fusiona regiones; radio pequeño las fragmenta.\item \texttt{min\_samples} grande exige más evidencia local.\item El escalado cambia el significado de $\varepsilon$.\item Ruido no significa error ni irrelevancia.\end{itemize}
+\begin{block}{Control}Explorar una grilla de parámetros y buscar configuraciones estables, no una cifra aislada favorable.\end{block}
+\end{frame}
+
+% 28
+\begin{frame}{Métricas internas}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.26\textwidth}XX}\toprule Métrica & Qué resume & Dirección\\\midrule Inercia & dispersión de K-means & menor\\ Silhouette & cohesión y separación & mayor\\ Calinski--Harabasz & separación relativa & mayor\\ Davies--Bouldin & grupos rivales & menor\\\bottomrule\end{tabularx}
+\begin{alertblock}{Límite}Las métricas dependen de representación y geometría; ninguna identifica sola una segmentación útil.\end{alertblock}
+\end{frame}
+
+% 29
+\begin{frame}{Silhouette}\small
+Para $i$, $a(i)$ es distancia media a su grupo y $b(i)$ la menor distancia media a otro grupo:
+\[s(i)=\frac{b(i)-a(i)}{\max\{a(i),b(i)\}}.\]
+\begin{itemize}\item Cercano a 1: cohesión y separación altas.\item Cercano a 0: caso fronterizo.\item Negativo: más cercano, en promedio, a otro grupo.\end{itemize}
+\end{frame}
+
+% 30
+\begin{frame}{Calinski--Harabasz y Davies--Bouldin}\small
+Calinski--Harabasz compara dispersión entre grupos con dispersión interna; valores mayores indican separación relativa mayor.
+\[DB=\frac{1}{K}\sum_{k=1}^{K}\max_{l\neq k}\frac{S_k+S_l}{M_{kl}}.\]
+Davies--Bouldin menor es preferible. Ambas métricas favorecen geometrías particulares y se interpretan junto con perfiles y estabilidad.
+\end{frame}
+
+% 31
+\begin{frame}{Estabilidad y casos frontera}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.26\textwidth}X}\toprule Diagnóstico & Pregunta\\\midrule reinicios & ¿la optimización llega a particiones parecidas?\\ submuestras & ¿los perfiles sobreviven a cambios de muestra?\\ silhouette baja & ¿son fronteras, errores o transiciones?\\ tamaños & ¿hay segmentos diminutos o dominantes?\\\bottomrule\end{tabularx}
+\end{frame}
+
+% 32
+\begin{frame}{Describir grupos con prudencia}\small
+Una ficha de grupo debe indicar cantidad, perfiles centrales y dispersión en unidades originales, casos representativos y frontera, sensibilidad y población cubierta.
+\begin{alertblock}{Lenguaje}Usar nombres descriptivos, no etiquetas valorativas. Un grupo encontrado no demuestra una clase natural ni una causa.\end{alertblock}
+\end{frame}
+
+% 33
+\begin{frame}{Comparación externa posterior}\small
+Después de formar grupos con las cuatro medidas, podemos cruzar \texttt{cluster} con \texttt{species}.
+\begin{tabularx}{\textwidth}{>{\bfseries}X X}\toprule Uso legítimo & Uso incorrecto\\\midrule describir coincidencias y desacuerdos & declarar que el algoritmo predijo especie\\ evaluar una referencia externa & usar especie para elegir retrospectivamente el mejor resultado\\\bottomrule\end{tabularx}
+\end{frame}
+
+% 34
+\begin{frame}{Notebook: qué exploraremos}\small
+\begin{enumerate}\item Imputación y estandarización de medidas morfológicas.\item K-means, jerárquico y DBSCAN.\item Inercia, silhouette, Calinski--Harabasz, Davies--Bouldin y estabilidad.\item PCA 2D solo para visualizar.\item Perfiles en unidades originales y tabla cruzada final con especie.\end{enumerate}
+\end{frame}
+
+% 35
+\begin{frame}{Síntesis}\small
+\begin{itemize}\item Atributos, escalas y agregaciones definen el espacio donde se buscan patrones.\item Selección conserva columnas; PCA crea representaciones nuevas.\item K-means, jerárquico y DBSCAN responden a geometrías distintas.\item Métricas comparan estructura geométrica, no significado automático.\item Estabilidad, perfiles e información externa completan la evaluación.\end{itemize}
+\end{frame}
+
+% 36
+\begin{frame}{Lecturas}\small
+\begin{block}{Ingeniería y reducción de atributos}\begin{itemize}\item Capítulo 10, §§10.1--10.4.\end{itemize}\end{block}
+\begin{block}{Clustering y evaluación}\begin{itemize}\item Capítulo 13, §§13.1--13.4.\end{itemize}\end{block}
+\begin{block}{Práctica}\begin{itemize}\item Guía de ejercicios de Diseño experimental de Machine Learning, ejercicio 10: Palmer Penguins.\end{itemize}\end{block}
+\end{frame}
+\end{document}
