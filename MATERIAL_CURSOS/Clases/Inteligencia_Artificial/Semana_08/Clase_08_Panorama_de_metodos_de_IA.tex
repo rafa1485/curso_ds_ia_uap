@@ -1,0 +1,702 @@
+% Compilar dos veces con pdflatex desde este directorio.
+\documentclass[aspectratio=169,10pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,fit}
+
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+\definecolor{UAPRed}{HTML}{A94343}
+
+\tikzset{
+  flow/.style={-{Stealth[length=2.2mm]},thick,draw=UAPNavy},
+  feedback/.style={{Stealth[length=2.2mm]}-{Stealth[length=2.2mm]},thick,draw=UAPNavy},
+  datum/.style={draw=UAPGold,fill=UAPGold!16,rounded corners=2pt,align=center,minimum height=8mm,text=UAPNavy},
+  process/.style={draw=UAPTeal,fill=UAPTeal!12,rounded corners=3pt,very thick,align=center,minimum height=10mm,text=UAPNavy},
+  decision/.style={draw=UAPNavy,fill=UAPNavy!9,rounded corners=3pt,very thick,align=center,minimum height=10mm,text=UAPNavy},
+  warning/.style={draw=UAPRed,fill=UAPRed!7,rounded corners=3pt,align=left},
+  neuron/.style={circle,draw=UAPTeal,fill=UAPTeal!12,minimum size=7mm,inner sep=0pt},
+  client/.style={draw=UAPGold,fill=UAPGold!14,rounded corners=2pt,align=center,minimum width=24mm,minimum height=9mm}
+}
+
+\usetheme{Boadilla}
+\usecolortheme{default}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alertblock title}{fg=white,bg=UAPRed}
+\setbeamercolor{alertblock body}{fg=UAPNavy,bg=UAPRed!7}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{%
+  \leavevmode\hbox{%
+    \begin{beamercolorbox}[wd=.78\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}%
+      \color{white}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}%
+      \color{UAPGray}\hfill Semana 8 \enspace | \enspace \insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}}}
+
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\newcommand{\idea}[1]{\begin{block}{Idea central}#1\end{block}}
+\title[IA · Clase 8]{Panorama de métodos de Inteligencia Artificial}
+\subtitle{Modelos, interacción, lenguaje y aprendizaje distribuido}
+\author{Curso de Inteligencia Artificial}
+\institute{Semana 8 · Clase 8}
+\date{}
+
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+    \vfill
+    {\Huge\bfseries\inserttitle\par}\vspace{.45em}
+    {\color{UAPGold}\Large\insertsubtitle\par}\vspace{1.2em}
+    \begin{tikzpicture}[node distance=4mm,scale=.69,transform shape]
+      \node[datum] (s) {Señal};
+      \node[process,right=of s] (r) {Representación};
+      \node[datum,right=of r] (a) {Aprendizaje};
+      \node[decision,right=of a] (o) {Salida};
+      \node[datum,right=of o] (e) {Evaluación};
+      \draw[flow] (s)--(r); \draw[flow] (r)--(a); \draw[flow] (a)--(o); \draw[flow] (o)--(e);
+    \end{tikzpicture}\par
+    \vfill {\color{UAPGold}\large\insertauthor\par}{\color{white}\insertinstitute\par}
+  \end{beamercolorbox}
+\end{frame}
+
+% 2
+\begin{frame}{Propósito de la clase}
+  Comprender los principios que distinguen varias familias centrales de Inteligencia Artificial y reconocer qué aprende cada una.
+  \begin{block}{Al finalizar, podremos}
+    \begin{itemize}
+      \item explicar SVM, redes neuronales y ensambles;
+      \item describir el ciclo de aprendizaje por refuerzo;
+      \item seguir el recorrido desde texto hasta un modelo de lenguaje;
+      \item explicar el aprendizaje federado;
+      \item comparar señales, salidas, fortalezas y límites.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% 3
+\begin{frame}{Un mapa para la clase}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.53\textwidth}X}\toprule
+  Pregunta & Familia\\\midrule
+  ¿Cómo separar ejemplos etiquetados? & SVM y redes neuronales\\
+  ¿Cómo combinar predictores? & Ensemble Learning\\
+  ¿Cómo aprender a actuar mediante consecuencias? & Aprendizaje por refuerzo\\
+  ¿Cómo representar y generar lenguaje? & NLP y modelos de lenguaje\\
+  ¿Cómo entrenar con datos distribuidos? & Aprendizaje federado\\\bottomrule
+  \end{tabularx}
+  \idea{No son alternativas equivalentes: responden a problemas y restricciones diferentes.}
+\end{frame}
+
+% 4
+\begin{frame}{El ciclo común}
+  \begin{center}
+    \begin{tikzpicture}[node distance=5mm,scale=.8,transform shape]
+      \node[datum] (d) {Datos o\\experiencia};
+      \node[process,right=of d] (r) {Representación};
+      \node[process,right=of r] (c) {Criterio de\\aprendizaje};
+      \node[datum,right=of c] (p) {Parámetros};
+      \node[decision,right=of p] (o) {Salida};
+      \draw[flow] (d)--(r); \draw[flow] (r)--(c); \draw[flow] (c)--(p); \draw[flow] (p)--(o);
+    \end{tikzpicture}
+  \end{center}
+  \begin{itemize}
+    \item Cambian la señal que informa qué mejorar y la estructura del modelo.
+    \item Cambian el procedimiento de ajuste y la evidencia necesaria para evaluar.
+  \end{itemize}
+\end{frame}
+
+% 5
+\begin{frame}{SVM: separar con margen}
+  Una máquina de soporte vectorial busca una frontera que separe clases y deje el mayor margen posible.
+  \[
+    f(\mathbf{x})=\mathbf{w}^{\mathsf T}\mathbf{x}+b,
+    \qquad \widehat y=\operatorname{sign}(f(\mathbf{x})).
+  \]
+  \begin{itemize}
+    \item La frontera está dada por $f(\mathbf{x})=0$.
+    \item $\mathbf{w}$ determina su orientación y $b$ su desplazamiento.
+    \item La distancia firmada es proporcional a $f(\mathbf{x})/\|\mathbf{w}\|_2$.
+  \end{itemize}
+\end{frame}
+
+% 6
+\begin{frame}{Margen y vectores de soporte}
+  \begin{columns}[T]
+    \column{.52\textwidth}
+    \centering
+    \begin{tikzpicture}[scale=.72]
+      \draw[->,UAPGray] (0,0)--(6.4,0) node[right] {$x_1$};
+      \draw[->,UAPGray] (0,0)--(0,4.8) node[above] {$x_2$};
+      \draw[UAPGold,dashed,very thick] (.7,3.8)--(4.7,.2);
+      \draw[UAPNavy,very thick] (1.4,4.6)--(5.4,.6) node[pos=.57,above right] {frontera};
+      \draw[UAPGold,dashed,very thick] (2.3,4.8)--(6.1,1.0);
+      \foreach \x/\y in {.7/1.0,1.2/1.7,1.9/.8,2.0/2.0,2.8/1.5}{\fill[UAPTeal] (\x,\y) circle (2.3pt);}
+      \foreach \x/\y in {3.2/4.1,4.0/3.5,4.8/4.2,5.3/3.1,5.7/4.4}{\fill[UAPRed] (\x,\y) circle (2.3pt);}
+      \draw[UAPNavy,thick] (2.0,2.0) circle (4.4pt);
+      \draw[UAPNavy,thick] (3.2,4.1) circle (4.4pt);
+      \draw[<->,UAPGray] (2.45,2.52)--(3.0,3.08) node[midway,right] {margen};
+    \end{tikzpicture}
+    \column{.46\textwidth}
+    \small
+    \begin{itemize}
+      \item Ancho del margen: $2/\|\mathbf{w}\|_2$.
+      \item Los ejemplos marcados son \concepto{vectores de soporte}.
+      \item Determinan la posición de la frontera.
+      \item Casos alejados suelen no modificar la solución.
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
+% 7
+\begin{frame}{Margen blando y kernels}
+  \small
+  En datos reales puede ser imposible separar sin errores. El parámetro $C$ regula el equilibrio entre margen amplio y penalización de violaciones.
+  \[
+    K(\mathbf{x},\mathbf{z})=\phi(\mathbf{x})^{\mathsf T}\phi(\mathbf{z}).
+  \]
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.25\textwidth}XX}\toprule
+  Opción & Qué representa & Cuidado\\\midrule
+  Kernel lineal & frontera lineal disponible & depende de escala y variables\\
+  Kernel RBF & semejanza local y frontera curva & requiere elegir $C$ y $\gamma$\\
+  Margen blando & admite violaciones & no convierte ruido en señal\\\bottomrule
+  \end{tabularx}
+\end{frame}
+
+% 8
+\begin{frame}{Ejemplo SVM: riesgo operativo}
+  \small
+  Se representan eventos mediante demora estimada y congestión.
+  \begin{enumerate}
+    \item Un SVM lineal busca una recta entre riesgo bajo y alto.
+    \item Los eventos cercanos son vectores de soporte.
+    \item Si la separación es curva, un kernel RBF puede representarla.
+    \item La puntuación respecto de la frontera no es automáticamente una probabilidad calibrada.
+  \end{enumerate}
+  \begin{alertblock}{Límite}La acción posterior todavía requiere costos, capacidad y supervisión.\end{alertblock}
+\end{frame}
+
+% 9
+\begin{frame}{Red neuronal: una unidad básica}
+  \begin{columns}[T]
+    \column{.54\textwidth}
+    Una neurona combina entradas y aplica una activación:
+    \[
+      z=\mathbf{w}^{\mathsf T}\mathbf{x}+b,
+      \qquad a=\phi(z).
+    \]
+    \begin{itemize}
+      \item Los pesos controlan la influencia de cada entrada.
+      \item El sesgo desplaza el umbral.
+      \item La activación introduce una transformación.
+    \end{itemize}
+    \column{.42\textwidth}
+    \centering
+    \begin{tikzpicture}[node distance=6mm]
+      \node[datum] (x1) {$x_1$};
+      \node[datum,below=of x1] (x2) {$x_2$};
+      \node[datum,below=of x2] (xp) {$x_p$};
+      \node[process,right=15mm of x2] (sum) {$\sum_j w_jx_j+b$};
+      \node[decision,right=8mm of sum] (act) {$\phi(z)$};
+      \draw[flow] (x1)--(sum); \draw[flow] (x2)--(sum); \draw[flow] (xp)--(sum); \draw[flow] (sum)--(act);
+    \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+% 10
+\begin{frame}{Funciones de activación}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}p{.29\textwidth}X}\toprule
+  Activación & Expresión o rango & Uso frecuente\\\midrule
+  Sigmoide & $\sigma(z)=1/(1+e^{-z})$ & salida binaria\\
+  Tanh & $(-1,1)$ & estados centrados\\
+  ReLU & $\max(0,z)$ & capas ocultas\\
+  Softmax & probabilidades que suman 1 & salida multiclase\\\bottomrule
+  \end{tabularx}
+  \begin{block}{Por qué importan}Sin activaciones no lineales, apilar capas seguiría produciendo una transformación lineal.\end{block}
+\end{frame}
+
+% 11
+\begin{frame}{Capas y propagación hacia adelante}
+  \begin{columns}[T]
+    \column{.49\textwidth}
+    \centering
+    \begin{tikzpicture}[x=1.4cm,y=.8cm]
+      \foreach \i in {1,...,3}{\node[neuron] (i\i) at (0,2-\i) {};}
+      \foreach \i in {1,...,4}{\node[neuron] (h\i) at (2,2.5-\i) {};}
+      \foreach \i in {1,...,2}{\node[neuron] (o\i) at (4,1.5-\i) {};}
+      \foreach \i in {1,...,3}\foreach \j in {1,...,4}{\draw[UAPGray!55] (i\i)--(h\j);}
+      \foreach \i in {1,...,4}\foreach \j in {1,...,2}{\draw[UAPGray!55] (h\i)--(o\j);}
+      \node[below=5mm of i3] {entrada}; \node[below=1mm of h4] {oculta}; \node[below=5mm of o2] {salida};
+      \draw[flow,UAPGold,very thick] (-.3,2)--(4.3,2) node[midway,above] {propagación};
+    \end{tikzpicture}
+    \column{.49\textwidth}
+    \small
+    \[
+      \mathbf{h}^{(\ell)}=\phi\!\left(W^{(\ell)}\mathbf{h}^{(\ell-1)}+\mathbf{b}^{(\ell)}\right).
+    \]
+    \begin{itemize}
+      \item Entrada: variables observadas.
+      \item Ocultas: representaciones aprendidas.
+      \item Salida: cantidad, clase o probabilidad.
+    \end{itemize}
+    La inferencia calcula una salida; no modifica parámetros.
+  \end{columns}
+\end{frame}
+
+% 12
+\begin{frame}{Pérdida y retropropagación}
+  \begin{center}
+    \begin{tikzpicture}[node distance=5mm,scale=.78,transform shape]
+      \node[datum] (x) {Entrada};
+      \node[process,right=of x] (f) {Forward};
+      \node[decision,right=of f] (y) {Predicción};
+      \node[warning,right=of y] (l) {Pérdida};
+      \node[process,below=8mm of y] (b) {Gradientes\\backprop};
+      \node[datum,left=of b] (u) {Actualizar\\parámetros};
+      \draw[flow] (x)--(f); \draw[flow] (f)--(y); \draw[flow] (y)--(l);
+      \draw[flow] (l)--(b); \draw[flow] (b)--(u); \draw[flow] (u)--(f);
+    \end{tikzpicture}
+  \end{center}
+  \[
+    \theta\leftarrow\theta-\eta\nabla_{\theta}L.
+  \]
+  \small La retropropagación calcula gradientes; el optimizador los usa para ajustar parámetros. La validación orienta arquitectura y parada; la prueba estima desempeño final.
+\end{frame}
+
+% 13
+\begin{frame}{Ejemplo neuronal: relación XOR}
+  \begin{columns}[T]
+    \column{.38\textwidth}
+    \centering
+    \begin{tabular}{ccc}\toprule
+    $x_1$ & $x_2$ & $y$\\\midrule
+    0&0&0\\0&1&1\\1&0&1\\1&1&0\\\bottomrule
+    \end{tabular}
+    \column{.58\textwidth}
+    \begin{itemize}
+      \item Una sola recta no separa los casos.
+      \item Una capa oculta construye regiones intermedias.
+      \item La salida combina esas regiones en una frontera no lineal.
+    \end{itemize}
+    \begin{block}{Resultado}Capacidad para ajustar no equivale a generalización: una red también puede memorizar ruido.\end{block}
+  \end{columns}
+\end{frame}
+
+% 14
+\begin{frame}{Ensemble Learning: combinar modelos}
+  Un ensamble agrega predicciones de varios modelos:
+  \[
+    \widehat f(\mathbf{x})=\sum_{m=1}^{M}\alpha_m f_m(\mathbf{x}).
+  \]
+  \begin{itemize}
+    \item La combinación puede ser promedio, voto, suma ponderada o metamodelo.
+    \item La mejora aparece cuando los modelos son competentes y sus errores difieren.
+    \item Combinar copias idénticas con los mismos errores aporta poco.
+  \end{itemize}
+\end{frame}
+
+% 15
+\begin{frame}{Bagging y Random Forest}
+  \begin{center}
+    \begin{tikzpicture}[node distance=5mm,scale=.8,transform shape]
+      \node[datum] (d) {Datos};
+      \node[process,right=10mm of d,yshift=12mm] (m1) {Muestra 1\\Árbol 1};
+      \node[process,right=10mm of d] (m2) {Muestra 2\\Árbol 2};
+      \node[process,right=10mm of d,yshift=-12mm] (m3) {Muestra 3\\Árbol 3};
+      \node[decision,right=14mm of m2] (a) {Promedio\\o voto};
+      \draw[flow] (d)--(m1); \draw[flow] (d)--(m2); \draw[flow] (d)--(m3);
+      \draw[flow] (m1)--(a); \draw[flow] (m2)--(a); \draw[flow] (m3)--(a);
+    \end{tikzpicture}
+  \end{center}
+  \small Bagging entrena en paralelo sobre muestras bootstrap. Random Forest añade selección aleatoria de variables para reducir la correlación entre árboles.
+\end{frame}
+
+% 16
+\begin{frame}{Boosting}
+  \begin{center}
+    \begin{tikzpicture}[node distance=6mm,scale=.82,transform shape]
+      \node[process] (m1) {Modelo 1};
+      \node[warning,right=of m1] (e1) {Error 1};
+      \node[process,right=of e1] (m2) {Modelo 2};
+      \node[warning,right=of m2] (e2) {Error 2};
+      \node[process,right=of e2] (m3) {Modelo 3};
+      \draw[flow] (m1)--(e1); \draw[flow] (e1)--(m2); \draw[flow] (m2)--(e2); \draw[flow] (e2)--(m3);
+    \end{tikzpicture}
+  \end{center}
+  \[
+    F_M(x)=F_0(x)+\sum_{m=1}^{M}\nu h_m(x).
+  \]
+  Cada modelo corrige parte del error actual. No es una votación independiente: el aprendizaje es secuencial.
+\end{frame}
+
+% 17
+\begin{frame}{Ejemplo de ensamble}
+  \small
+  Para estimar riesgo de demora:
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.24\textwidth}XX}\toprule
+  Método & Mecanismo & Efecto buscado\\\midrule
+  Árbol & reglas por regiones & modelo base interpretable\\
+  Random Forest & árboles decorrelacionados & menor variabilidad\\
+  Boosting & correcciones sucesivas & menor error sistemático\\
+  Stacking & metamodelo sobre predicciones & combinación aprendida\\\bottomrule
+  \end{tabularx}
+  \idea{La comparación conserva la misma partición, información y métrica.}
+\end{frame}
+
+% 18
+\begin{frame}{Aprendizaje por refuerzo}
+  En aprendizaje supervisado, una etiqueta indica la respuesta esperada. En RL, un agente actúa, observa consecuencias y aprende una política.
+  \[
+    S_t\rightarrow A_t\rightarrow R_{t+1},S_{t+1}.
+  \]
+  \begin{itemize}
+    \item La señal puede llegar con demora.
+    \item Una acción cambia las experiencias futuras.
+    \item El objetivo es una secuencia de decisiones, no una predicción aislada.
+  \end{itemize}
+\end{frame}
+
+% 19
+\begin{frame}{Ciclo agente-entorno}
+  \begin{center}
+    \begin{tikzpicture}[node distance=28mm]
+      \node[process,minimum width=35mm,minimum height=18mm] (agent) {Agente\\política / valor};
+      \node[decision,right=of agent,minimum width=35mm,minimum height=18mm] (env) {Entorno\\transición};
+      \draw[flow,bend left=18] (agent) to node[above] {acción $A_t$} (env);
+      \draw[flow,bend left=18] (env) to node[below] {estado $S_{t+1}$, recompensa $R_{t+1}$} (agent);
+    \end{tikzpicture}
+  \end{center}
+  \begin{itemize}
+    \item El estado resume información relevante.
+    \item La recompensa aporta una señal inmediata.
+    \item La política asigna acciones a estados.
+  \end{itemize}
+\end{frame}
+
+% 20
+\begin{frame}{Retorno y funciones de valor}
+  \small
+  \[
+    G_t=R_{t+1}+\gamma R_{t+2}+\gamma^2R_{t+3}+\cdots,
+    \qquad 0\leq\gamma<1.
+  \]
+  \begin{columns}[T]
+    \column{.48\textwidth}
+    \begin{block}{Valor de estado}
+      $V^{\pi}(s)=\mathbb{E}_{\pi}[G_t\mid S_t=s]$
+    \end{block}
+    \column{.48\textwidth}
+    \begin{block}{Valor de acción}
+      $Q^{\pi}(s,a)=\mathbb{E}_{\pi}[G_t\mid S_t=s,A_t=a]$
+    \end{block}
+  \end{columns}
+  $\gamma$ regula cuánto pesan consecuencias futuras; el valor resume retorno esperado.
+\end{frame}
+
+% 21
+\begin{frame}{Exploración y explotación}
+  \begin{columns}[T]
+    \column{.48\textwidth}
+    \begin{block}{Explotar}
+      Elegir la acción que actualmente parece mejor. Puede fijar una política prematura.
+    \end{block}
+    \column{.48\textwidth}
+    \begin{block}{Explorar}
+      Probar alternativas para obtener información. Puede ser costoso o inseguro.
+    \end{block}
+  \end{columns}
+  \vspace{4mm}
+  La estrategia $\varepsilon$-greedy elige una acción aleatoria con probabilidad $\varepsilon$ y la mejor conocida en los demás casos.
+\end{frame}
+
+% 22
+\begin{frame}{Q-learning como ejemplo}
+  \[
+    Q(s,a)\leftarrow Q(s,a)+\alpha\left[r+\gamma\max_{a'}Q(s',a')-Q(s,a)\right].
+  \]
+  \begin{center}
+    \begin{tikzpicture}[node distance=5mm,scale=.85,transform shape]
+      \node[datum] (old) {$Q(s,a)$ actual};
+      \node[process,right=of old] (target) {$r+\gamma\max Q(s',a')$};
+      \node[decision,right=of target] (new) {$Q(s,a)$ actualizado};
+      \draw[flow] (old)--node[above] {comparar} (target); \draw[flow] (target)--node[above] {$\alpha$} (new);
+    \end{tikzpicture}
+  \end{center}
+  El objetivo combina recompensa inmediata y mejor valor futuro estimado.
+\end{frame}
+
+% 23
+\begin{frame}{Ejemplo RL: asignación secuencial}
+  \small
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}X}\toprule
+  Elemento & Ejemplo\\\midrule
+  Estado & zona, hora, congestión y disponibilidad\\
+  Acción & mantener, mover o esperar\\
+  Recompensa & servicio logrado menos traslado y demora\\
+  Política & regla aprendida para seleccionar acciones\\\bottomrule
+  \end{tabularx}
+  \begin{alertblock}{Diseño de la señal}Una recompensa incompleta puede producir conductas indeseadas aunque el algoritmo la optimice correctamente.\end{alertblock}
+\end{frame}
+
+% 24
+\begin{frame}{NLP: del texto a una tarea}
+  \begin{center}
+    \begin{tikzpicture}[node distance=5mm,scale=.78,transform shape]
+      \node[datum] (t) {Texto};
+      \node[process,right=of t] (tok) {Tokens};
+      \node[process,right=of tok] (rep) {Representación\\numérica};
+      \node[datum,right=of rep] (mod) {Modelo};
+      \node[decision,right=of mod] (out) {Clase, entidad,\\respuesta o texto};
+      \draw[flow] (t)--(tok); \draw[flow] (tok)--(rep); \draw[flow] (rep)--(mod); \draw[flow] (mod)--(out);
+    \end{tikzpicture}
+  \end{center}
+  \small Un corpus es una colección de documentos; un token es una unidad procesada. Los tokens pueden ser palabras, subpalabras, caracteres o símbolos especiales.
+\end{frame}
+
+% 25
+\begin{frame}{Representaciones dispersas}
+  Bag of Words representa documentos mediante conteos. TF--IDF reduce el peso de términos frecuentes en muchos documentos:
+  \[
+    \operatorname{tfidf}(t,d)=\operatorname{tf}(t,d)\log\frac{N}{\operatorname{df}(t)}.
+  \]
+  \begin{itemize}
+    \item Son baselines útiles e interpretables.
+    \item Producen vectores grandes y dispersos.
+    \item Pierden gran parte del orden y del contexto.
+  \end{itemize}
+\end{frame}
+
+% 26
+\begin{frame}{Embeddings}
+  \[
+    \text{token}\longrightarrow\mathbf{e}\in\mathbb{R}^{d}.
+  \]
+  \begin{itemize}
+    \item Un embedding representa una unidad mediante un vector denso.
+    \item Los embeddings distribucionales aproximan semejanzas de uso.
+    \item Los embeddings contextuales cambian según la oración.
+  \end{itemize}
+  \begin{block}{Ejemplo}“Banco” necesita representaciones distintas en “banco financiero” y “banco de la plaza”.\end{block}
+\end{frame}
+
+% 27
+\begin{frame}{Atención}
+  \[
+    \operatorname{Attention}(Q,K,V)=
+    \operatorname{softmax}\left(\frac{QK^{\mathsf T}}{\sqrt{d_k}}\right)V.
+  \]
+  \begin{center}
+    \begin{tikzpicture}[node distance=7mm,scale=.82,transform shape]
+      \node[datum] (q) {Consulta $Q$\\qué busca};
+      \node[datum,right=of q] (k) {Claves $K$\\con qué compara};
+      \node[process,right=of k] (w) {Pesos\\softmax};
+      \node[datum,right=of w] (v) {Valores $V$\\qué combina};
+      \node[decision,right=of v] (o) {Contexto};
+      \draw[flow] (q)--(w); \draw[flow] (k)--(w); \draw[flow] (w)--(v); \draw[flow] (v)--(o);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+% 28
+\begin{frame}{Transformer simplificado}
+  \begin{center}
+    \begin{tikzpicture}[node distance=4mm,scale=.76,transform shape]
+      \node[datum] (tok) {Tokens};
+      \node[process,right=of tok] (emb) {Embeddings\\+ posición};
+      \node[process,right=of emb] (att) {Atención\\multi-cabeza};
+      \node[process,right=of att] (ff) {Red\\feed-forward};
+      \node[datum,right=of ff] (stack) {Capas\\apiladas};
+      \node[decision,right=of stack] (out) {Salida};
+      \draw[flow] (tok)--(emb); \draw[flow] (emb)--(att); \draw[flow] (att)--(ff); \draw[flow] (ff)--(stack); \draw[flow] (stack)--(out);
+    \end{tikzpicture}
+  \end{center}
+  \begin{itemize}
+    \item Conexiones residuales y normalización estabilizan el procesamiento.
+    \item La atención permite intercambiar información entre posiciones.
+    \item El diagrama omite detalles, pero conserva el flujo funcional.
+  \end{itemize}
+\end{frame}
+
+% 29
+\begin{frame}{Modelos de lenguaje}
+  Un modelo de lenguaje asigna probabilidades a secuencias. En generación autorregresiva:
+  \[
+    P(x_{1:T})=\prod_{t=1}^{T}P(x_t\mid x_{<t}).
+  \]
+  \begin{itemize}
+    \item Un LLM amplía escala de parámetros, datos y cómputo.
+    \item El modelo produce una distribución sobre tokens posibles.
+    \item Una aplicación conversacional añade interfaz, instrucciones, memoria y herramientas.
+  \end{itemize}
+\end{frame}
+
+% 30
+\begin{frame}{Ejemplo de generación token a token}
+  \begin{columns}[T]
+    \column{.52\textwidth}
+    Contexto: \concepto{“La capital de Argentina es”}
+    \begin{center}
+      \begin{tabular}{lr}\toprule
+      Token candidato & Probabilidad\\\midrule
+      Buenos & 0,72\\
+      Córdoba & 0,08\\
+      una & 0,05\\
+      grande & 0,02\\\bottomrule
+      \end{tabular}
+    \end{center}
+    \column{.44\textwidth}
+    \begin{tikzpicture}[node distance=5mm]
+      \node[datum] (c) {Contexto};
+      \node[process,below=of c] (m) {Modelo};
+      \node[decision,below=of m] (p) {Distribución};
+      \node[datum,below=of p] (n) {Nuevo token};
+      \draw[flow] (c)--(m); \draw[flow] (m)--(p); \draw[flow] (p)--(n);
+      \draw[flow] (n.east) -- ++(.7,0) |- (c.east);
+    \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+% 31
+\begin{frame}{Fluidez no equivale a verdad}
+  \begin{alertblock}{Límite del objetivo}
+    Predecir tokens probables no verifica automáticamente afirmaciones.
+  \end{alertblock}
+  \begin{itemize}
+    \item Una salida probable puede ser falsa.
+    \item El contexto puede ser insuficiente o ambiguo.
+    \item Los datos pueden contener sesgos o información desactualizada.
+    \item Recuperar fuentes ayuda, pero no elimina la validación.
+  \end{itemize}
+  La evaluación debe corresponder al uso: exactitud factual, cobertura, robustez, seguridad y trazabilidad.
+\end{frame}
+
+% 32
+\begin{frame}{Aprendizaje federado}
+  El aprendizaje federado entrena un modelo compartido sin reunir todos los datos brutos en un único repositorio.
+  \begin{center}
+    \concepto{modelo global $\rightarrow$ entrenamiento local $\rightarrow$ actualizaciones $\rightarrow$ agregación}
+  \end{center}
+  \begin{itemize}
+    \item Es una organización distribuida del entrenamiento.
+    \item No es una familia de predicción.
+    \item El modelo local puede ser una red u otra arquitectura compatible.
+  \end{itemize}
+\end{frame}
+
+% 33
+\begin{frame}{Una ronda de FedAvg}
+  \begin{columns}[T]
+    \column{.54\textwidth}
+    \centering
+    \begin{tikzpicture}[node distance=7mm,scale=.72,transform shape]
+      \node[process,minimum width=30mm] (server) {Servidor\\$\theta_t\rightarrow\theta_{t+1}$};
+      \node[client,below left=14mm and 7mm of server] (c1) {Cliente 1\\$n_1,\theta^{(1)}$};
+      \node[client,below=14mm of server] (c2) {Cliente 2\\$n_2,\theta^{(2)}$};
+      \node[client,below right=14mm and 7mm of server] (c3) {Cliente 3\\$n_3,\theta^{(3)}$};
+      \draw[feedback] (server)--(c1); \draw[feedback] (server)--(c2); \draw[feedback] (server)--(c3);
+      \node[below=4mm of c2] {datos permanecen locales};
+    \end{tikzpicture}
+    \column{.44\textwidth}
+    \small
+    \[
+      \theta_{t+1}=\sum_{k=1}^{K}\frac{n_k}{\sum_jn_j}\theta_t^{(k)}.
+    \]
+    \begin{enumerate}
+      \item distribuir;
+      \item ajustar localmente;
+      \item enviar actualizaciones;
+      \item agregar y repetir.
+    \end{enumerate}
+  \end{columns}
+\end{frame}
+
+% 34
+\begin{frame}{Ejemplo federado: varias instituciones}
+  \small
+  Varios hospitales desean mejorar un clasificador sin centralizar historias clínicas.
+  \begin{itemize}
+    \item Cada institución conserva sus registros.
+    \item Entrena localmente una copia del modelo.
+    \item Comparte actualizaciones con un coordinador.
+    \item El coordinador agrega y redistribuye el modelo.
+  \end{itemize}
+  \begin{alertblock}{Heterogeneidad}El resultado puede fallar si poblaciones, mediciones o tamaños difieren mucho entre instituciones.\end{alertblock}
+\end{frame}
+
+% 35
+\begin{frame}{Federado no significa privado por sí solo}
+  \small
+  Las actualizaciones pueden revelar información y el servidor puede ser un punto de ataque.
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.31\textwidth}X}\toprule
+  Riesgo & Control posible\\\midrule
+  exposición de actualizaciones & agregación segura y privacidad diferencial\\
+  clientes maliciosos & autenticación y validación robusta\\
+  poblaciones diferentes & evaluación global y por cliente\\
+  costo de comunicación & selección de clientes y compresión\\
+  clientes intermitentes & rondas tolerantes a disponibilidad\\\bottomrule
+  \end{tabularx}
+\end{frame}
+
+% 36
+\begin{frame}{Comparación final}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.15\textwidth}p{.22\textwidth}p{.29\textwidth}X}\toprule
+  Método & Señal principal & Qué aprende & Salida típica\\\midrule
+  SVM & etiquetas & frontera de margen & clase o puntuación\\
+  Red neuronal & pérdida & transformaciones compuestas & predicción o representación\\
+  Ensamble & errores etiquetados & combinación de modelos & predicción agregada\\
+  RL & recompensas & política o valores & acción\\
+  NLP / LLM & texto, etiquetas o tokens & representación y distribución & clase, extracción o texto\\
+  Federado & actualizaciones locales & parámetros compartidos & modelo global\\\bottomrule
+  \end{tabularx}
+  \idea{Elegir exige alinear señal, salida, evaluación y condiciones de uso.}
+\end{frame}
+
+% 37
+\begin{frame}{Síntesis}
+  \small
+  \begin{itemize}
+    \item SVM selecciona una frontera mediante margen y ejemplos críticos.
+    \item Las redes aprenden composiciones no lineales mediante gradientes.
+    \item Los ensambles aprovechan diversidad entre predictores.
+    \item RL aprende decisiones secuenciales a partir de recompensas.
+    \item NLP convierte lenguaje en representaciones; los LLM generan token a token.
+    \item El aprendizaje federado distribuye el ajuste, pero no garantiza privacidad.
+  \end{itemize}
+\end{frame}
+
+% 38
+\begin{frame}{Lecturas}
+  \small
+  \begin{block}{Modelos supervisados y distribuidos}
+    \begin{itemize}
+      \item Capítulo 12, §§12.2--12.4: SVM, ensambles y aprendizaje federado.
+      \item Capítulo 15, §§15.1--15.2: redes neuronales y entrenamiento.
+    \end{itemize}
+  \end{block}
+  \begin{block}{Decisiones y lenguaje}
+    \begin{itemize}
+      \item Capítulo 8, §§8.2 y 8.4: decisiones secuenciales y aprendizaje por refuerzo.
+      \item Capítulo 16, §§16.1, 16.3 y 16.4: NLP, Transformer y modelos de lenguaje.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\end{document}

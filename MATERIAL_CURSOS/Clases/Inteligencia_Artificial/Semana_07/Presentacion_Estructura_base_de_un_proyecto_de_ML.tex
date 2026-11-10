@@ -1,0 +1,324 @@
+% Compilar dos veces con pdflatex desde este directorio.
+\documentclass[aspectratio=169,10pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,fit,backgrounds}
+
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+\definecolor{UAPRed}{HTML}{A94343}
+\definecolor{OuterBlue}{HTML}{2878A8}
+\definecolor{InnerGreen}{HTML}{358A68}
+
+\tikzset{
+  flow/.style={-{Stealth[length=2.1mm]},thick,draw=UAPNavy},
+  data/.style={trapezium,trapezium left angle=70,trapezium right angle=110,draw=UAPGold,fill=UAPGold!14,rounded corners=1pt,align=center,minimum height=8mm,text=UAPNavy},
+  process/.style={draw=UAPTeal,fill=UAPTeal!11,rounded corners=3pt,very thick,align=center,minimum height=9mm,text=UAPNavy},
+  external/.style={draw=OuterBlue,fill=OuterBlue!8,rounded corners=3pt,very thick,align=center,minimum height=9mm,text=UAPNavy},
+  internal/.style={draw=InnerGreen,fill=InnerGreen!9,rounded corners=3pt,very thick,align=center,minimum height=9mm,text=UAPNavy},
+  decision/.style={diamond,aspect=1.7,draw=UAPNavy,fill=UAPNavy!7,very thick,align=center,inner sep=1.5pt,text=UAPNavy},
+  optional/.style={draw=UAPGray,dashed,fill=UAPGray!7,rounded corners=3pt,align=center,minimum height=9mm,text=UAPNavy},
+  outerbox/.style={draw=OuterBlue,very thick,rounded corners=4pt,inner sep=5pt},
+  innerbox/.style={draw=InnerGreen,very thick,rounded corners=4pt,inner sep=4pt}
+}
+
+\usetheme{Boadilla}
+\usecolortheme{default}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alertblock title}{fg=white,bg=UAPRed}
+\setbeamercolor{alertblock body}{fg=UAPNavy,bg=UAPRed!7}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{%
+  \leavevmode\hbox{%
+    \begin{beamercolorbox}[wd=.78\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}%
+      \color{white}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}%
+      \color{UAPGray}\hfill Semana 7 \enspace | \enspace \insertframenumber/\inserttotalframenumber
+    \end{beamercolorbox}}}
+
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\newcommand{\idea}[1]{\begin{block}{Idea central}#1\end{block}}
+\title[Estructura base de un proyecto de ML]{Estructura base de un proyecto de Machine Learning}
+\subtitle{Selección interna, evaluación externa y ajuste definitivo}
+\author{Curso de Inteligencia Artificial}
+\institute{Semana 7 · Presentación complementaria}
+\date{}
+
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+  \begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+    \vfill
+    {\Huge\bfseries\inserttitle\par}\vspace{.45em}
+    {\color{UAPGold}\Large\insertsubtitle\par}\vspace{1.2em}
+    \begin{tikzpicture}[node distance=5mm,scale=.75,transform shape]
+      \node[data] (p) {Protocolo};
+      \node[internal,right=of p] (s) {Selección interna};
+      \node[external,right=of s] (e) {Evaluación externa};
+      \node[process,right=of e] (f) {Ajuste final};
+      \draw[flow] (p)--(s); \draw[flow] (s)--(e); \draw[flow] (e)--(f);
+    \end{tikzpicture}\par
+    \vfill {\color{UAPGold}\large\insertauthor\par}{\color{white}\insertinstitute\par}
+  \end{beamercolorbox}
+\end{frame}
+
+% 2
+\begin{frame}{El objeto evaluado es el procedimiento}
+  Un proyecto de ML no evalúa solamente un algoritmo. Evalúa una composición:
+  \[
+    \text{datos}\rightarrow\text{transformaciones}\rightarrow\text{representación}
+    \rightarrow\text{modelo}\rightarrow\text{regla de decisión}.
+  \]
+  \begin{itemize}
+    \item Imputación, categorías, escalas y componentes pueden aprender parámetros.
+    \item Selección de variables, hiperparámetros y umbral también usan datos.
+    \item Toda decisión adaptativa forma parte del procedimiento que debe aislarse.
+  \end{itemize}
+  \idea{La unidad evaluada es el pipeline completo, no el estimador aislado.}
+\end{frame}
+
+% 3
+\begin{frame}{Protocolo antes de ajustar}
+  \small
+  \begin{columns}[T]
+    \column{.49\textwidth}
+    \begin{block}{Formulación}
+      \begin{itemize}
+        \item problema, población y unidad;
+        \item instante y horizonte;
+        \item información disponible;
+        \item salida y uso posterior.
+      \end{itemize}
+    \end{block}
+    \column{.49\textwidth}
+    \begin{block}{Evaluación}
+      \begin{itemize}
+        \item alternativas y configuraciones;
+        \item métrica y regla de selección;
+        \item partición por unidad, grupo o tiempo;
+        \item prueba, semillas y presupuesto.
+      \end{itemize}
+    \end{block}
+  \end{columns}
+  \begin{alertblock}{Alcance}La anidación separa selección y evaluación, pero no corrige una formulación o partición inadecuada.\end{alertblock}
+\end{frame}
+
+% 4
+\begin{frame}{Diagrama general de validación anidada}
+  \centering
+  \begin{tikzpicture}[scale=.92,transform shape,x=1cm,y=1cm,font=\footnotesize]
+    % Una fila de ajuste y otra de evaluación; el retorno tiene su propio carril.
+    \node[data,text width=2cm] (trainout) at (1.2,0) {Entrenamiento\\externo};
+    \node[internal,text width=1.65cm] (fitin) at (4.0,0) {Ajustar\\candidatos};
+    \node[internal,text width=1.65cm] (valin) at (6.6,0) {Validar y agregar\\folds internos};
+    \node[internal,text width=1.65cm] (choose) at (9.2,0) {Elegir\\configuración};
+    \node[external,text width=2cm] (refit) at (12.0,0) {Reajustar con\\entrenamiento externo};
+
+    \node[external,text width=1.8cm] (predict) at (12.0,-1.8) {Predecir y guardar\\fuera de muestra};
+    \node[decision,text width=1.55cm] (more) at (7.0,-1.8) {¿Más folds\\externos?};
+    \node[process,text width=1.9cm] (aggregate) at (1.5,-1.8) {Agregar predicciones\\y calcular métricas};
+    \node[data,text width=1.65cm] (valout) at (12.0,-3.15) {Validación\\externa};
+
+    \draw[flow] (trainout)--(fitin);
+    \draw[flow] (fitin)--(valin);
+    \draw[flow] (valin)--(choose);
+    \draw[flow] (choose)--(refit);
+    \draw[flow] (refit)--(predict);
+    \draw[flow] (valout)--(predict);
+    \draw[flow] (predict)--(more);
+    \draw[flow] (more)--node[above] {no: finalizar} (aggregate);
+    \draw[flow] (more.south) -- (7,-3.15)
+      -- node[below] {sí: siguiente partición externa} (-.25,-3.15)
+      |- (trainout.west);
+
+    \node[text=InnerGreen,font=\footnotesize\bfseries] at (6.6,.9) {Selección interna: repetir en todos los folds internos};
+    \node[text=OuterBlue,font=\footnotesize\bfseries,anchor=west] at (-.55,1.5) {Evaluación externa: cada partición de los datos de desarrollo};
+    \begin{scope}[on background layer]
+      \node[innerbox,fit=(fitin)(valin)(choose),inner sep=8pt] {};
+      \draw[outerbox] (-.65,-3.65) rectangle (13.25,1.22);
+    \end{scope}
+  \end{tikzpicture}
+
+  \vspace{1mm}
+  \scriptsize Los dos conjuntos externos se renuevan en cada partición.\\
+  La prueba opcional se muestra en la diapositiva 9.
+\end{frame}
+
+% 5
+\begin{frame}{Ciclo externo: estimar el procedimiento}
+  \begin{center}
+    \begin{tikzpicture}[node distance=6mm,scale=.75,transform shape]
+      \node[data] (d) {Desarrollo};
+      \node[external,right=of d] (s) {Partición externa};
+      \node[data,right=of s,yshift=8mm] (tr) {Entrenamiento\\externo};
+      \node[data,right=of s,yshift=-8mm] (va) {Validación\\externa};
+      \node[internal,right=8mm of tr] (sel) {Selección\\interna};
+      \node[external,right=8mm of sel] (fit) {Reajuste};
+      \node[external,right=8mm of va] (pred) {Predicción\\externa};
+      \draw[flow] (d)--(s); \draw[flow] (s)--(tr); \draw[flow] (s)--(va);
+      \draw[flow] (tr)--(sel); \draw[flow] (sel)--(fit); \draw[flow] (fit)--(pred); \draw[flow] (va)--(pred);
+    \end{tikzpicture}
+  \end{center}
+  \small
+  \begin{enumerate}
+    \item toda selección ocurre dentro del entrenamiento externo;
+    \item la configuración elegida se reajusta con ese entrenamiento completo;
+    \item la validación externa se predice una sola vez;
+    \item se conservan predicciones fuera de muestra.
+  \end{enumerate}
+  \begin{block}{Terminología}“Externa” describe su posición respecto de la selección; no implica necesariamente otra población.\end{block}
+\end{frame}
+
+% 6
+\begin{frame}{Ciclo interno: elegir la configuración}
+  \begin{center}
+    \begin{tikzpicture}[node distance=5mm,scale=.72,transform shape]
+      \node[data] (tr) {Entrenamiento\\externo};
+      \node[internal,right=of tr] (split) {Crear folds\\internos};
+      \node[internal,right=of split] (cand) {Ajustar cada\\pipeline candidato};
+      \node[internal,right=of cand] (val) {Validar sin\\reajustar};
+      \node[decision,right=of val] (more) {¿Más folds y\\configuraciones?};
+      \node[process,right=of more] (pick) {Agregar y elegir\\con la regla fijada};
+      \draw[flow] (tr)--(split); \draw[flow] (split)--(cand); \draw[flow] (cand)--(val); \draw[flow] (val)--(more);
+      \draw[flow] (more)--node[above] {no} (pick);
+      \draw[flow] (more.south) -- ++(0,-.6) -| node[pos=.25,below] {sí} (split.south);
+    \end{tikzpicture}
+  \end{center}
+  \begin{itemize}
+    \item Los folds internos respetan la misma unidad, agrupación y temporalidad.
+    \item Las métricas se agregan antes de elegir.
+    \item No se selecciona por el resultado de un fold aislado.
+  \end{itemize}
+\end{frame}
+
+% 7
+\begin{frame}{El pipeline vive dentro de cada fold}
+  \begin{columns}[T]
+    \column{.52\textwidth}
+    \centering
+    \begin{tikzpicture}[node distance=4mm,scale=.75,transform shape]
+      \node[data] (tr) {Entrenamiento\\interno};
+      \node[internal,below=of tr] (prep) {Ajustar imputación,\\codificación y escala};
+      \node[internal,below=of prep] (sel) {Ajustar selección,\\balanceo o PCA};
+      \node[internal,below=of sel] (mod) {Ajustar modelo};
+      \draw[flow] (tr)--(prep); \draw[flow] (prep)--(sel); \draw[flow] (sel)--(mod);
+    \end{tikzpicture}
+    \column{.46\textwidth}
+    \centering
+    \begin{tikzpicture}[node distance=4mm,scale=.75,transform shape]
+      \node[data] (va) {Validación\\interna};
+      \node[external,below=of va] (apply) {Aplicar objetos\\congelados};
+      \node[external,below=of apply] (pred) {Predecir};
+      \node[external,below=of pred] (metric) {Medir};
+      \draw[flow] (va)--(apply); \draw[flow] (apply)--(pred); \draw[flow] (pred)--(metric);
+    \end{tikzpicture}
+  \end{columns}
+  \begin{alertblock}{Fuga}Preprocesar una sola vez antes de crear los folds permite que validación influya en los parámetros aprendidos.\end{alertblock}
+\end{frame}
+
+% 8
+\begin{frame}{Predicciones externas y agregación}
+  \begin{center}
+    \begin{tikzpicture}[node distance=5mm,scale=.78,transform shape]
+      \node[external] (f1) {Fold externo 1\\predicciones};
+      \node[external,below=of f1] (f2) {Fold externo 2\\predicciones};
+      \node[external,below=of f2] (fk) {Fold externo $K$\\predicciones};
+      \node[process,right=13mm of f2] (pool) {Integrar predicciones\\fuera de muestra};
+      \node[process,right=9mm of pool] (metrics) {Métricas globales,\\por fold y calibración};
+      \draw[flow] (f1)--(pool); \draw[flow] (f2)--(pool); \draw[flow] (fk)--(pool); \draw[flow] (pool)--(metrics);
+    \end{tikzpicture}
+  \end{center}
+  \small
+  \begin{itemize}
+    \item Conservar soporte, composición y resultados por fold.
+    \item En CV repetida, no multiplicar artificialmente observaciones independientes.
+    \item No iniciar otra selección con resultados externos sin reconocer su reutilización.
+  \end{itemize}
+\end{frame}
+
+% 9
+\begin{frame}{Modelo definitivo y prueba opcional}
+  \begin{center}
+    \begin{tikzpicture}[node distance=5mm,scale=.61,transform shape]
+      \node[data] (dev) {Todo el desarrollo};
+      \node[internal,right=of dev] (search) {Nueva búsqueda\\interna};
+      \node[process,right=of search] (choose) {Configuración\\elegida};
+      \node[process,right=of choose] (fit) {Reajustar pipeline\\completo};
+      \node[process,right=of fit] (save) {Persistir modelo,\\transformaciones y umbral};
+      \node[optional,right=of save] (test) {Prueba independiente\\una sola vez};
+      \draw[flow] (dev)--(search); \draw[flow] (search)--(choose); \draw[flow] (choose)--(fit); \draw[flow] (fit)--(save);
+      \draw[flow,dashed,draw=UAPGray] (save)--(test);
+    \end{tikzpicture}
+  \end{center}
+  \begin{itemize}
+    \item La evaluación externa estima el procedimiento; no entrega automáticamente el modelo final.
+    \item El ajuste definitivo usa todos los datos de desarrollo permitidos.
+    \item No se conserva el ajuste del fold externo con mejor puntuación.
+  \end{itemize}
+\end{frame}
+
+% 10
+\begin{frame}{Ejemplo: anticipar demora crítica}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.23\textwidth}X}\toprule
+  Nivel & Decisión ilustrativa\\\midrule
+  Tarea & demora mayor que 10 minutos\\
+  Partición externa & vehículos completos; ningún vehículo aparece en ambos lados\\
+  Partición interna & folds por vehículo dentro del entrenamiento externo\\
+  Pipelines & logística escalada, SVM con RBF y árbol controlado\\
+  Configuraciones & regularización, $C$, $\gamma$, profundidad y umbral\\
+  Selección interna & recall mínimo y menor cantidad de falsas alarmas\\
+  Evaluación externa & predicciones fuera de muestra por vehículo\\
+  Ajuste final & nueva búsqueda interna y reajuste con desarrollo completo\\\bottomrule
+  \end{tabularx}
+  \idea{La estructura de partición responde a la generalización buscada: vehículos no vistos.}
+\end{frame}
+
+% 11
+\begin{frame}{Errores que rompen la separación}
+  \scriptsize
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{.36\textwidth}X}\toprule
+  Error & Consecuencia\\\midrule
+  preprocesar antes de crear folds & validación influye en la representación\\
+  seleccionar con resultados externos & la estimación externa se vuelve optimista\\
+  abrir prueba repetidamente & prueba pasa a cumplir función de validación\\
+  mezclar grupos o periodos & se evalúa una tarea más fácil que el uso real\\
+  reportar el ganador interno & se ignora el sesgo de selección\\
+  conservar el mejor fold externo & se elige por azar de esa partición\\\bottomrule
+  \end{tabularx}
+  \begin{alertblock}{Límite}La anidación organiza el uso de la información; no vuelve válida cualquier decisión experimental.\end{alertblock}
+\end{frame}
+
+% 12
+\begin{frame}{Síntesis}
+  \small
+  \begin{itemize}
+    \item El pipeline completo es la unidad evaluada.
+    \item El ciclo interno selecciona configuraciones.
+    \item El ciclo externo estima el procedimiento de selección.
+    \item Cada transformación se ajusta solo con el entrenamiento correspondiente.
+    \item Las predicciones externas se agregan sin volver a seleccionar.
+    \item El modelo definitivo se reajusta después de evaluar el procedimiento.
+    \item La prueba es opcional, pero permanece intacta si existe.
+  \end{itemize}
+  \begin{block}{Simplificación válida}Sin selección adaptativa puede omitirse el ciclo interno, pero no el ajuste local de transformaciones.\end{block}
+  \scriptsize Lecturas: capítulo 9, §9.3; capítulo 3, §3.4; capítulo 10, §10.2.7.
+\end{frame}
+
+\end{document}
