@@ -91,38 +91,6 @@
 \end{frame}
 
 % 3
-\begin{frame}{Un mapa para la clase}
-  \small
-  \begin{tabularx}{\textwidth}{>{\bfseries}p{.53\textwidth}X}\toprule
-  Pregunta & Familia\\\midrule
-  ¿Cómo separar ejemplos etiquetados? & SVM y redes neuronales\\
-  ¿Cómo combinar predictores? & Ensemble Learning\\
-  ¿Cómo aprender a actuar mediante consecuencias? & Aprendizaje por refuerzo\\
-  ¿Cómo representar y generar lenguaje? & NLP y modelos de lenguaje\\
-  ¿Cómo entrenar con datos distribuidos? & Aprendizaje federado\\\bottomrule
-  \end{tabularx}
-  \idea{No son alternativas equivalentes: responden a problemas y restricciones diferentes.}
-\end{frame}
-
-% 4
-\begin{frame}{El ciclo común}
-  \begin{center}
-    \begin{tikzpicture}[node distance=5mm,scale=.8,transform shape]
-      \node[datum] (d) {Datos o\\experiencia};
-      \node[process,right=of d] (r) {Representación};
-      \node[process,right=of r] (c) {Criterio de\\aprendizaje};
-      \node[datum,right=of c] (p) {Parámetros};
-      \node[decision,right=of p] (o) {Salida};
-      \draw[flow] (d)--(r); \draw[flow] (r)--(c); \draw[flow] (c)--(p); \draw[flow] (p)--(o);
-    \end{tikzpicture}
-  \end{center}
-  \begin{itemize}
-    \item Cambian la señal que informa qué mejorar y la estructura del modelo.
-    \item Cambian el procedimiento de ajuste y la evidencia necesaria para evaluar.
-  \end{itemize}
-\end{frame}
-
-% 5
 \begin{frame}{SVM: separar con margen}
   Una máquina de soporte vectorial busca una frontera que separe clases y deje el mayor margen posible.
   \[

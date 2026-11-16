@@ -32,39 +32,6 @@ Al finalizar podremos:
 
 ---
 
-# Un mapa para la clase
-
-| Pregunta | Familia |
-|---|---|
-| ¿Cómo separar ejemplos etiquetados? | SVM y redes neuronales |
-| ¿Cómo combinar predictores? | Ensemble Learning |
-| ¿Cómo aprender a actuar mediante consecuencias? | Aprendizaje por refuerzo |
-| ¿Cómo representar y generar lenguaje? | NLP y modelos de lenguaje |
-| ¿Cómo entrenar cuando los datos permanecen distribuidos? | Aprendizaje federado |
-
-No son alternativas equivalentes: responden a problemas y restricciones diferentes.
-
----
-
-# El ciclo común
-
-$$
-\text{datos o experiencia}
-\rightarrow \text{representación}
-\rightarrow \text{criterio de aprendizaje}
-\rightarrow \text{parámetros}
-\rightarrow \text{salida}.
-$$
-
-En cada familia cambian:
-
-- la señal que informa qué mejorar;
-- la estructura del modelo;
-- el procedimiento de ajuste;
-- la evidencia necesaria para evaluar.
-
----
-
 # SVM: separar con margen
 
 Una máquina de soporte vectorial busca una frontera que separe clases y deje el mayor margen posible.
