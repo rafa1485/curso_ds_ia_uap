@@ -13,3 +13,8 @@ Las guias de presentaciones y del libro estan en la raiz para que los agentes de
 - No usar la palabra `contrato` ni sus variantes como recurso pedagogico, metafora tecnica o parte de ejemplos en los materiales de los cursos.
 - Elegir el termino segun el contexto: `definicion` para delimitar un problema, `formulacion` para describir una tarea, `especificacion` para datos o interfaces, `criterio` para reglas de aceptacion y `ficha` para una plantilla de trabajo.
 - Antes de finalizar cambios en `MATERIAL_CURSOS/`, comprobar que no existan coincidencias del patron `contrat` en fuentes, nombres de archivo ni PDF generados.
+
+## Redaccion de presentaciones
+
+- Redactar las presentaciones mediante formulaciones positivas, centradas en capacidades, condiciones de uso, alcance y evidencia necesaria.
+- Consultar al usuario antes de incorporar una formulacion negativa cuando resulte imprescindible para conservar la precision conceptual.

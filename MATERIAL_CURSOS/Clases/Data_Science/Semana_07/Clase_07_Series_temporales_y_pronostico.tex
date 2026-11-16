@@ -1,0 +1,368 @@
+% Compilar dos veces con pdflatex desde este directorio.
+\documentclass[aspectratio=169,10pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
+\definecolor{UAPNavy}{HTML}{17324D}
+\definecolor{UAPTeal}{HTML}{007F82}
+\definecolor{UAPGold}{HTML}{E2A33A}
+\definecolor{UAPLight}{HTML}{F3F6F8}
+\definecolor{UAPGray}{HTML}{536471}
+\definecolor{UAPRed}{HTML}{A94343}
+\tikzset{flow/.style={-{Stealth[length=2.2mm]},thick,draw=UAPNavy},datum/.style={draw=UAPGold,fill=UAPGold!16,rounded corners=2pt,align=center,minimum height=8mm,text=UAPNavy},process/.style={draw=UAPTeal,fill=UAPTeal!12,rounded corners=3pt,very thick,align=center,minimum height=10mm,text=UAPNavy},decision/.style={draw=UAPNavy,fill=UAPNavy!9,rounded corners=3pt,very thick,align=center,minimum height=10mm,text=UAPNavy}}
+\usetheme{Boadilla}
+\usecolortheme{default}
+\setbeamercolor{normal text}{fg=UAPNavy,bg=white}
+\setbeamercolor{structure}{fg=UAPTeal}
+\setbeamercolor{frametitle}{fg=white,bg=UAPNavy}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=UAPGold}
+\setbeamercolor{block title}{fg=white,bg=UAPTeal}
+\setbeamercolor{block body}{fg=UAPNavy,bg=UAPLight}
+\setbeamercolor{alertblock title}{fg=white,bg=UAPRed}
+\setbeamercolor{alertblock body}{fg=UAPNavy,bg=UAPRed!7}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{UAPGold}$\blacktriangleright$}
+\setbeamertemplate{itemize subitem}{\color{UAPTeal}$\bullet$}
+\setbeamertemplate{footline}{\leavevmode\hbox{\begin{beamercolorbox}[wd=.78\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1em]{author in head/foot}\color{white}\insertshorttitle\end{beamercolorbox}\begin{beamercolorbox}[wd=.22\paperwidth,ht=2.8ex,dp=1.2ex,rightskip=1em plus1fil]{date in head/foot}\color{UAPGray}\hfill Semana 7 \enspace | \enspace \insertframenumber/\inserttotalframenumber\end{beamercolorbox}}}
+\newcommand{\concepto}[1]{\textcolor{UAPTeal}{\textbf{#1}}}
+\title[Data Science · Clase 7]{Series temporales y pronóstico}
+\subtitle{Del orden temporal a decisiones con incertidumbre}
+\author{Curso de Data Science}
+\institute{Semana 7 · Clase 7 · Cierre del curso}
+\date{}
+\begin{document}
+
+% 1
+\begin{frame}[plain]
+\begin{beamercolorbox}[wd=\paperwidth,ht=\paperheight,sep=2em]{frametitle}
+\vfill {\Huge\bfseries\inserttitle\par}\vspace{.45em}{\color{UAPGold}\Large\insertsubtitle\par}\vspace{1.1em}
+\begin{tikzpicture}[node distance=4mm,scale=.70,transform shape]
+\node[datum](o){Objeto\\temporal};\node[process,right=of o](e){Estructura};\node[datum,right=of e](m){Modelo};\node[process,right=of m](v){Validación};\node[decision,right=of v](s){Seguimiento};\draw[flow](o)--(e);\draw[flow](e)--(m);\draw[flow](m)--(v);\draw[flow](v)--(s);
+\end{tikzpicture}\par\vfill {\color{UAPGold}\large\insertauthor\par}{\color{white}\insertinstitute\par}
+\end{beamercolorbox}
+\end{frame}
+
+% 2
+\begin{frame}{Propósito de la clase}\small
+Construir y evaluar pronósticos respetando el orden, la información disponible y la incertidumbre.
+\begin{block}{Al finalizar, podremos}\begin{itemize}\item definir frecuencia, origen y horizonte;\item reconocer componentes y dependencia temporal;\item interpretar SARIMA y alternativas;\item validar con múltiples orígenes y baselines;\item diagnosticar, actualizar y comunicar límites.\end{itemize}\end{block}
+\end{frame}
+
+% 3
+\begin{frame}{¿Qué cambia cuando aparece el tiempo?}\small
+Las observaciones conservan secuencia y dependencia:
+\[\mathcal F_t=\{\text{información disponible hasta }t\}\longrightarrow\widehat y_{t+h\mid t}.\]
+\begin{itemize}\item El pasado puede informar sobre el futuro.\item La distribución puede cambiar con calendario y régimen.\item Mezclar filas aleatoriamente destruye orden y puede filtrar futuro.\end{itemize}
+\begin{block}{Regla}Reproducir qué se sabía en cada origen de pronóstico.\end{block}
+\end{frame}
+
+% 5
+\begin{frame}{Definir el objeto temporal}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}X}\toprule Concepto & Pregunta\\\midrule Unidad & ¿qué cuenta cada $y_t$?\\ Índice & ¿qué instante o intervalo identifica $t$?\\ Frecuencia & ¿cada cuánto se observa?\\ Origen & ¿hasta cuándo llega $\mathcal F_t$?\\ Horizonte & ¿a cuántos pasos se decide, $h$?\\\bottomrule\end{tabularx}
+\begin{block}{Caso}$y_t$ es el total diario reportado tras filtros; $h=1,\ldots,H$ días.\end{block}
+\end{frame}
+
+% 6
+\begin{frame}{Frecuencia, periodo y horizonte}\small
+\begin{itemize}\item \concepto{Frecuencia de muestreo:} una observación por día.\item \concepto{Periodo:} pasos entre repeticiones; semana candidata $m=7$.\item \concepto{Horizonte:} distancia entre emisión y objetivo.\end{itemize}
+\[\widehat y_{t+h\mid t}=\text{pronóstico para }t+h\text{ usando }\mathcal F_t.\]
+Agregar por día responde una pregunta distinta de agregar por hora. Tres meses permiten explorar semanas; una estacionalidad anual requiere ventanas de varios años.
+\end{frame}
+
+% 7
+\begin{frame}{Series univariadas y multivariadas}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.26\textwidth}XX}\toprule Tipo & Información & Ejemplo\\\midrule Univariada & historia de $y_t$ & pickups diarios totales\\ Con variables exógenas & $y_t$ y predictores disponibles & calendario conocido\\ Multivariada & varias series endógenas & pickups de varias zonas\\\bottomrule\end{tabularx}
+\begin{alertblock}{Disponibilidad}La información futura crece cuando las variables adicionales están disponibles al emitir el pronóstico y aportan señal pertinente.\end{alertblock}
+\end{frame}
+
+% 8
+\begin{frame}{Componentes de una serie}\small
+\[y_t=T_t+S_t+C_t+R_t.\]
+\begin{columns}[T]\column{.48\textwidth}\begin{itemize}\item \concepto{Tendencia:} evolución suave.\item \concepto{Estacionalidad:} repetición de calendario.\end{itemize}\column{.48\textwidth}\begin{itemize}\item \concepto{Ciclo:} oscilación con duración variable.\item \concepto{Resto:} variación pendiente de explicación.\end{itemize}\end{columns}
+\vspace{.4em}\begin{block}{Lectura}Son hipótesis dependientes de escala, ventana y método.\end{block}
+\end{frame}
+
+% 9
+\begin{frame}{Descomposición: aditiva o multiplicativa}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.22\textwidth}XX}\toprule Estructura & Expresión & Indicio\\\midrule Aditiva & $y_t=T_t+S_t+R_t$ & amplitud estable\\ Multiplicativa & $y_t=T_tS_tR_t$ & amplitud proporcional al nivel\\\bottomrule\end{tabularx}
+Con valores positivos, $\log y_t$ vuelve aditiva la segunda estructura.
+\begin{alertblock}{Límite}Una descomposición retrospectiva puede usar ambos lados de $t$; una característica predictiva debe usar solo pasado.\end{alertblock}
+\end{frame}
+
+% 10
+\begin{frame}{Regularidad, ceros y cobertura}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.48\textwidth}X}\toprule Situación & Representación\\\midrule cobertura confirmada, conteo observado igual a cero & cero observado\\ interrupción o cobertura incompleta & faltante\\ más de una fila para el día & revisar duplicación y agregación\\\bottomrule\end{tabularx}
+\begin{alertblock}{Control}Completar todo hueco con cero inventa actividad nula. Fijar zona horaria, límites diarios y filtros iguales entre meses.\end{alertblock}
+\end{frame}
+
+% 11
+\begin{frame}{Faltantes y anomalías temporales}\small
+\begin{itemize}\item \concepto{Puntual:} extremo aislado.\item \concepto{Contextual:} inusual para ese día semanal.\item \concepto{Colectiva:} secuencia de duración anómala.\item \concepto{Cambio de nivel:} nuevo régimen persistente.\end{itemize}
+Investigar captura, calendario y eventos antes de tratar. Toda imputación en validación usa solo información disponible en el origen.
+\begin{block}{Trazabilidad}Conservar valor original, valor tratado, bandera y motivo.\end{block}
+\end{frame}
+
+% 12
+\begin{frame}{Pronóstico y explicación causal}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}XX}\toprule Pronóstico & Explicación causal\\\midrule anticipa $Y_{t+h}$ & estima efecto de una intervención\\ explota regularidades predictivas & requiere supuestos de identificación\\ se evalúa fuera de muestra & se evalúa frente a alternativas causales\\\bottomrule\end{tabularx}
+\begin{block}{Ejemplo}La semejanza entre martes sostiene una regularidad predictiva. Atribuir un efecto causal al calendario requiere supuestos y un diseño de identificación; SARIMA aprovecha la regularidad para pronosticar.\end{block}
+\end{frame}
+
+% 13
+\begin{frame}{Dependencia temporal}\small
+\[E(Y_t\mid Y_{t-1},Y_{t-2},\ldots)=g(Y_{t-1},Y_{t-2},\ldots).\]
+Puede surgir por hábitos, calendario, inercia o agregación. También puede ser espuria si dos valores comparten tendencia.
+\begin{block}{Consecuencia doble}La dependencia hace posible pronosticar y obliga a separar entrenamiento y evaluación en orden cronológico.\end{block}
+\end{frame}
+
+% 14
+\begin{frame}{Baselines que deben superarse}\small
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.31\textwidth}X}\toprule Baseline & Pronóstico\\\midrule media histórica & $\widehat y_{t+h\mid t}=\bar y_{1:t}$\\ último valor & $\widehat y_{t+h\mid t}=y_t$\\ estacional & $\widehat y_{t+h\mid t}=y_{t+h-7}$\\ media por día semanal & promedio pasado de esa posición\\\bottomrule\end{tabularx}
+El baseline estacional es fuerte con patrón semanal. Todos los métodos comparten orígenes y horizontes.
+\end{frame}
+
+% 15
+\begin{frame}{Medias móviles y modelos MA}\small
+\[\widetilde T_t=\frac{1}{2k+1}\sum_{j=-k}^{k}y_{t+j}.\]
+La media centrada usa observaciones posteriores a $t$ y sirve para descripción retrospectiva.
+\begin{columns}[T]\column{.48\textwidth}\begin{block}{Media causal}Para predecir $t$, promedia $y_{t-1},\ldots,y_{t-w}$.\end{block}\column{.48\textwidth}\begin{block}{Modelo MA($q$)}Combina innovaciones pasadas.\end{block}\end{columns}
+\end{frame}
+
+% 16
+\begin{frame}{Suavizado exponencial y ETS}\small
+\[\ell_t=\alpha y_t+(1-\alpha)\ell_{t-1},\qquad 0<\alpha<1.\]
+ETS combina componentes de \concepto{error, tendencia y estacionalidad} en variantes aditivas o multiplicativas.
+\begin{itemize}\item útil cuando nivel y patrones evolucionan gradualmente;\item produce pronósticos e intervalos bajo una especificación probabilística;\item se compara con baselines mediante validación temporal.\end{itemize}
+\end{frame}
+
+% 17
+\begin{frame}{Regresión con tiempo y calendario}\small
+\[Y_t=\beta_0+\beta_1t+\sum_{j=1}^{6}\gamma_jD_{j,t}+\varepsilon_t.\]
+Los indicadores de día de semana son conocidos de antemano. La tendencia lineal resume cambio, pero extrapolarla supone que continuará.
+\begin{block}{Diagnóstico}Si $\varepsilon_t$ conserva autocorrelación, puede necesitarse una regresión dinámica.\end{block}
+\end{frame}
+
+% 18
+\begin{frame}{AR: memoria en los valores}\small
+\[Y_t=c+\phi_1Y_{t-1}+\cdots+\phi_pY_{t-p}+\varepsilon_t.\]
+\begin{itemize}\item $p$ indica cuántos rezagos regulares entran.\item En AR(1), $|\phi|<1$ permite reversión hacia la media.\item $\phi$ cercano a uno implica choques persistentes.\end{itemize}
+\begin{alertblock}{Interpretación}Los coeficientes expresan asociación predictiva condicionada. La interpretación causal requiere supuestos adicionales.\end{alertblock}
+\end{frame}
+
+% 19
+\begin{frame}{MA, ARMA y ARIMA}\small
+Una \concepto{innovación} es la información nueva en $t$ respecto de lo anticipado con el pasado:
+\[\varepsilon_t=Y_t-E(Y_t\mid\mathcal F_{t-1}).\]
+En datos ajustados se aproxima mediante $\widehat\varepsilon_t=y_t-\widehat y_{t\mid t-1}$.
+\[\text{MA}(q):\quad Y_t=\mu+\varepsilon_t+\sum_{j=1}^{q}\theta_j\varepsilon_{t-j}.\]
+MA($q$) combina innovaciones recientes; ARMA($p,q$) agrega valores rezagados. ARIMA aplica esta dinámica después de diferenciar.
+\end{frame}
+
+% 20
+\begin{frame}{Estacionariedad: estabilidad útil}\small
+\[E(Y_t)=\mu,\quad \operatorname{Var}(Y_t)=\sigma^2,\quad \operatorname{Cov}(Y_t,Y_{t-k})=\gamma_k.\]
+Media y varianza permanecen estables en $t$; la covarianza depende del rezago. Tendencia, amplitud creciente o cambios de régimen señalan otra dinámica.
+\begin{block}{Propósito}Estacionarizar busca patrones transferibles; la validación temporal determina su aporte al pronóstico.\end{block}
+\end{frame}
+
+% 21
+\begin{frame}{Diferencias regulares y estacionales}\small
+Una serie $I(d)$ alcanza una dinámica aproximadamente estacionaria después de $d$ diferencias entre periodos consecutivos.
+\[\nabla Y_t=(1-B)Y_t=Y_t-Y_{t-1},\qquad \nabla_7Y_t=(1-B^7)Y_t=Y_t-Y_{t-7}.\]
+\begin{itemize}\item $d=0$ modela niveles; $d=1$ modela cambios consecutivos.\item $D$ cuenta diferencias entre posiciones equivalentes de un periodo $m$.\item Sobrediferenciar aumenta varianza y puede inducir ACF negativa en rezago 1.\end{itemize}
+\begin{block}{Criterio}Elegir los mínimos $d,D$ que estabilicen la dinámica.\end{block}
+\end{frame}
+
+% 22
+\begin{frame}{ACF y PACF}\small
+\begin{columns}[T]\column{.57\textwidth}\begin{itemize}\item \concepto{ACF:} correlación con el rezago $k$.\item \concepto{PACF:} asociación tras controlar rezagos intermedios.\item Picos en $7,14,21$ sugieren estructura semanal.\item Caída muy lenta puede indicar tendencia o raíz unitaria.\end{itemize}\column{.39\textwidth}\centering
+\begin{tikzpicture}[x=.24cm,y=.7cm]
+\draw[->,UAPNavy] (0,0)--(22,0) node[right,font=\scriptsize]{$k$};
+\foreach \x/\h in {1/.35,2/.18,3/.1,7/1,8/.2,14/.72,21/.5}{\draw[UAPTeal,very thick](\x,0)--(\x,\h);}
+\foreach \x in {7,14,21}\node[font=\scriptsize,below] at (\x,0){\x};
+\draw[UAPGold,dashed](0,.28)--(22,.28);\node[font=\scriptsize] at (11,1.2){ACF estacional};
+\end{tikzpicture}\end{columns}
+Patrones ideales orientan órdenes; la decisión integra validación y conocimiento del proceso.
+\end{frame}
+
+% 23
+\begin{frame}{SARIMA: mapa completo}\small
+\[\operatorname{SARIMA}(p,d,q)(P,D,Q)_m\]
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.25\textwidth}X}\toprule Orden & Función\\\midrule $p,d,q$ & dinámica AR, diferencias y MA regulares\\ $P,D,Q$ & dinámica AR, diferencias y MA estacionales\\ $m$ & pasos por periodo; aquí, semana diaria $m=7$\\\bottomrule\end{tabularx}
+\begin{block}{Lectura}Separa memoria de corto plazo y memoria en múltiplos de la estación.\end{block}
+\end{frame}
+
+% 24
+\begin{frame}{Órdenes regulares: $(p,d,q)$}\small
+\begin{itemize}\item \concepto{$p$:} usa $Y_{t-1},\ldots,Y_{t-p}$ tras transformar y diferenciar.\item \concepto{$d$:} cantidad de diferencias entre periodos consecutivos utilizadas para estabilizar la dinámica.\item \concepto{$q$:} usa innovaciones $\varepsilon_{t-1},\ldots,\varepsilon_{t-q}$.\end{itemize}
+\begin{block}{Ejemplo}ARIMA$(1,1,1)$ modela el cambio diario con AR(1) y MA(1).\end{block}
+Órdenes altos consumen información, dificultan identificación y pueden memorizar ruido.
+\end{frame}
+
+% 25
+\begin{frame}{Órdenes estacionales: $(P,D,Q)_m$}\small
+\begin{itemize}\item \concepto{$P$:} términos AR en $m,2m,\ldots,Pm$.\item \concepto{$D$:} diferencias $(1-B^m)^D$.\item \concepto{$Q$:} innovaciones en $m,2m,\ldots,Qm$.\item \concepto{$m=7$:} posiciones del ciclo semanal diario.\end{itemize}
+\begin{block}{Baseline como modelo}SARIMA$(0,0,0)(0,1,0)_7$ implica $Y_t-Y_{t-7}=\varepsilon_t$.\end{block}
+\end{frame}
+
+% 26
+\begin{frame}{SARIMA con operadores}\small
+\[\Phi(B^7)\phi(B)(1-B)^d(1-B^7)^DY_t=\Theta(B^7)\theta(B)\varepsilon_t.\]
+Con AR regular y estacional de orden uno:
+\[(1-\phi B)(1-\Phi B^7)Y_t=\varepsilon_t,\]
+aparece también el término cruzado $\phi\Phi Y_{t-8}$.
+\begin{block}{Lectura}Los factores estacionales y regulares interactúan dentro de un único modelo.\end{block}
+\end{frame}
+
+% 27
+\begin{frame}{Una grilla pequeña y defendible}\small
+\begin{enumerate}\item Fijar $m=7$ por dominio y evidencia gráfica.\item Comparar $d,D\in\{0,1\}$ evitando sobrediferenciación.\item Probar $p,q,P,Q\in\{0,1\}$ con límite de complejidad.\item Excluir fallas de convergencia o raíces problemáticas.\item Usar AIC/AICc para filtrar y \textit{walk-forward} para decidir.\end{enumerate}
+\begin{block}{Parsimonia}Si dos candidatos rinden parecido, preferir el más simple, estable y actualizable.\end{block}
+\end{frame}
+
+% 28
+\begin{frame}{SARIMAX o regresión dinámica}\small
+\[Y_t=\beta_0+\boldsymbol\beta^\top\mathbf x_t+n_t,\qquad n_t\sim\operatorname{SARIMA}.\]
+Calendario, feriados o eventos programados pueden explicar nivel mientras SARIMA modela el error temporal.
+\begin{alertblock}{Disponibilidad}Para pronosticar $t+h$, $\mathbf x_{t+h}$ debe conocerse en $t$ o construirse mediante escenarios. Las variables de fin de viaje quedan disponibles para análisis retrospectivo.\end{alertblock}
+\end{frame}
+
+% 29
+\begin{frame}{VAR: vectores autorregresivos}\small
+VAR significa \concepto{vectores autorregresivos}. Esta familia aplica autorregresión vectorial para modelar conjuntamente varias series temporales.
+\[\mathbf y_t=\mathbf c+A_1\mathbf y_{t-1}+\cdots+A_p\mathbf y_{t-p}+\boldsymbol\varepsilon_t.\]
+Cada componente utiliza sus propios rezagos y los de las demás series. Los pickups de cada zona pueden aprovechar la historia conjunta de varias zonas. El número de parámetros crece rápido con series y rezagos.
+\begin{alertblock}{Lectura prudente}La utilidad predictiva conjunta describe dependencia temporal; una influencia causal entre zonas requiere supuestos adicionales.\end{alertblock}
+\end{frame}
+
+% 30
+\begin{frame}{ML con rezagos: de serie a tabla}\small
+\centering\begin{tikzpicture}[node distance=4.5mm,scale=.76,transform shape]
+\node[datum](r){Historia\\hasta $t$};\node[process,right=of r](x){Atributos $X_t$\\rezagos, medias, calendario};\node[process,right=of x](ml){Árboles /\\boosting};\node[decision,right=of ml](p){$\widehat y_{t+h\mid t}$};\draw[flow](r)--(x);\draw[flow](x)--(ml);\draw[flow](ml)--(p);
+\end{tikzpicture}\par\vspace{.4em}\raggedright
+\begin{enumerate}\item Definir el horizonte $h$ y ubicar $y_{t+h}$ como objetivo.\item Crear rezagos $y_t,y_{t-1},y_{t-7}$, medias hasta $t$ y calendario conocido.\item Comenzar en la primera fecha con todos los rezagos y medias disponibles; luego dividir por fecha en entrenamiento y prueba.\item Ajustar el modelo y reconstruir el pronóstico en cada origen.\end{enumerate}
+\begin{block}{Unidad de aprendizaje}Cada fila representa exactamente la información disponible al emitir su pronóstico.\end{block}
+\end{frame}
+
+% 31
+\begin{frame}{Flujo de trabajo completo}\small
+\centering\begin{tikzpicture}[node distance=3.5mm,scale=.67,transform shape]
+\node[datum](a){Definir};\node[process,right=of a](b){Auditar};\node[datum,right=of b](c){Visualizar};\node[process,right=of c](d){Proponer};\node[datum,right=of d](e){Validar};\node[process,right=of e](f){Diagnosticar};\node[decision,right=of f](g){Desplegar};
+\foreach \x/\y in {a/b,b/c,c/d,d/e,e/f,f/g}\draw[flow](\x)--(\y);
+\end{tikzpicture}\par\vspace{.6em}\raggedright
+\begin{enumerate}\item Especificar unidad, frecuencia, origen, horizonte y decisión.\item Auditar cobertura, ceros, faltantes y anomalías.\item Formular baselines y pocos candidatos.\item Ajustar todo dentro de cada ventana.\item Comparar errores, intervalos, residuos y costo.\end{enumerate}
+\end{frame}
+
+% 32
+\begin{frame}{Separación cronológica y walk-forward}\small
+\centering
+\begin{tikzpicture}[x=.48cm,y=.55cm]
+\foreach \x in {0,...,19}\draw[UAPGray!35](\x,0) rectangle +(1,.7);
+\fill[UAPTeal!45](0,0) rectangle (11,.7);\fill[UAPGold!55](11,0) rectangle (14,.7);
+\draw[UAPNavy,very thick](11,-.15)--(11,.9);\node[font=\scriptsize,below]at(5.5,0){entrenamiento};\node[font=\scriptsize,below]at(12.5,0){$H$};
+\foreach \x in {0,...,19}\draw[UAPGray!35](\x,-1.3) rectangle +(1,.7);
+\fill[UAPTeal!45](0,-1.3) rectangle (13,-.6);\fill[UAPGold!55](13,-1.3) rectangle (16,-.6);\draw[UAPNavy,very thick](13,-1.45)--(13,-.45);
+\end{tikzpicture}\par\vspace{.2em}\raggedright
+\begin{itemize}\item Expansiva conserva historia; deslizante conserva longitud fija.\item Los métodos comparten pares origen--objetivo.\item Transformación, imputación y orden se reajustan por ventana.\end{itemize}
+\end{frame}
+
+% 33
+\begin{frame}{MAE, RMSE y MASE}\small
+\[\operatorname{MAE}=\frac1N\sum|e_i|,\qquad \operatorname{RMSE}=\sqrt{\frac1N\sum e_i^2}.\]
+\[\operatorname{MASE}=\frac{N^{-1}\sum|e_i|}{(n-7)^{-1}\sum_{t=8}^{n}|y_t-y_{t-7}|}.\]
+MAE mantiene unidades; RMSE castiga errores grandes; MASE $<1$ supera la escala del baseline estacional de entrenamiento.
+\begin{block}{Reporte}Informar por horizonte y añadir sesgo.\end{block}
+\end{frame}
+
+% 34
+\begin{frame}{Pronósticos e intervalos}\small
+\[P(L_{t,h}\le Y_{t+h}\le U_{t,h}\mid\mathcal F_t)=1-\alpha.\]
+\begin{columns}[T]\column{.52\textwidth}\begin{itemize}\item \concepto{Cobertura:} proporción contenida.\item \concepto{Anchura:} precisión útil.\item Revisar por horizonte y régimen.\end{itemize}\column{.44\textwidth}\centering
+\begin{tikzpicture}[x=.45cm,y=.45cm]
+\draw[->,UAPNavy](0,0)--(8,0);\draw[UAPGold,fill=UAPGold!18](0,.5)--(2,.8)--(4,.35)--(6,.75)--(8,.25)--(8,2.4)--(6,2)--(4,1.75)--(2,1.9)--(0,1.5)--cycle;
+\draw[UAPTeal,very thick](0,1)--(2,1.3)--(4,1.05)--(6,1.35)--(8,1.1);
+\end{tikzpicture}\end{columns}
+Intervalos demasiado estrechos comunican falsa certeza.
+\end{frame}
+
+% 35
+\begin{frame}{Residuos y Ljung--Box}\small
+Un residuo de un paso es $e_t=y_t-\widehat y_{t\mid t-1}$. Revisar serie, ACF, varianza, colas, calendario y horizonte.
+\[Q=n(n+2)\sum_{k=1}^{H}\frac{\widehat\rho_k^2}{n-k}.\]
+Ljung--Box evalúa autocorrelaciones conjuntamente.
+\begin{alertblock}{Interpretación}Un valor $p$ alto indica compatibilidad con ruido blanco y uno bajo señala estructura temporal remanente. Gráficos y validación determinan su relevancia operativa.\end{alertblock}
+\end{frame}
+
+% 36
+\begin{frame}{Fugas temporales frecuentes}\scriptsize
+\begin{tabularx}{\textwidth}{>{\bfseries}p{.44\textwidth}X}\toprule Fuga & Corrección\\\midrule mezcla aleatoria & cortes cronológicos\\ media o imputación centrada & cálculo causal por ventana\\ perfil semanal con toda la serie & aprender solo con entrenamiento\\ elegir orden mirando abril repetidamente & selección interna y confirmación final\\ monto, propina u hora de descenso & usar variables disponibles al origen\\\bottomrule\end{tabularx}
+\begin{alertblock}{Auditoría}Una puntuación extraordinaria exige revisar disponibilidad antes que celebrar.\end{alertblock}
+\end{frame}
+
+% 37
+\begin{frame}{Actividad: seleccionar un orden}\small
+\textbf{En grupos, 12 minutos.} Serie diaria con $m=7$; tras $D=1$, la ACF muestra pico en 1, la PACF decae y el nivel fluctúa alrededor de una media estable.
+\begin{enumerate}\item Propongan baseline y dos candidatos SARIMA parsimoniosos.\item Expliquen cada orden y su evidencia.\item Diseñen una grilla máxima de 8 modelos.\item Decidan con \textit{walk-forward}, residuos e intervalos.\end{enumerate}
+\begin{block}{Salida}Una recomendación provisional y una razón para descartarla.\end{block}
+\end{frame}
+
+% 38
+\begin{frame}{Resultados: datos y patrón semanal}\scriptsize
+\texttt{Ejemplo\_entrenamiento\_SARIMA\_Yellow\_Taxi.ipynb}
+\vspace{.35em}
+\begin{tabularx}{\textwidth}{>{\bfseries}Xr}\toprule
+Evidencia ejecutada & Resultado\\\midrule
+pickups válidos reportados & 11.183.510\\
+cobertura temporal & 89 días\\
+promedio diario & 125.657\\
+promedio de lunes & 101.494\\
+promedio de sábado & 140.377\\
+partición cronológica & 75 días + 14 días\\\bottomrule
+\end{tabularx}
+\begin{block}{Lectura}El perfil semanal mostró su máximo promedio el sábado y su mínimo el lunes. La diferencia regular alcanzó $p=0,0019$ en ADF y aportó evidencia para candidatos con $d=1$.\end{block}
+\end{frame}
+
+% 39
+\begin{frame}{Resultados: selección y diagnóstico}\scriptsize
+Los cuatro candidatos convergieron con cero avisos. El menor AIC de entrenamiento correspondió a:
+\[\operatorname{SARIMA}(0,1,1)(0,1,1)_7,\qquad \mathrm{AIC}=1287,84.\]
+\begin{tabularx}{\textwidth}{>{\bfseries}Xr}\toprule
+Diagnóstico & Resultado\\\midrule
+Ljung--Box, rezago 7 & $p=0,0459$\\
+Ljung--Box, rezago 14 & $p=0,0639$\\
+Ljung--Box, rezago 21 & $p=0,2642$\\
+cobertura del intervalo al 90\,\% & 100\,\% en 14 días\\\bottomrule
+\end{tabularx}
+\begin{alertblock}{Lectura}La señal en rezago 7 orienta una revisión de la dinámica semanal. Más orígenes permiten estimar la calibración de intervalos con mayor estabilidad.\end{alertblock}
+\end{frame}
+
+% 40
+\begin{frame}{Resultados: desempeño predictivo}\scriptsize
+\begin{tabularx}{\textwidth}{>{\bfseries}Xrrr}\toprule
+Procedimiento & MAE & RMSE & MASE\\\midrule
+último valor, 14 días & 14.185,7 & 17.683,7 & 1,224\\
+baseline semanal, 14 días & \textbf{5.300,9} & 7.058,6 & \textbf{0,457}\\
+SARIMA fijo, 14 días & 9.388,8 & 11.471,1 & 0,810\\
+SARIMA actualizado, $h=1$ & 5.461,3 & \textbf{6.741,1} & 0,471\\\bottomrule
+\end{tabularx}
+\begin{alertblock}{Lectura}El baseline ganó el corte fijo. La actualización diaria respondió otra pregunta y redujo el error del SARIMA. La complejidad se justifica cuando aporta mejoras dentro del mismo horizonte de evaluación.\end{alertblock}
+\end{frame}
+
+% 41
+\begin{frame}{Actualización y seguimiento}\small
+Actualizar puede significar incorporar estado, reestimar parámetros o volver a seleccionar modelo.
+\begin{itemize}\item MAE, sesgo y desempeño frente al baseline;\item cobertura y anchura de intervalos;\item faltantes, anomalías y cambios de distribución;\item tiempo de ajuste y fallas de convergencia.\end{itemize}
+\begin{block}{Respuesta}Una alarma inicia una revisión; la evidencia resultante guía la continuidad, actualización o sustitución del modelo.\end{block}
+\end{frame}
+
+% 42
+\begin{frame}{Síntesis final}\small
+\begin{itemize}\item El objeto temporal incluye valores, frecuencia, calendario, cobertura y horizonte.\item Dependencia permite pronosticar; orden y disponibilidad limitan lo aprendible.\item SARIMA separa dinámica regular y estacional con órdenes interpretables.\item Un modelo se juzga contra baselines, en múltiples orígenes y con incertidumbre.\item Residuos, fuga, actualización y representatividad forman parte del resultado.\end{itemize}
+\begin{block}{Cierre del curso}Una predicción útil es una afirmación delimitada, reproducible y revisable.\end{block}
+\end{frame}
+
+\end{document}
