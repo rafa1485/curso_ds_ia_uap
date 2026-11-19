@@ -14,7 +14,6 @@ BANCO = [
 (7,1,"Clase 6 – Transformaciones numéricas","Al construir una razón para normalizar por exposición, el riesgo señalado es:","Un denominador pequeño o nulo.","Ocultar eventos reales al recortar extremos.","Comprimir en exceso las colas de la distribución."),
 (8,1,"Clase 6 – Outliers: error, evento o población distinta","Antes de recortar o eliminar un valor extremo, se recomienda:","Revisar fuente, unidad, cobertura y contexto.","Reemplazarlo por la media de la variable.","Eliminarlo para estabilizar el análisis."),
 (9,1,"Clase 6 – Tiempo, espacio e interacciones (Cap. 10 §10.1.3)","Una interacción entre atributos expresa que:","El efecto de una variable depende de otra.","Dos variables están perfectamente correlacionadas.","Una variable se registra en dos unidades distintas."),
-(10,1,"Clase 6 – Tiempo, espacio e interacciones (Cap. 10 §10.1.6)","Al representar la cercanía espacial, kilómetros, conectividad y tiempo de viaje:","Son nociones distintas, y la elegida debe representar el mecanismo relevante.","Son equivalentes y pueden intercambiarse.","Se combinan siempre en una única distancia promedio."),
 (11,2,"Clase 6 – Selección y reducción son distintas","La selección de atributos:","Conserva un subconjunto de las columnas originales.","Construye nuevas coordenadas combinando columnas.","Crea una columna binaria por cada nivel de una categoría."),
 (12,2,"Clase 6 – Selección y reducción son distintas","La reducción dimensional, como PCA:","Construye nuevas coordenadas combinando columnas originales.","Conserva un subconjunto de las columnas originales.","Elimina las observaciones atípicas."),
 (13,2,"Clase 6 – Familias de selección de atributos (Cap. 10 §10.2.2)","Los métodos de selección de tipo filtro:","Puntúan los atributos antes de ajustar el modelo.","Comparan subconjuntos de atributos entrenando el modelo.","Seleccionan atributos durante el ajuste del modelo."),
@@ -37,8 +36,6 @@ BANCO = [
 (30,3,"Clase 6 – Manhattan y coseno (Cap. 13 §13.1.4)","La similitud coseno:","Compara la forma relativa de los perfiles y puede ignorar su magnitud.","Suma las diferencias absolutas.","Penaliza más las diferencias grandes."),
 (31,3,"Cap. 13 §13.1.4 – Similitud coseno","Los perfiles (2, 4, 2) y (20, 40, 20) tienen similitud coseno:","Igual a 1, porque son proporcionales.","Cercana a 0, porque sus magnitudes difieren.","Igual a −1, porque sus normas difieren."),
 (32,3,"Clase 6 – Transformaciones numéricas / Escalado","Si la masa se mide en gramos y la longitud de aleta en milímetros, antes de calcular distancias:","Debe decidirse cómo escalar las variables.","Conviene excluir del análisis la variable de mayor magnitud.","Conviene redondear ambas variables a valores enteros."),
-(33,3,"Clase 6 – Escalado y ponderación (Cap. 13 §13.1.5)","Estandarizar un atributo consiste en:","Restar la media y dividir por la desviación estándar.","Dividir por el valor máximo.","Aplicar el logaritmo."),
-(34,3,"Clase 6 – Escalado y ponderación (Cap. 13 §13.1.5)","Al ponderar variables en una distancia, los pesos deben responder a:","La confiabilidad o el significado de las variables.","La obtención de grupos visualmente atractivos.","El orden de las columnas en la tabla."),
 (35,4,"Clase 6 – K-means: objetivo (Cap. 13 §13.2.1)","K-means busca minimizar:","La suma de distancias cuadráticas de cada observación a su centroide.","El número de grupos.","La distancia entre centroides."),
 (36,4,"Clase 6 – K-means: objetivo (Cap. 13 §13.2.1)","El centroide de un grupo en K-means:","Es la media del grupo: un perfil promedio que puede diferir de toda observación real.","Es siempre una de las observaciones reales que pertenecen al grupo.","Es la observación del grupo más alejada de los demás grupos."),
 (37,4,"Clase 6 – K-means: procedimiento","Después de asignar cada observación al centroide más cercano, K-means:","Recalcula cada centroide como la media de su grupo.","Fusiona los dos grupos más cercanos.","Marca como ruido los puntos alejados."),
@@ -81,9 +78,9 @@ BANCO = [
 (74,7,"Clase 6 – Métricas internas (Cap. 13 §13.4.1)","La inercia resume:","La dispersión interna de los grupos de K-means.","La cohesión y la separación de cada observación.","La coincidencia con una referencia externa."),
 ]
 PARES = [
- (1,2),(6,7),(5,10),              # Atributos
+ (1,2),(6,7),(5,9),              # Atributos
  (11,12),(13,14),(19,20),(23,24), # Selección, reducción, PCA
- (26,27),(28,29),(32,34),         # Semejanza
+ (26,27),(28,29),(32,4),         # Semejanza
  (35,36),(39,40),(42,43),         # K-means
  (45,46),(48,49),                 # Jerárquico
  (54,56),(58,59),                 # DBSCAN

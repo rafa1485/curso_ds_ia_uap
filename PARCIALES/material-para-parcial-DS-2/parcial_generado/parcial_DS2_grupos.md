@@ -161,11 +161,11 @@ a) Ocultar eventos reales al recortar extremos.
 b) Un denominador pequeño o nulo.  
 c) Comprimir en exceso las colas de la distribución.  
 
-**3.** Al representar la cercanía espacial, kilómetros, conectividad y tiempo de viaje:
+**3.** Una interacción entre atributos expresa que:
 
-a) Son equivalentes y pueden intercambiarse.  
-b) Son nociones distintas, y la elegida debe representar el mecanismo relevante.  
-c) Se combinan siempre en una única distancia promedio.  
+a) Dos variables están perfectamente correlacionadas.  
+b) El efecto de una variable depende de otra.  
+c) Una variable se registra en dos unidades distintas.  
 
 **4.** La reducción dimensional, como PCA:
 
@@ -203,11 +203,11 @@ a) Eleva al cuadrado las diferencias.
 b) Suma las diferencias absolutas y reduce el peso relativo de los extremos.  
 c) Compara la orientación de los vectores.  
 
-**10.** Al ponderar variables en una distancia, los pesos deben responder a:
+**10.** Discretizar un atributo consiste en:
 
-a) La obtención de grupos visualmente atractivos.  
-b) La confiabilidad o el significado de las variables.  
-c) El orden de las columnas en la tabla.  
+a) Crear una columna binaria por cada nivel de una categoría.  
+b) Convertir una escala continua en intervalos.  
+c) Restar la media y dividir por la desviación estándar.  
 
 **11.** El centroide de un grupo en K-means:
 
@@ -275,14 +275,14 @@ c) Usarla para elegir retrospectivamente la mejor configuración.
 |---|---|---|---|---|
 | 1 | b | 2 | Atributos | Clase 6 – Categorías, discretización y binarización (Cap. 10 §10.1.4) |
 | 2 | b | 7 | Atributos | Clase 6 – Transformaciones numéricas |
-| 3 | b | 10 | Atributos | Clase 6 – Tiempo, espacio e interacciones (Cap. 10 §10.1.6) |
+| 3 | b | 9 | Atributos | Clase 6 – Tiempo, espacio e interacciones (Cap. 10 §10.1.3) |
 | 4 | a | 12 | Selección, reducción y PCA | Clase 6 – Selección y reducción son distintas |
 | 5 | c | 14 | Selección, reducción y PCA | Clase 6 – Familias de selección de atributos (Cap. 10 §10.2.3) |
 | 6 | c | 20 | Selección, reducción y PCA | Clase 6 – PCA: componentes principales (Cap. 10 §10.3.3) |
 | 7 | a | 24 | Selección, reducción y PCA | Clase 6 – Varianza explicada y límites de PCA |
 | 8 | a | 27 | Semejanza y distancias | Clase 6 – Aprendizaje no supervisado (Cap. 13 §13.1.1) |
 | 9 | b | 29 | Semejanza y distancias | Clase 6 – Manhattan y coseno (Cap. 13 §13.1.3) |
-| 10 | b | 34 | Semejanza y distancias | Clase 6 – Escalado y ponderación (Cap. 13 §13.1.5) |
+| 10 | b | 4 | Atributos | Clase 6 – Categorías, discretización y binarización |
 | 11 | a | 36 | K-means | Clase 6 – K-means: objetivo (Cap. 13 §13.2.1) |
 | 12 | c | 40 | K-means | Clase 6 – Cuándo sirve K-means |
 | 13 | c | 43 | K-means | Clase 6 – Elegir K (Cap. 13 §13.2.3) |
